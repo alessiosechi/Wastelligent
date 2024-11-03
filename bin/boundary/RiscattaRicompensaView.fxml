@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane prefHeight="768.0" prefWidth="540.0" style="-fx-background-color: #E9F0EB;">
+         <children>
+            <ComboBox fx:id="comboBoxRicompense" layoutX="92.25" layoutY="419.25" prefHeight="40.5" prefWidth="355.5" promptText="Seleziona ricompensa" style="-fx-background-color: white; -fx-font-size: 15;">
+               <effect>
+                  <DropShadow />
+               </effect>
+            </ComboBox>
+            <Button fx:id="btnRiscatta" layoutX="207.75" layoutY="525.0" mnemonicParsing="false" prefHeight="40.5" prefWidth="117.75" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="RISCATTA" textFill="WHITE">
+               <font>
+                  <Font size="18.75" />
+               </font>
+            </Button>
+            <Label fx:id="dettagliRicompensaLabel" layoutX="62.25" layoutY="590.0" prefHeight="131.0" prefWidth="296.0" wrapText="true">
+               <font>
+                  <Font name="System" size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="115.5" prefWidth="1080.0" style="-fx-background-color: #216838;">
+         <children>
+            <Label layoutX="29.25" layoutY="35.25" text="Wastelligent" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="37.5" />
+               </font>
+            </Label>
+            <Button fx:id="exitButton" layoutX="984.0" layoutY="24.0" mnemonicParsing="false" style="-fx-background-color: #216838;">
+               <graphic>
+                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../pics/exit.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </AnchorPane>
+      <Button fx:id="nuovaSegnalazioneButton" layoutX="429.75" layoutY="11.25" mnemonicParsing="false" prefHeight="90.75" prefWidth="209.25" style="-fx-background-color: #216838;" text="NUOVA&#10;SEGNALAZIONE" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="22.5" />
+         </font>
+      </Button>
+      <Button layoutX="645.0" layoutY="11.25" mnemonicParsing="false" prefHeight="90.75" prefWidth="209.25" style="-fx-background-color: #216838;" text="RISCATTA&#10;RICOMPENSA" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="22.5" />
+         </font>
+      </Button>
+      <Line endX="209.25" layoutX="645.0" layoutY="97.5" style="-fx-stroke: #ffffffff;" />
+      <Label layoutX="62.25" layoutY="165.0" text="Saldo punti:" wrapText="true">
+         <font>
+            <Font name="System Bold" size="26.25" />
+         </font>
+      </Label>
+      <Label layoutX="62.25" layoutY="249.75" text="Cronologia punti:" wrapText="true">
+         <font>
+            <Font name="System Bold" size="26.25" />
+         </font>
+      </Label>
+      <Label fx:id= "labelSaldoPunti" layoutX="222.0" layoutY="165.0" prefHeight="38.25" prefWidth="108.75" text="0" textFill="#216838" wrapText="true">
+         <font>
+            <Font name="System Bold" size="26.25" />
+         </font>
+      </Label>
+      <Button fx:id="visualizzaStoricoButton" layoutX="304.5" layoutY="245.25" mnemonicParsing="false" prefHeight="40.5" prefWidth="147.75" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="VISUALIZZA" textFill="WHITE">
+         <font>
+            <Font size="18.75" />
+         </font>
+      </Button>
+      <Label layoutX="62.25" layoutY="334.5" text="Riscatta ricompensa:" wrapText="true">
+         <font>
+            <Font name="System Bold" size="26.25" />
+         </font>
+      </Label>
+      <Label layoutX="661.5" layoutY="165.0" text="Ricompense riscattate:" wrapText="true">
+         <font>
+            <Font name="System Bold" size="26.25" />
+         </font>
+      </Label>
+      <TableView fx:id="tableViewRicompense" layoutX="600.0" layoutY="236.25" prefHeight="150.0" prefWidth="450.0" style="-fx-background-color: #E9F0EB; -fx-border-color: #216838;">
+        <columns>
+          <TableColumn fx:id="colNomeRicompensa" prefWidth="218.25" text="Ricompensa" />
+          <TableColumn fx:id="colCodiceRiscatto" prefWidth="231.0" text="Codice" />
+          <TableColumn fx:id="colDescrizione" prefWidth="218.25" text="Descrizione" />
+          <TableColumn fx:id="colValore" prefWidth="231.0" text="Valore" />
+          <TableColumn fx:id="colDataRiscatto" prefWidth="231.0" text="Data riscatto" />
+          <TableColumn fx:id="colDataScadenza" prefWidth="231.0" text="Data scadenza" />
+          <TableColumn fx:id="colPuntiUtilizzati" prefWidth="231.0" text="Punti utilizzati" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

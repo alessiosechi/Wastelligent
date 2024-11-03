@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="768.0" fitWidth="540.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../pics/logo.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="783.75" layoutY="196.5" text="Login" wrapText="true">
+         <font>
+            <Font name="System Bold" size="37.5" />
+         </font>
+      </Label>
+      <Line endX="143.25" layoutX="762.75" layoutY="256.5" style="-fx-stroke: #216838;" />
+      
+      <!-- Campo username con ID corretto -->
+      <TextField fx:id="usernameField" layoutX="678.75" layoutY="311.25" promptText="Username">
+         <font>
+            <Font size="26.25" />
+         </font>
+      </TextField>
+      
+      <!-- Campo password con ID corretto -->
+      <PasswordField fx:id="passwordField" layoutX="678.75" layoutY="390.0" promptText="Password">
+         <font>
+            <Font size="26.25" />
+         </font>
+      </PasswordField>
+
+      <Label layoutX="678.75" layoutY="468.75" text="Seleziona interfaccia:" wrapText="true">
+         <font>
+            <Font size="18.75" />
+         </font>
+      </Label>
+
+      <!-- RadioButton per interfaccia 1 con ID corretto -->
+      <RadioButton fx:id="interfaceOption1" layoutX="877.5" layoutY="471.0" mnemonicParsing="false" selected="true" text="1">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </RadioButton>
+
+      <!-- RadioButton per interfaccia 2 con ID corretto -->
+      <RadioButton fx:id="interfaceOption2" layoutX="930.75" layoutY="471.0" mnemonicParsing="false" text="2">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </RadioButton>
+
+      <!-- Pulsante Login con azione collegata -->
+      <Button layoutX="678.75" layoutY="516.0" minHeight="56.25" mnemonicParsing="false" prefHeight="56.25" prefWidth="326.25" style="-fx-background-color: #216838; -fx-background-radius: 50;" text="LOGIN" textAlignment="CENTER" textFill="WHITE" onAction="#handleLoginButtonAction">
+         <font>
+            <Font name="System Bold" size="26.25" />
+         </font>
+      </Button>
+
+      <Label layoutX="678.75" layoutY="599.25" text="Non hai un account?" wrapText="true">
+         <font>
+            <Font size="18.75" />
+         </font>
+      </Label>
+
+      <!-- Hyperlink per registrazione con ID corretto e azione -->
+
+      <Hyperlink fx:id="registerLink" layoutX="851.25" layoutY="594.75" text="Registrati" textFill="#216838" onAction="#handleRegisterLinkAction">
+         <font>
+            <Font name="System Bold" size="18.75" />
+         </font>
+      </Hyperlink>
+   </children>
+</AnchorPane>

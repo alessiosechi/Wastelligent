@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane prefHeight="115.5" prefWidth="1080.0" style="-fx-background-color: #216838;">
+         <children>
+            <Label layoutX="29.25" layoutY="35.25" text="Wastelligent" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="37.5" />
+               </font>
+            </Label>
+            <Button fx:id="exitButton" layoutX="984.0" layoutY="24.0" mnemonicParsing="false" style="-fx-background-color: #216838;">
+               <graphic>
+                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../pics/exit.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </AnchorPane>
+      <Button layoutX="537.375" layoutY="11.25" mnemonicParsing="false" prefHeight="90.75" prefWidth="209.25" style="-fx-background-color: #216838;" text="VISUALIZZA&#10;ASSEGNAZIONI" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="22.5" />
+         </font>
+      </Button>
+      <Line endX="209.25" layoutX="537.375" layoutY="97.5" style="-fx-stroke: #ffffffff;" />
+      <Label layoutX="29.25" layoutY="165.0" text="Segnalazioni assegnate" wrapText="true">
+         <font>
+            <Font name="System Bold" size="26.25" />
+         </font>
+      </Label>
+      <Button fx:id="completaButton" layoutX="915.75" layoutY="637.5" mnemonicParsing="false" prefHeight="40.5" prefWidth="135.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="COMPLETA" textFill="WHITE">
+         <font>
+            <Font size="18.75" />
+         </font>
+      </Button>
+      <TableView fx:id="segnalazioniTable" layoutX="29.25" layoutY="246.0" prefHeight="289.5" prefWidth="1021.5">
+         <columns>
+            <TableColumn fx:id="idColumn" prefWidth="105.0" text="ID" />
+            <TableColumn fx:id="descrizioneColumn" prefWidth="285.0" text="Descrizione" />
+            <TableColumn fx:id="posizioneColumn" prefWidth="285.0" text="Posizione" />
+         </columns>
+      </TableView>
+      <Button fx:id="dettagliButton" layoutX="29.25" layoutY="637.5" mnemonicParsing="false" prefHeight="40.5" prefWidth="135.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="DETTAGLI" textFill="WHITE">
+         <font>
+            <Font size="18.75" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
