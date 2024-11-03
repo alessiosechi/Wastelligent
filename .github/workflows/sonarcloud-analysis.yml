@@ -1,34 +1,31 @@
-name: SonarCloud Analysis
-
+name: SonarCloud
 on:
   push:
     branches:
-      - master  # Cambia se hai un branch principale diverso
+      - master
   pull_request:
     branches:
-      - master  # Cambia se hai un branch principale diverso
-
+      - master
 jobs:
-  build:
-    name: Build and Analyze
+  sonarcloud:
+    name: SonarCloud
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Set up JDK 11
+      - name: Setup JDK
         uses: actions/setup-java@v1
         with:
-          java-version: '11'  # Puoi cambiare la versione se necessario
-
-      - name: Compile Java Files
-        run: |
-          mkdir -p out  # Crea la directory di output se non esiste
-          javac -d out $(find src -name "*.java")  # Compila tutti i file .java nella directory src
-
+          java-version: '11' # Usa la versione JDK appropriata per il tuo progetto
+      - name: Cache SonarCloud
+        uses: actions/cache@v2
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar-${{ hashFiles('**/sonar-project.properties') }}
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -DprojectKey=alessiosechi_WastelligentScheletro
+            -Dorganization=alessiosechi
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
