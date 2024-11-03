@@ -25,8 +25,5 @@ jobs:
           key: ${{ runner.os }}-sonar-${{ hashFiles('**/sonar-project.properties') }}
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
-        with:
-          args: >
-            -DprojectKey=alessiosechi_WastelligentScheletro
-            -Dorganization=alessiosechi
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
