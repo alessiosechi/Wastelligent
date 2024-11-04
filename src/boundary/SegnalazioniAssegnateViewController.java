@@ -2,6 +2,7 @@ package boundary;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import controller.LoginController;
 import controller.RisolviSegnalazioneController;
@@ -15,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.domain.SegnalazioneBean;
 import model.domain.UtenteBean;
@@ -44,7 +44,7 @@ public class SegnalazioniAssegnateViewController {
 	private Stage primaryStage;
     private static SegnalazioniAssegnateViewController instance;
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
-	
+	private static final Logger logger = Logger.getLogger(SegnalazioniAssegnateViewController.class.getName());
     
     
     public void initialize() {
@@ -71,9 +71,9 @@ public class SegnalazioniAssegnateViewController {
             }
         });
         
-        dettagliButton.setOnAction(event -> {
-            ViewLoader.caricaView("DettagliSegnalazioneView.fxml", primaryStage);
-        }); 
+        dettagliButton.setOnAction(event -> 
+            ViewLoader.caricaView("DettagliSegnalazioneView.fxml", primaryStage)
+        ); 
         
 
         completaButton.setOnAction(event -> {
@@ -86,7 +86,7 @@ public class SegnalazioniAssegnateViewController {
                 boolean successo = risolviSegnalazioneController.completaSegnalazione(idSegnalazione);
 
                 if (successo) {
-                    System.out.println("Segnalazione completata!");
+                    logger.info("Segnalazione completata!");
 
                 	ViewLoader.caricaView("SegnalazioniAssegnateView.fxml", primaryStage);
                 } else {

@@ -132,9 +132,9 @@ public class EffettuaSegnalazioneController {
         // c rappresenta l'angolo centrale tra i due punti rispetto al centro della Terra
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         
-        double distanza = R * c; // converto l'angolo in metri
+        return R * c; // converto l'angolo in metri
 
-        return distanza;
+
     }
 	
 	

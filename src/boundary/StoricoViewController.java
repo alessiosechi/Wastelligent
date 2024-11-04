@@ -73,27 +73,27 @@ public class StoricoViewController {
             }
         });
         
-        vediDettagliButton.setOnAction(event -> {
-            ViewLoader.caricaView("DettagliSegnalazioneView.fxml", primaryStage);
-        });  
+        vediDettagliButton.setOnAction(event -> 
+            ViewLoader.caricaView("DettagliSegnalazioneView.fxml", primaryStage)
+        );  
         
 
-        indietroButton.setOnAction(event -> { 	
-        	ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage);     		
-        });
+        indietroButton.setOnAction(event -> 	
+        	ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage)	
+        );
         
-        exitButton.setOnAction(event -> {	
-        	ViewLoader.caricaView("LoginView.fxml", primaryStage);   	     	
-        });
+        exitButton.setOnAction(event ->
+        	ViewLoader.caricaView("LoginView.fxml", primaryStage) 	     	
+        );
     	
-        riscattaRicompensaButton.setOnAction(event -> {   	
-        	ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage); 	
-        });
+        riscattaRicompensaButton.setOnAction(event -> 
+        	ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage)
+        );
            
-        nuovaSegnalazioneButton.setOnAction(event -> {	
-        	ViewLoader.caricaView("EffettuaSegnalazioneView.fxml", primaryStage);
+        nuovaSegnalazioneButton.setOnAction(event -> 	
+        	ViewLoader.caricaView("EffettuaSegnalazioneView.fxml", primaryStage)
         		
-        });
+        );
     }
 
     

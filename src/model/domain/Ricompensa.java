@@ -18,8 +18,9 @@ public class Ricompensa {
     private String dataScadenza;
     private int punti;
 
-    // Costruttore vuoto
+
     public Ricompensa() {
+        // Costruttore vuoto
     }
     
     

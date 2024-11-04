@@ -5,7 +5,7 @@ public class UtenteBean {
 	private String username;  
 	
 	public UtenteBean() {
-		
+        // Costruttore vuoto
 	}
 
     public void setIdUtente(int idUtente) {

@@ -80,7 +80,7 @@ public class EffettuaSegnalazioneViewController_v0 {
         submitButton.setOnAction(event -> {
             String description = descriptionField.getText();
             String photoPath = photoField.getText();
-            inviaSegnalazione(description, photoPath, coordinatesLabel.getText());
+            inviaSegnalazione(description, photoPath);
         });
 
         searchButton.setOnAction(event -> {
@@ -145,7 +145,7 @@ public class EffettuaSegnalazioneViewController_v0 {
     }
 
 
-    private void inviaSegnalazione(String description, String photoPath, String location) {
+    private void inviaSegnalazione(String description, String photoPath) {
         try {
             // Creazione dell'oggetto SegnalazioneBean
             SegnalazioneBean segnalazioneBean = new SegnalazioneBean();

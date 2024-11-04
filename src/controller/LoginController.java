@@ -5,13 +5,8 @@ import java.util.logging.Logger;
 import exceptions.UsernameAlreadyTakenException;
 import model.dao.LoginDAO;
 import model.dao.LoginDAOImplementazione;
-import model.dao.SegnalazioneDAO;
-import model.dao.SegnalazioneDAOImplementazione;
 import model.domain.CredenzialiBean;
-import model.domain.EspertoEcologico;
-import model.domain.OperatoreEcologico;
 import model.domain.Utente;
-import model.domain.UtenteBase;
 import model.domain.UtenteBean;
 import model.domain.Ruolo;
 
@@ -77,8 +72,9 @@ public class LoginController {
 			String username= credenzialiBean.getUsername();
 			String password = credenzialiBean.getPassword();
 			
-			logger.info("USERNAME: " + username);
-			logger.info("PASSWORD: " + password);
+			logger.info(String.format("USERNAME: ", username));
+			logger.info(String.format("PASSWORD: ****%s", password.substring(password.length() - 2)));
+
 			int ruoloId = loginDAO.autenticazione(username, password);
 
 			int idUtente = loginDAO.getIdByUsername(username);

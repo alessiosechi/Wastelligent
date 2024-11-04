@@ -12,7 +12,6 @@ import model.domain.AssegnazioneBean;
 import model.domain.OperatoreEcologico;
 import model.domain.Segnalazione;
 import model.domain.SegnalazioneBean;
-import model.domain.Utente;
 import model.domain.UtenteBean;
 
 public class RisolviSegnalazioneController {
@@ -62,7 +61,7 @@ public class RisolviSegnalazioneController {
 	    	String stato="Ricevuta";
 	        List<Segnalazione> segnalazioniDaCompletare=segnalazioneDAO.getSegnalazioniByStato(stato);
 
-			if (segnalazioniDaCompletare.size() > 0) {
+			if (!segnalazioniDaCompletare.isEmpty()) {
 				for (Segnalazione s : segnalazioniDaCompletare) {
 			        String posizioneTesto = servizioGeocoding.ottieniPosizione(s.getLatitudine(), s.getLongitudine());
 
@@ -145,7 +144,7 @@ public class RisolviSegnalazioneController {
 
 	        List<Segnalazione> segnalazioniAssegnate=segnalazioneDAO.getSegnalazioniAssegnate(idOperatore, stato);
 
-			if (segnalazioniAssegnate.size() > 0) {
+			if (!segnalazioniAssegnate.isEmpty()) {
 				for (Segnalazione s : segnalazioniAssegnate) {
 			        String posizioneTesto = servizioGeocoding.ottieniPosizione(s.getLatitudine(), s.getLongitudine());
 

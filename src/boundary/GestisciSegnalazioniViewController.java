@@ -2,6 +2,7 @@ package boundary;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import controller.LoginController;
 import controller.RisolviSegnalazioneController;
@@ -17,7 +18,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.domain.AssegnazioneBean;
 import model.domain.SegnalazioneBean;
@@ -56,6 +56,7 @@ public class GestisciSegnalazioniViewController {
     private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
     private LoginController loginController = LoginController.getInstance();
     private Stage primaryStage;
+	private static final Logger logger = Logger.getLogger(GestisciSegnalazioniViewController.class.getName());
     
     
     
@@ -92,9 +93,9 @@ public class GestisciSegnalazioniViewController {
         });
         
 
-        vediDettagliButton.setOnAction(event -> {
-            ViewLoader.caricaView("DettagliSegnalazioneView.fxml", primaryStage);
-        });  
+        vediDettagliButton.setOnAction(event -> 
+            ViewLoader.caricaView("DettagliSegnalazioneView.fxml", primaryStage)
+        );  
         
         eliminaButton.setOnAction(event -> {
             Optional<ButtonType> result = showAlert("Conferma Eliminazione", 
@@ -110,10 +111,10 @@ public class GestisciSegnalazioniViewController {
                 	ViewLoader.caricaView("GestisciSegnalazioniView.fxml", primaryStage);
 
                 } else {
-                    System.out.println("Nessuna segnalazione selezionata.");
+                    logger.info("Nessuna segnalazione selezionata.");
                 }
             } else {
-                System.out.println("Eliminazione annullata.");
+                logger.info("Eliminazione annullata.");
             }
         });
 
@@ -139,7 +140,7 @@ public class GestisciSegnalazioniViewController {
 
 
                 if (successo) {
-                    System.out.println("Segnalazione assegnata con successo a " + operatoreSelezionato.getUsername());
+                    logger.info("Segnalazione assegnata con successo a " + operatoreSelezionato.getUsername());
                     
                 	ViewLoader.caricaView("GestisciSegnalazioniView.fxml", primaryStage);
                 } else {
@@ -152,10 +153,10 @@ public class GestisciSegnalazioniViewController {
         });
         
         
-        assegnaPuntiButton.setOnAction(event ->{
-        	ViewLoader.caricaView("AssegnaPuntiView.fxml", primaryStage);
+        assegnaPuntiButton.setOnAction(event ->
+        	ViewLoader.caricaView("AssegnaPuntiView.fxml", primaryStage)
 
-        });
+        );
         
   
 		

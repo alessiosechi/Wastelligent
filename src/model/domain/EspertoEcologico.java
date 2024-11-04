@@ -26,7 +26,7 @@ public class EspertoEcologico implements Utente{
 			return "GestisciSegnalazioniView.fxml"; 
 		}
 		else {
-			return "GestisciSegnalazioniView.fxml"; 
+			return ""; 
 		}
 
 	}

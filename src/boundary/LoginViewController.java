@@ -31,7 +31,7 @@ public class LoginViewController {
 	@FXML
 	private Hyperlink registerLink;
 	
-	private ToggleGroup toggleGroup;
+
 	
 	private static LoginViewController instance;
 	private LoginController loginController = LoginController.getInstance();
@@ -40,7 +40,7 @@ public class LoginViewController {
 
     @FXML
     private void initialize() {
-        toggleGroup = new ToggleGroup();
+        ToggleGroup toggleGroup = new ToggleGroup();
 
         // assegno il ToggleGroup ai RadioButton in modo tale da gestire la selezione degli stessi
         interfaceOption1.setToggleGroup(toggleGroup);

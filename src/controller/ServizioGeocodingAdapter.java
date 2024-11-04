@@ -74,11 +74,10 @@ public class ServizioGeocodingAdapter implements ServizioGeocoding {
         JsonObject json = gson.fromJson(risposta.toString(), JsonObject.class);
         JsonArray risultati = json.getAsJsonArray("results");
 
-        if (risultati.size() > 0) {
+        if (!risultati.isEmpty()) {
             // Ottieni l'indirizzo formattato dal primo risultato
             JsonObject primoRisultato = risultati.get(0).getAsJsonObject();
-            String indirizzo = primoRisultato.get("formatted").getAsString();
-            return indirizzo; // Restituisce l'indirizzo formattato
+            return primoRisultato.get("formatted").getAsString(); // Restituisce l'indirizzo formattato
         } else {
             return "Nessun indirizzo trovato per le coordinate fornite."; // Messaggio di errore
         }

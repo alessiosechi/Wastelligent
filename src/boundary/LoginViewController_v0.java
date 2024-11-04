@@ -72,7 +72,7 @@ public class LoginViewController_v0 {
 
 		// Mostra un messaggio di successo e carica la view successiva
 		showAlert(Alert.AlertType.INFORMATION, "Login Success", "Login effettuato con successo!");
-		String view = loginController.ottieniView(1);
+		//String view = loginController.ottieniView(1);
 		loadView(); // Metodo per caricare la nuova vista
 	}
 

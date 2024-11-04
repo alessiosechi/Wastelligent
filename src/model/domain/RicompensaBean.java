@@ -13,7 +13,7 @@ public class RicompensaBean {
 	private int punti;
 
 	public RicompensaBean() {
-
+        // Costruttore vuoto
 	}
 
 	public int getIdUtente() {

@@ -1,9 +1,12 @@
 package boundary;
 
+import java.util.logging.Logger;
+
 public class StateMachine {
 
     private State currentState;  // stato corrente
     private final DettagliSegnalazioneViewController controller;
+	private static final Logger logger = Logger.getLogger(SegnalazioniAssegnateViewState.class.getName());
 
     public StateMachine( ) {
         this.controller = DettagliSegnalazioneViewController.getInstance();;
@@ -16,7 +19,7 @@ public class StateMachine {
             currentState.configureView(controller);  // configuro la view in base allo stato attuale
         } else {
             // se state è null:
-            System.err.println("Errore: stato non valido.");
+            logger.severe("Errore: stato non valido.");
         }
     }
 }

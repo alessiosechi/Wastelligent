@@ -7,7 +7,9 @@ public class CredenzialiBean {
     private String username;
     private String password;
 
-    public CredenzialiBean() {}
+    public CredenzialiBean() {
+        // Costruttore vuoto
+    }
 
 
     public String getUsername() {

@@ -3,8 +3,17 @@ package boundary;
 // Decorator
 public abstract class ValidatoreInputDecorator implements ValidaInput {
     protected ValidaInput validatoreDecorato;
+    
+    
+    
+    
+    /*
+     * Abstract classes should not have public constructors. 
+     * Constructors of abstract classes can only be called in constructors of their subclasses. 
+     * So there is no point in making them public. The protected modifier should be enough.
+     */
 
-    public ValidatoreInputDecorator(ValidaInput validatore) {
+    protected ValidatoreInputDecorator(ValidaInput validatore) {
         this.validatoreDecorato = validatore;
     }
 

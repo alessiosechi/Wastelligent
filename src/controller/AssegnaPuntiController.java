@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import model.dao.LoginDAOImplementazione;
 import model.dao.SegnalazioneDAO;
 import model.dao.SegnalazioneDAOImplementazione;
 import model.dao.UtenteDAO;
@@ -60,7 +59,7 @@ public class AssegnaPuntiController {
 	    	String stato="Risolta";
 	        List<Segnalazione> segnalazioniDaCompletare=segnalazioneDAO.getSegnalazioniByStato(stato);
 
-			if (segnalazioniDaCompletare.size() > 0) {
+			if (!segnalazioniDaCompletare.isEmpty()) {
 				for (Segnalazione s : segnalazioniDaCompletare) {
 			        String posizioneTesto = servizioGeocoding.ottieniPosizione(s.getLatitudine(), s.getLongitudine());
 

@@ -18,6 +18,7 @@ public class SegnalazioneBean {
 	
 
 	public SegnalazioneBean() {
+        // Costruttore vuoto
 	}
 
 	public int getIdUtente() {

@@ -120,14 +120,14 @@ public class EffettuaSegnalazioneViewController2 {
         });
 
         // Reward button action
-        redeemRewardButton.setOnAction(event -> {
-            ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage);
-        });
+        redeemRewardButton.setOnAction(event -> 
+            ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage)
+        );
 
         // Exit button action
-        exitButton.setOnAction(event -> {
-            ViewLoader.caricaView("LoginView.fxml", primaryStage);
-        });
+        exitButton.setOnAction(event -> 
+            ViewLoader.caricaView("LoginView.fxml", primaryStage)
+        );
     }
 
     private void placeMarker(Coordinate coordinate) {

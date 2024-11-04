@@ -19,6 +19,7 @@ public class Segnalazione {
     private int idOperatore;
     
     public Segnalazione() {
+        // Costruttore vuoto
     }
 
 

@@ -1,11 +1,16 @@
 package boundary;
 
+import java.util.logging.Logger;
+
+
+
 public class AssegnaPuntiViewState implements State {
+	private static final Logger logger = Logger.getLogger(AssegnaPuntiViewState.class.getName());
 
 	@Override
 	public void configureView(DettagliSegnalazioneViewController dettagliSegnalazioneViewController) {
 
-		System.out.println("Configurazione DettagliSegnalazione per AssegnaPuntiView");
+		logger.info("Configurazione DettagliSegnalazione per AssegnaPuntiView");
 
 		dettagliSegnalazioneViewController.indietroButton.setOnAction(event -> {
 			ViewLoader.caricaView("AssegnaPuntiView.fxml", dettagliSegnalazioneViewController.getPrimaryStage());

@@ -131,14 +131,14 @@ public class EffettuaSegnalazioneViewController {
         
         
         // azione associata al pulsante redeemRewardButton
-        redeemRewardButton.setOnAction(event -> {	
-        	ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage);
-        });
+        redeemRewardButton.setOnAction(event -> 	
+        	ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage)
+        );
         
         // azione associata al pulsante exitButton
-        exitButton.setOnAction(event ->{
-        	ViewLoader.caricaView("LoginView.fxml", primaryStage);  	
-        });
+        exitButton.setOnAction(event ->
+        	ViewLoader.caricaView("LoginView.fxml", primaryStage)	
+        );
              
     }
 

@@ -3,6 +3,9 @@ package boundary;
 import com.sothawo.mapjfx.Coordinate;
 import com.sothawo.mapjfx.Marker;
 import com.sothawo.mapjfx.MapView;
+
+import java.util.logging.Logger;
+
 import com.sothawo.mapjfx.Configuration;
 import com.sothawo.mapjfx.Projection;
 import com.sothawo.mapjfx.event.MapViewEvent;
@@ -55,6 +58,7 @@ public class DettagliSegnalazioneViewController {
     private SegnalazioneBean segnalazioneBean;
     private StateMachine stateMachine;
     private State currentState;
+	private static final Logger logger = Logger.getLogger(DettagliSegnalazioneViewController.class.getName());
 
 
 	public DettagliSegnalazioneViewController() {
@@ -92,7 +96,7 @@ public class DettagliSegnalazioneViewController {
 					}
 				});
 			} catch (Exception e) {
-				System.out.println("Errore durante il caricamento dell'immagine: " + e.getMessage());
+				logger.info("Errore durante il caricamento dell'immagine: " + e.getMessage());
 			}
 		}
 
@@ -132,7 +136,9 @@ public class DettagliSegnalazioneViewController {
 		Tooltip tooltip = new Tooltip(testoPosizione);
 		Tooltip.install(posizioneLabel, tooltip);
 
-		exitButton.setOnAction(event -> ViewLoader.caricaView("LoginView.fxml", primaryStage));
+		exitButton.setOnAction(event -> 
+			ViewLoader.caricaView("LoginView.fxml", primaryStage)
+		);
 	}
 
     private void showFullImagePopup(Image image) {

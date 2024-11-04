@@ -17,7 +17,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.Label;
 
@@ -49,7 +48,9 @@ public class RiscattaRicompensaViewController {
 	private TableColumn<RicompensaBean, Integer> colPuntiUtilizzati;
 	
 	@FXML
-	private Label dettagliRicompensaLabel, labelSaldoPunti;
+	private Label dettagliRicompensaLabel;
+	@FXML
+	private Label labelSaldoPunti;
 	@FXML
 	private ComboBox<String> comboBoxRicompense;
 	@FXML
@@ -155,17 +156,21 @@ public class RiscattaRicompensaViewController {
 
 
 	private List<RicompensaBean> getRicompenseRiscattate() {
-		List<RicompensaBean> ricompenseUtente = riscattaRicompensaController.ottieniRicompenseUtente(idUtente);
-		return ricompenseUtente;
+		return riscattaRicompensaController.ottieniRicompenseUtente(idUtente);
 	}
 
 	private void mostraDettagliRicompensa(RicompensaBean ricompensaBean) {
 		int puntiNecessari = riscattaRicompensaController.calcolaPuntiNecessari(ricompensaBean.getValore());
 		String dettagli = String.format(
-				"Nome: %s\nValore: %d€\nDescrizione: %s\nData scadenza: %s\nPunti necessari: %d",
-				ricompensaBean.getNome(), ricompensaBean.getValore(), ricompensaBean.getDescrizione(),
-				ricompensaBean.getDataScadenza(), puntiNecessari);
+		        "Nome: %s%nValore: %d€%nDescrizione: %s%nData scadenza: %s%nPunti necessari: %d",
+		        ricompensaBean.getNome(), 
+		        ricompensaBean.getValore(), 
+		        ricompensaBean.getDescrizione(),
+		        ricompensaBean.getDataScadenza(), 
+		        puntiNecessari
+		);
 		dettagliRicompensaLabel.setText(dettagli);
+
 	}
 
 	private void riscattaSelezione() {

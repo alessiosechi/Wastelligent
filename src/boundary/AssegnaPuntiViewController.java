@@ -71,9 +71,9 @@ public class AssegnaPuntiViewController {
 			}
 		});
 
-		dettagliButton.setOnAction(event -> {
-			ViewLoader.caricaView("DettagliSegnalazioneView.fxml", primaryStage);
-		});
+		dettagliButton.setOnAction(event -> 
+			ViewLoader.caricaView("DettagliSegnalazioneView.fxml", primaryStage)
+		);
 
 		assegnaButton.setOnAction(event -> {
 
@@ -99,7 +99,7 @@ public class AssegnaPuntiViewController {
 				boolean successo = assegnaPuntiController.assegnaPunti(segnalazioneSelezionata);
 
 				if (successo) {
-					System.out.println("Punti assegnati correttamente!");
+					
 
 					ViewLoader.caricaView("AssegnaPuntiView.fxml", primaryStage);
 				} else {
@@ -110,12 +110,12 @@ public class AssegnaPuntiViewController {
 			}
 		});
 
-		exitButton.setOnAction(event -> {
-			ViewLoader.caricaView("LoginView.fxml", primaryStage);
-		});
-		gestisciSegnalazioniButton.setOnAction(event -> {
-			ViewLoader.caricaView("GestisciSegnalazioniView.fxml", primaryStage);
-		});
+		exitButton.setOnAction(event -> 
+			ViewLoader.caricaView("LoginView.fxml", primaryStage)
+		);
+		gestisciSegnalazioniButton.setOnAction(event -> 
+			ViewLoader.caricaView("GestisciSegnalazioniView.fxml", primaryStage)
+		);
 
 	}
 

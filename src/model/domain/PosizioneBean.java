@@ -7,7 +7,9 @@ public class PosizioneBean {
     private double latitudine;
     private double longitudine;
 
-    public PosizioneBean() {}
+    public PosizioneBean() {
+        // Costruttore vuoto
+    }
 
 
     public double getLatitudine() {

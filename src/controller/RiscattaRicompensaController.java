@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 
 import exceptions.DailyRedemptionLimitException;
 import exceptions.InsufficientPointsException;
-import exceptions.UsernameAlreadyTakenException;
 import model.dao.ListaRicompenseGithubDAO;
 import model.dao.ListaRicompenseGithubDAOImplementazione;
 import model.dao.UtenteDAO;
@@ -19,8 +18,6 @@ import model.dao.RicompensaDAO;
 import model.dao.RicompensaDAOImplementazione;
 import model.dao.SegnalazioneDAO;
 import model.dao.SegnalazioneDAOImplementazione;
-import model.domain.Posizione;
-import model.domain.PosizioneBean;
 import model.domain.Ricompensa;
 import model.domain.RicompensaBean;
 import model.domain.Segnalazione;
@@ -56,7 +53,7 @@ public class RiscattaRicompensaController {
 		try {
 			List<Ricompensa> ricompenseAPI = listaRicompenseDAO.getRicompense();
 
-			if (ricompenseAPI.size() > 0) {
+			if (!ricompenseAPI.isEmpty()) {
 
 				return conversione.convertRicompensaListToBeanList(ricompenseAPI);
 			} else {
@@ -74,7 +71,7 @@ public class RiscattaRicompensaController {
 
 	        ricompenseUtente = ricompensaDAO.getRicompenseByUtente(idUtente);
 
-			if (ricompenseUtente.size() > 0) {
+			if (!ricompenseUtente.isEmpty()) {
 				return conversione.convertRicompensaListToBeanList(ricompenseUtente);
 			} else {
 				return new ArrayList<>();
@@ -105,7 +102,8 @@ public class RiscattaRicompensaController {
 	        }
 	        
 	        if (numeroRiscattiOggi >= 5) {
-	            logger.warning("Limite di 5 riscatti al giorno raggiunto per l'utente " + idUtente);
+	        	logger.warning(String.format("Limite di 5 riscatti al giorno raggiunto per l'utente %s", idUtente));
+
 	            throw new DailyRedemptionLimitException("Hai raggiunto il limite giornaliero di riscatti.");
 
 	        }
@@ -127,8 +125,8 @@ public class RiscattaRicompensaController {
 			String codiceRiscatto = listaRicompenseDAO.getCodiceRiscatto(ricompensa.getIdRicompensa());
 			ricompensa.setCodiceRiscatto(codiceRiscatto);
 
-			logger.info("ID RICOMPENSA: " + ricompensa.getIdRicompensa());
-			logger.info("CODICE RISCATTO: " + codiceRiscatto);
+			logger.info(String.format("ID RICOMPENSA: %d, CODICE RISCATTO: %s", ricompensa.getIdRicompensa(), codiceRiscatto));
+
 
 			// registro il riscatto
 			ricompensaDAO.registraRicompensaRiscattata(ricompensa);
@@ -138,13 +136,9 @@ public class RiscattaRicompensaController {
 
 			return true; // riscatto riuscito
 
-		}catch (DailyRedemptionLimitException e) {
-	        throw e; 
-
-	    }catch (InsufficientPointsException e) {
-	        throw e; 
-
-	    } catch (Exception e) {
+		}catch (DailyRedemptionLimitException | InsufficientPointsException e) {
+		    throw e; 
+		} catch (Exception e) {
 	        logger.severe("Errore durante il riscatto della ricompensa: " + e.getMessage());
 			e.printStackTrace();
 			return false;
@@ -185,7 +179,7 @@ public class RiscattaRicompensaController {
 		try {
 			List<Segnalazione> segnalazioniRiscontrate = segnalazioneDAO.trovaSegnalazioniRiscontrate(idUtente);
 
-			if (segnalazioniRiscontrate.size() > 0) {
+			if (!segnalazioniRiscontrate.isEmpty()) {
 
 				for (Segnalazione s : segnalazioniRiscontrate) {
 					String posizioneTesto = servizioGeocoding.ottieniPosizione(s.getLatitudine(), s.getLongitudine());
