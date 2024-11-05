@@ -6,7 +6,7 @@ public class StateMachine {
 
     private State currentState;  // stato corrente
     private final DettagliSegnalazioneViewController controller;
-	private static final Logger logger = Logger.getLogger(SegnalazioniAssegnateViewState.class.getName());
+	private static final Logger logger = Logger.getLogger(StateMachine.class.getName());
 
     public StateMachine( ) {
         this.controller = DettagliSegnalazioneViewController.getInstance();;

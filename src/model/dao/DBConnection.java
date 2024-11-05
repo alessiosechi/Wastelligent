@@ -17,11 +17,11 @@ public class DBConnection {
 			Properties properties = new Properties();
 			properties.load(input);
 
-			String connection_url = properties.getProperty("CONNECTION_URL");
+			String connectionUrl = properties.getProperty("CONNECTION_URL");
 			String user = properties.getProperty("LOGIN_USER");
 			String pass = properties.getProperty("LOGIN_PASS");
 
-			connection = DriverManager.getConnection(connection_url, user, pass);
+			connection = DriverManager.getConnection(connectionUrl, user, pass);
 		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 		}

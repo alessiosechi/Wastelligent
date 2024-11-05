@@ -38,7 +38,7 @@ public class Conversione {
 		Segnalazione segnalazione = new Segnalazione();
 		segnalazione.setDescrizione(segnalazioneBean.getDescrizione());
 		segnalazione.setFoto(segnalazioneBean.getFoto());
-		segnalazione.setStato("Ricevuta"); // da modificare in seguito
+		segnalazione.setStato("Ricevuta");
 		segnalazione.setIdUtente(segnalazioneBean.getIdUtente());
 		segnalazione.setLatitudine(segnalazioneBean.getLatitudine());
 		segnalazione.setLongitudine(segnalazioneBean.getLongitudine());
@@ -49,54 +49,43 @@ public class Conversione {
 
 
 	public List<RicompensaBean> convertRicompensaListToBeanList(List<Ricompensa> ricompense) {
+	    List<RicompensaBean> ricompensaBeanList = new ArrayList<>();
 
-		if (ricompense != null) {
+	    if (ricompense != null) {
+	        for (Ricompensa r : ricompense) {
+	            ricompensaBeanList.add(convertRicompensaToBean(r));
+	        }
+	    }
 
-			List<RicompensaBean> ricompensaBeanList = new ArrayList<>();
-
-			// itero su ogni oggetto Ricompensa e lo converto in un oggetto RicompensaBean
-			for (Ricompensa r : ricompense) {
-
-				RicompensaBean ricompensaBean = new RicompensaBean();
-
-				ricompensaBean.setIdRicompensa(r.getIdRicompensa());
-				ricompensaBean.setNome(r.getNome());
-				ricompensaBean.setValore(r.getValore());
-				ricompensaBean.setDescrizione(r.getDescrizione());
-				ricompensaBean.setDataScadenza(r.getDataScadenza());
-
-				/*
-				 * i campi idUtente, dataRiscatto e puntiUtilizzati sono presenti solo nelle
-				 * ricompense riscattate e dato che questo metodo viene utilizzato sia per le
-				 * ricompense disponibili dall'api sia per quelle riscattate dal db, verifico se
-				 * i suddetti campi sono inizializzati, altrimenti farei assegnazioni inutili
-				 * 
-				 */
-
-				if (r.getIdUtente() > 0) {
-					ricompensaBean.setIdUtente(r.getIdUtente());
-				}
-
-				if (r.getDataRiscatto() != null) {
-					ricompensaBean.setDataRiscatto(r.getDataRiscatto());
-				}
-				if (r.getCodiceRiscatto() != null) {
-					ricompensaBean.setCodiceRiscatto(r.getCodiceRiscatto());
-				}
-				if (r.getPunti() > 0) {
-					ricompensaBean.setPunti(r.getPunti());
-				}
-
-				ricompensaBeanList.add(ricompensaBean);
-			}
-
-			return ricompensaBeanList;
-
-		} else {
-			return new ArrayList<>();
-		}
-
+	    return ricompensaBeanList;
 	}
+
+	private RicompensaBean convertRicompensaToBean(Ricompensa r) {
+	    RicompensaBean ricompensaBean = new RicompensaBean();
+
+	    ricompensaBean.setIdRicompensa(r.getIdRicompensa());
+	    ricompensaBean.setNome(r.getNome());
+	    ricompensaBean.setValore(r.getValore());
+	    ricompensaBean.setDescrizione(r.getDescrizione());
+	    ricompensaBean.setDataScadenza(r.getDataScadenza());
+
+	    // Campi opzionali
+	    if (r.getIdUtente() > 0) {
+	        ricompensaBean.setIdUtente(r.getIdUtente());
+	    }
+	    if (r.getDataRiscatto() != null) {
+	        ricompensaBean.setDataRiscatto(r.getDataRiscatto());
+	    }
+	    if (r.getCodiceRiscatto() != null) {
+	        ricompensaBean.setCodiceRiscatto(r.getCodiceRiscatto());
+	    }
+	    if (r.getPunti() > 0) {
+	        ricompensaBean.setPunti(r.getPunti());
+	    }
+
+	    return ricompensaBean;
+	}
+
 
 	public Ricompensa convertToEntity(RicompensaBean ricompensaBean) {
 		Ricompensa ricompensa = new Ricompensa();

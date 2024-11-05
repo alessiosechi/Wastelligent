@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import com.sothawo.mapjfx.MapView?>
 
-<GridPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx/fxml/1" fx:controller="boundary.EffettuaSegnalazioneViewController_v0" hgap="10" vgap="10">
+<GridPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx/fxml/1" fx:controller="boundary.EffettuaSegnalazioneViewController1" hgap="10" vgap="10">
     <columnConstraints>
         <ColumnConstraints percentWidth="50" />
         <ColumnConstraints percentWidth="50" />

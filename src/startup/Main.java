@@ -1,7 +1,7 @@
 package startup;
 
 import boundary.LoginViewController;
-import boundary.LoginViewController_v0;
+import boundary.LoginViewController1;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

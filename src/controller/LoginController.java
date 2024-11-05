@@ -18,6 +18,8 @@ public class LoginController {
 
 	private static Conversione conversione = new Conversione();
 	private static final Logger logger = Logger.getLogger(LoginController.class.getName());
+	private static final String REGISTRAZIONE_ERRORE_MSG = "Errore durante la registrazione.";
+
 
 	private LoginController() {
 		try {
@@ -103,7 +105,7 @@ public class LoginController {
 			int success = loginDAO.registraUtente(credenzialiBean.getUsername(), credenzialiBean.getPassword());
 			
 	        if (success != 1) {
-	            throw new RuntimeException("Errore durante la registrazione.");
+	            throw new RuntimeException(REGISTRAZIONE_ERRORE_MSG);
 	        }
 			
 
@@ -112,8 +114,8 @@ public class LoginController {
 	        throw e; // rilancio l'eccezione che ho appena catturato, la passo al livello superiore
 
 	    }catch (Exception e) {
-			logger.severe("Errore durante la registrazione."+e.getMessage());
-	        throw new RuntimeException("Errore durante la registrazione.", e);
+			logger.severe(REGISTRAZIONE_ERRORE_MSG+e.getMessage());
+	        throw new RuntimeException(REGISTRAZIONE_ERRORE_MSG, e);
 		}
 
 	}
@@ -137,7 +139,7 @@ public class LoginController {
 	}
 	
 	
-	public void logout() { // il logout potrebbe non servire, tanto ad ogni login sovrascrivo l'utente
+	public static void logout() { // il logout potrebbe non servire, tanto ad ogni login sovrascrivo l'utente
 	    utente = null;
 	    logger.info("Logout effettuato correttamente.");
 	}
