@@ -27,26 +27,19 @@ public class RiscattaRicompensaController {
 
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
 	private static Conversione conversione = new Conversione();
+	
+	
+	// i DAO sono stateless, li dichiaro statici
 	private static ListaRicompenseGithubDAO listaRicompenseDAO;
 	private static RicompensaDAO ricompensaDAO;
 	private static UtenteDAO utenteDAO;
 	private static SegnalazioneDAO segnalazioneDAO;
+	
 	private static volatile RiscattaRicompensaController instance;
 	private static final Logger logger = Logger.getLogger(RiscattaRicompensaController.class.getName());
     private List<Ricompensa> ricompenseUtente = new ArrayList<>();
 
 	private RiscattaRicompensaController() {
-		try {
-
-			listaRicompenseDAO = ListaRicompenseGithubDAOImplementazione.getInstance();
-			ricompensaDAO = RicompensaDAOImplementazione.getInstance();
-			utenteDAO = UtenteDAOImplementazione.getInstance();
-			segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
-
-		} catch (Exception e) {
-			logger.severe("Errore durante l'inizializzazione di uno dei DAO: " + e.getMessage());
-			throw new RuntimeException("Inizializzazione fallita");
-		}
 	}
 
 	public List<RicompensaBean> ottieniRicompenseAPI() {
@@ -223,6 +216,19 @@ public class RiscattaRicompensaController {
 				result = instance;
 				if (result == null) {
 					instance = result = new RiscattaRicompensaController();
+					
+					
+					// inizializzo i DAO solo una volta, quando viene creata l'istanza di RiscattaRicompensaController
+	                try {
+	                    listaRicompenseDAO = ListaRicompenseGithubDAOImplementazione.getInstance();
+	                    ricompensaDAO = RicompensaDAOImplementazione.getInstance();
+	                    utenteDAO = UtenteDAOImplementazione.getInstance();
+	                    segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
+	                } catch (Exception e) {
+	                    // Gestione dell'errore durante l'inizializzazione
+	                    logger.severe("Errore durante l'inizializzazione dei DAO: " + e.getMessage());
+	                    throw new RuntimeException("Inizializzazione fallita dei DAO", e);
+	                }
 				}
 
 			}
