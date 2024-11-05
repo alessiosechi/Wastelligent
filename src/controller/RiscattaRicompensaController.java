@@ -116,7 +116,8 @@ public class RiscattaRicompensaController {
 			
 			
 	        if (puntiUtente < puntiNecessari) {
-	            logger.warning("Punti insufficienti per riscattare la ricompensa per l'utente " + idUtente);
+	        	logger.warning(String.format("Punti insufficienti per riscattare la ricompensa per l'utente %s", idUtente));
+
 	            throw new InsufficientPointsException("Punti insufficienti per riscattare la ricompensa.");
 	        }
 

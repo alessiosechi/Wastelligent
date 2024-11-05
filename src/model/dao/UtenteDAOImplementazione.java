@@ -6,12 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import model.domain.OperatoreEcologico;
 
 public class UtenteDAOImplementazione implements UtenteDAO {
 
     private static volatile UtenteDAOImplementazione instance;
+    private static final Logger logger = Logger.getLogger(UtenteDAOImplementazione.class.getName());
 
     public static UtenteDAOImplementazione getInstance() {
         UtenteDAOImplementazione result = instance;
@@ -54,7 +56,7 @@ public class UtenteDAOImplementazione implements UtenteDAO {
             try {
                 if (resultSet != null) resultSet.close();
                 if (stmt != null) stmt.close();
-                // if (connessione != null) connessione.close(); // Chiudi la connessione se necessario
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -87,7 +89,7 @@ public class UtenteDAOImplementazione implements UtenteDAO {
         } finally {
             try {
                 if (stmt != null) stmt.close();
-                // if (connessione != null) connessione.close(); // Chiudi la connessione se necessario
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -118,7 +120,7 @@ public class UtenteDAOImplementazione implements UtenteDAO {
         } finally {
             try {
                 if (stmt != null) stmt.close();
-                // if (connessione != null) connessione.close(); // Chiudi la connessione se necessario
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -163,14 +165,14 @@ public class UtenteDAOImplementazione implements UtenteDAO {
                 operatoriEcologici.add(operatore);
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Gestione degli errori
+			logger.severe("Errore durante l'esecuzione della query: " + e.getMessage());
         } finally {
             try {
                 if (resultSet != null) resultSet.close();
                 if (stmt != null) stmt.close();
-                // if (connessione != null) connessione.close(); // Connessione gestita altrove
+
             } catch (SQLException e) {
-                e.printStackTrace();
+    			logger.severe("Errore durante la chiusura dello statement: " + e.getMessage());
             }
         }
 

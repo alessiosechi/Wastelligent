@@ -70,9 +70,9 @@ public class GestisciSegnalazioniViewController {
 	    statoColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStato()));
 	}
 	private void configureTableSelection() {
-	    segnalazioniTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-	        handleTableSelection(newValue);
-	    });
+	    segnalazioniTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> 
+	        handleTableSelection(newValue)
+	    );
 	}
 	private void handleTableSelection(SegnalazioneBean newValue) {
 	    if (newValue != null) {

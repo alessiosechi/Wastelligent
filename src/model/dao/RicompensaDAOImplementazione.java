@@ -10,10 +10,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class RicompensaDAOImplementazione implements RicompensaDAO {
 
 	private static volatile RicompensaDAOImplementazione instance;
+    private static final Logger logger = Logger.getLogger(RicompensaDAOImplementazione.class.getName());
 
 	public static RicompensaDAOImplementazione getInstance() {
 		RicompensaDAOImplementazione result = instance;
@@ -67,7 +69,6 @@ public class RicompensaDAOImplementazione implements RicompensaDAO {
 			try {
 				if (stmt != null)
 					stmt.close();
-				// if (connessione != null) connessione.close(); // Chiudi la connessione
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -130,7 +131,6 @@ public class RicompensaDAOImplementazione implements RicompensaDAO {
 	        try {
 	            if (resultSet != null) resultSet.close();
 	            if (stmt != null) stmt.close();
-	            // if (connessione != null) connessione.close(); // Chiudi la connessione se necessario
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }

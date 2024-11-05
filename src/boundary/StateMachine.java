@@ -9,7 +9,7 @@ public class StateMachine {
 	private static final Logger logger = Logger.getLogger(StateMachine.class.getName());
 
     public StateMachine( ) {
-        this.controller = DettagliSegnalazioneViewController.getInstance();;
+        this.controller = DettagliSegnalazioneViewController.getInstance();
     }
 
 

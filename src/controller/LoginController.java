@@ -20,13 +20,11 @@ public class LoginController {
 	private static final Logger logger = Logger.getLogger(LoginController.class.getName());
 	private static final String REGISTRAZIONE_ERRORE_MSG = "Errore durante la registrazione.";
 
-
 	private LoginController() {
 		try {
 			// inizializzazione di LoginDAO
 			loginDAO = LoginDAOImplementazione.getInstance();
 
-			
 		} catch (Exception e) {
 			logger.severe("Errore durante l'inizializzazione di LoginDAO: " + e.getMessage());
 			throw new RuntimeException("Impossibile inizializzare LoginDAO");
@@ -71,10 +69,11 @@ public class LoginController {
 //	}
 	public int effettuaLogin(CredenzialiBean credenzialiBean) {
 		try {
-			String username= credenzialiBean.getUsername();
+			String username = credenzialiBean.getUsername();
 			String password = credenzialiBean.getPassword();
-			
-			logger.info(String.format("USERNAME: ", username));
+
+			logger.info(String.format("USERNAME: %s", username));
+
 			logger.info(String.format("PASSWORD: ****%s", password.substring(password.length() - 2)));
 
 			int ruoloId = loginDAO.autenticazione(username, password);
@@ -93,38 +92,36 @@ public class LoginController {
 
 	}
 
-	public void registraUtente(CredenzialiBean credenzialiBean) throws UsernameAlreadyTakenException { 
+	public void registraUtente(CredenzialiBean credenzialiBean) throws UsernameAlreadyTakenException {
 		try {
-			
+
 			// controllo se lo username è già stato preso
-	        if (loginDAO.isUsernameTaken(credenzialiBean.getUsername())) {
-	            throw new UsernameAlreadyTakenException();
-	        }
-			
-			
+			if (loginDAO.isUsernameTaken(credenzialiBean.getUsername())) {
+				throw new UsernameAlreadyTakenException();
+			}
+
 			int success = loginDAO.registraUtente(credenzialiBean.getUsername(), credenzialiBean.getPassword());
-			
-	        if (success != 1) {
-	            throw new RuntimeException(REGISTRAZIONE_ERRORE_MSG);
-	        }
-			
+
+			if (success != 1) {
+				throw new RuntimeException(REGISTRAZIONE_ERRORE_MSG);
+			}
 
 		} catch (UsernameAlreadyTakenException e) {
-	        logger.warning("Il nome utente è già in uso: " + credenzialiBean.getUsername());
-	        throw e; // rilancio l'eccezione che ho appena catturato, la passo al livello superiore
+			logger.warning("Il nome utente è già in uso: " + credenzialiBean.getUsername());
+			throw e; // rilancio l'eccezione che ho appena catturato, la passo al livello superiore
 
-	    }catch (Exception e) {
-			logger.severe(REGISTRAZIONE_ERRORE_MSG+e.getMessage());
-	        throw new RuntimeException(REGISTRAZIONE_ERRORE_MSG, e);
+		} catch (Exception e) {
+			logger.severe(REGISTRAZIONE_ERRORE_MSG + e.getMessage());
+			throw new RuntimeException(REGISTRAZIONE_ERRORE_MSG, e);
 		}
 
 	}
 
-	private void setUtente(int idUtente, String username, Ruolo ruolo) {
+	private static void setUtente(int idUtente, String username, Ruolo ruolo) {
 		if (ruolo == null) {
 			throw new IllegalArgumentException("Ruolo non può essere null");
 		}
-		//stampaDettagliUtenteCorrente();
+		// stampaDettagliUtenteCorrente();
 		utente = utenteFactory.createUtente(idUtente, username, ruolo);
 	}
 
@@ -134,17 +131,14 @@ public class LoginController {
 
 	public UtenteBean getUtente() {
 
-		
 		return conversione.convertToBean(utente);
 	}
-	
-	
+
 	public static void logout() { // il logout potrebbe non servire, tanto ad ogni login sovrascrivo l'utente
-	    utente = null;
-	    logger.info("Logout effettuato correttamente.");
+		utente = null;
+		logger.info("Logout effettuato correttamente.");
 	}
-	
-	
+
 //	public void stampaDettagliUtenteCorrente() {
 //	    if (utente != null) {
 //	        System.out.println("Ultimo utente: " + utente.getUsername());
@@ -163,8 +157,6 @@ public class LoginController {
 //	        System.out.println("Nessun utente è attualmente autenticato.");
 //	    }
 //	}
-	
-	
 
 //	public UtenteBean convertToBean(Utente utente) {
 //		UtenteBean utenteBean = new UtenteBean();

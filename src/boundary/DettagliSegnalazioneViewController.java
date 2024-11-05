@@ -50,7 +50,7 @@ public class DettagliSegnalazioneViewController {
     @FXML 
     private Pane mapPane;
 
-    private MapView mapView;
+
     private Marker marker;
     private Stage primaryStage;
 
@@ -61,9 +61,9 @@ public class DettagliSegnalazioneViewController {
 	private static final Logger logger = Logger.getLogger(DettagliSegnalazioneViewController.class.getName());
 
 
-	public DettagliSegnalazioneViewController() {
-		instance = this;
-	}
+//	public DettagliSegnalazioneViewController() {
+//		instance = this;
+//	}
 
 	@FXML
 	public void initialize() {
@@ -100,7 +100,7 @@ public class DettagliSegnalazioneViewController {
 			}
 		}
 
-		mapView = new MapView();
+		MapView mapView = new MapView();
 		mapView.initialize(Configuration.builder().projection(Projection.WEB_MERCATOR).showZoomControls(true).build());
 
 		mapPane.getChildren().add(mapView);
@@ -109,7 +109,7 @@ public class DettagliSegnalazioneViewController {
 
 		mapView.initializedProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue) {
-				System.out.println("Mappa pronta");
+				logger.info("Mappa pronta");
 
 				if (segnalazioneBean != null && segnalazioneBean.getLatitudine() != 0
 						&& segnalazioneBean.getLongitudine() != 0) {

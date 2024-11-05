@@ -1,15 +1,27 @@
 package model.dao;
 
 import model.domain.Segnalazione;
-
+import model.domain.StatoSegnalazione;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
+
 
 public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 
 	private static volatile SegnalazioneDAOImplementazione instance;
+	private static final Logger logger = Logger.getLogger(SegnalazioneDAOImplementazione.class.getName());
+    private static final String COL_DESCRIZIONE = "descrizione";
+    private static final String COL_LATITUDINE = "latitudine";
+    private static final String COL_LONGITUDINE = "longitudine";
+    private static final String COL_STATO = "stato";
+    private static final String COL_ID_SEGNALAZIONE = "id_segnalazione";
+    private static final String COL_ID_UTENTE = "id_utente";
+    private static final String COL_FOTO = "foto";
+    private static final String COL_PUNTI = "punti";
 
 	private SegnalazioneDAOImplementazione() {
 	}
@@ -38,8 +50,8 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 
 	    try {
 	        connessione = DBConnection.getConnection();
-	        String sql = "INSERT INTO segnalazioni (id_utente, descrizione, foto, stato, latitudine, longitudine) "
-	                   + "VALUES (?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO segnalazioni (" + COL_ID_UTENTE + ", " + COL_DESCRIZIONE + ", " + COL_FOTO + ", "
+					+ COL_STATO + ", " + COL_LATITUDINE + ", " + COL_LONGITUDINE + ") VALUES (?, ?, ?, ?, ?, ?)";
 	        stmt = connessione.prepareStatement(sql);
 	        stmt.setInt(1, segnalazione.getIdUtente());
 	        stmt.setString(2, segnalazione.getDescrizione());
@@ -58,10 +70,10 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        int righeInserite = stmt.executeUpdate();
 	        if (righeInserite > 0) {
 	            connessione.commit();
-	            System.out.println("Segnalazione registrata con successo");
+	            logger.info("Segnalazione registrata con successo");
 	        } else {
 	            connessione.rollback();
-	            System.out.println("Errore nella registrazione della segnalazione");
+	            logger.info("Errore nella registrazione della segnalazione");
 	        }
 	        
 	        /*
@@ -85,7 +97,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	    } finally {
 	        try {
 	            if (stmt != null) stmt.close();
-	            //if (connessione != null) connessione.close();
+
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }
@@ -108,10 +120,10 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        connessione = DBConnection.getConnection();
 
 	        // Query SQL per ottenere le segnalazioni riscontrate di uno specifico utente
-	        String sql = "SELECT s.id_segnalazione, s.descrizione, s.foto, s.stato, s.latitudine, s.longitudine, ps.punti " +
-	                     "FROM segnalazioni s " +
-	                     "LEFT JOIN punti_segnalazioni ps ON s.id_segnalazione = ps.id_segnalazione " +
-	                     "WHERE s.id_utente = ? AND s.stato = 'Riscontrata'";
+	        String sql = "SELECT s." + COL_ID_SEGNALAZIONE + ", s." + COL_DESCRIZIONE + ", s.foto, s." + COL_STATO + ", s." + COL_LATITUDINE + ", s." + COL_LONGITUDINE + ", ps.punti " +
+                    "FROM segnalazioni s " +
+                    "LEFT JOIN punti_segnalazioni ps ON s." + COL_ID_SEGNALAZIONE + " = ps." + COL_ID_SEGNALAZIONE +
+                    " WHERE s." + COL_ID_UTENTE + " = ? AND s." + COL_STATO + " = 'Riscontrata'";
 
 	        stmt = connessione.prepareStatement(sql);
 	        stmt.setInt(1, idUtente);
@@ -121,23 +133,20 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 
 	        // Itera attraverso i risultati e crea gli oggetti Segnalazione
 	        while (resultSet.next()) {
-	            Segnalazione segnalazione = new Segnalazione();
+
 	            
-	            segnalazione.setDescrizione(resultSet.getString("descrizione"));
-	            segnalazione.setFoto(resultSet.getString("foto")); // Se necessario, gestire il recupero del BLOB
-	            segnalazione.setStato(resultSet.getString("stato"));
-	            segnalazione.setLatitudine(resultSet.getDouble("latitudine"));
-	            segnalazione.setLongitudine(resultSet.getDouble("longitudine"));
-
+                Segnalazione segnalazione = new Segnalazione();
+                segnalazione.setDescrizione(resultSet.getString(COL_DESCRIZIONE));
+                segnalazione.setFoto(resultSet.getString(COL_FOTO));
+                segnalazione.setStato(resultSet.getString(COL_STATO));
+                segnalazione.setLatitudine(resultSet.getDouble(COL_LATITUDINE));
+                segnalazione.setLongitudine(resultSet.getDouble(COL_LONGITUDINE));
 	            // Aggiungi i punti assegnati all'oggetto Segnalazione
-	            int puntiAssegnati = resultSet.getInt("punti"); // Questo potrebbe essere null, quindi gestire con un controllo
-
+                int puntiAssegnati = resultSet.getInt(COL_PUNTI);
 	            // Qui puoi memorizzare i punti nell'oggetto Segnalazione, se necessario
 	            // segnalazione.setPuntiAssegnati(puntiAssegnati); // Assicurati di avere il setter nel tuo modello
-
-	            segnalazione.setPuntiAssegnati(puntiAssegnati);
-	            
-	            segnalazioni.add(segnalazione);
+                segnalazione.setPuntiAssegnati(puntiAssegnati);
+                segnalazioni.add(segnalazione);
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace(); // Gestione degli errori
@@ -146,7 +155,6 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	            if (resultSet != null) resultSet.close();
 	            if (stmt != null) stmt.close();
 
-	            //if (connessione != null) connessione.close();
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }
@@ -168,8 +176,9 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        connessione = DBConnection.getConnection();
 
 	        // Query SQL per ottenere tutte le segnalazioni
-	        String sql = "SELECT id_segnalazione, id_utente, descrizione, foto, stato, latitudine, longitudine " +
-	                     "FROM segnalazioni";
+			String sql = "SELECT " + COL_ID_SEGNALAZIONE + ", " + COL_ID_UTENTE + ", " + COL_DESCRIZIONE + ", "
+					+ COL_FOTO + ", " + COL_STATO + ", " + COL_LATITUDINE + ", " + COL_LONGITUDINE
+					+ " FROM segnalazioni";
 
 	        stmt = connessione.prepareStatement(sql);
 
@@ -178,15 +187,14 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 
 	        // Itera attraverso i risultati e crea gli oggetti Segnalazione
 	        while (resultSet.next()) {
-	            Segnalazione segnalazione = new Segnalazione();
-
-	            segnalazione.setIdSegnalazione(resultSet.getInt("id_segnalazione"));
-	            segnalazione.setIdUtente(resultSet.getInt("id_utente"));
-	            segnalazione.setDescrizione(resultSet.getString("descrizione"));
-	            segnalazione.setFoto(resultSet.getString("foto")); // Gestisci il recupero del BLOB come necessario
-	            segnalazione.setStato(resultSet.getString("stato"));
-	            segnalazione.setLatitudine(resultSet.getDouble("latitudine"));
-	            segnalazione.setLongitudine(resultSet.getDouble("longitudine"));
+                Segnalazione segnalazione = new Segnalazione();
+                segnalazione.setIdSegnalazione(resultSet.getInt(COL_ID_SEGNALAZIONE));
+                segnalazione.setIdUtente(resultSet.getInt(COL_ID_UTENTE));
+                segnalazione.setDescrizione(resultSet.getString(COL_DESCRIZIONE));
+                segnalazione.setFoto(resultSet.getString(COL_FOTO));
+                segnalazione.setStato(resultSet.getString(COL_STATO));
+                segnalazione.setLatitudine(resultSet.getDouble(COL_LATITUDINE));
+                segnalazione.setLongitudine(resultSet.getDouble(COL_LONGITUDINE));
 
 	            // Aggiungi la segnalazione alla lista
 	            segnalazioni.add(segnalazione);
@@ -197,7 +205,6 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        try {
 	            if (resultSet != null) resultSet.close();
 	            if (stmt != null) stmt.close();
-	            // if (connessione != null) connessione.close(); // Non chiudere la connessione se gestita altrove
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }
@@ -219,9 +226,9 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        connessione = DBConnection.getConnection();
 
 	        // Query SQL per ottenere le segnalazioni con un determinato stato
-	        String sql = "SELECT id_segnalazione, id_utente, descrizione, foto, stato, latitudine, longitudine " +
-	                     "FROM segnalazioni " +
-	                     "WHERE stato = ?";
+	        String sql = "SELECT " + COL_ID_SEGNALAZIONE + ", " + COL_ID_UTENTE + ", " + COL_DESCRIZIONE + ", " + COL_FOTO +
+                    ", " + COL_STATO + ", " + COL_LATITUDINE + ", " + COL_LONGITUDINE + " FROM segnalazioni " +
+                    "WHERE " + COL_STATO + " = ?";
 
 	        stmt = connessione.prepareStatement(sql);
 	        stmt.setString(1, stato); // Imposta lo stato come parametro nella query
@@ -233,15 +240,14 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        while (resultSet.next()) {
 	            Segnalazione segnalazione = new Segnalazione();
 
-	            segnalazione.setIdSegnalazione(resultSet.getInt("id_segnalazione"));
-	            segnalazione.setIdUtente(resultSet.getInt("id_utente"));
-	            segnalazione.setDescrizione(resultSet.getString("descrizione"));
-	            segnalazione.setFoto(resultSet.getString("foto")); // Gestisci il recupero del BLOB come necessario
-	            segnalazione.setStato(resultSet.getString("stato"));
-	            segnalazione.setLatitudine(resultSet.getDouble("latitudine"));
-	            segnalazione.setLongitudine(resultSet.getDouble("longitudine"));
 
-	            // Aggiungi la segnalazione alla lista
+	            segnalazione.setIdSegnalazione(resultSet.getInt(COL_ID_SEGNALAZIONE));
+	            segnalazione.setIdUtente(resultSet.getInt(COL_ID_UTENTE));
+	            segnalazione.setDescrizione(resultSet.getString(COL_DESCRIZIONE));
+	            segnalazione.setFoto(resultSet.getString(COL_FOTO));
+	            segnalazione.setStato(resultSet.getString(COL_STATO));
+	            segnalazione.setLatitudine(resultSet.getDouble(COL_LATITUDINE));
+	            segnalazione.setLongitudine(resultSet.getDouble(COL_LONGITUDINE));
 	            segnalazioni.add(segnalazione);
 	        }
 	    } catch (SQLException e) {
@@ -250,7 +256,6 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        try {
 	            if (resultSet != null) resultSet.close();
 	            if (stmt != null) stmt.close();
-	            //if (connessione != null) connessione.close();
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }
@@ -271,7 +276,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        connessione = DBConnection.getConnection();
 	        
 	        // Query SQL per eliminare la segnalazione tramite il suo ID
-	        String sql = "DELETE FROM segnalazioni WHERE id_segnalazione = ?";
+	        String sql = "DELETE FROM segnalazioni WHERE " + COL_ID_SEGNALAZIONE + " = ?";
 	        
 	        stmt = connessione.prepareStatement(sql);
 	        stmt.setInt(1, idSegnalazione); // Imposta l'ID come parametro
@@ -279,10 +284,10 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        int righeEliminate = stmt.executeUpdate();
 	        if (righeEliminate > 0) {
 	            connessione.commit();
-	            System.out.println("Segnalazione eliminata con successo");
+	            logger.info("Segnalazione eliminata con successo");
 	        } else {
 	            connessione.rollback();
-	            System.out.println("Errore: nessuna segnalazione trovata con l'ID specificato");
+	            logger.info("Errore: nessuna segnalazione trovata con l'ID specificato");
 	        }
 
 	    } catch (SQLException e) {
@@ -291,7 +296,6 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	    } finally {
 	        try {
 	            if (stmt != null) stmt.close();
-	            //if (connessione != null) connessione.close();
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }
@@ -310,8 +314,8 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        connessione.setAutoCommit(false); // Imposta la transazione manuale
 
 	        // Query SQL per inserire una nuova assegnazione
-	        String sqlAssegnazione = "INSERT INTO assegnazioni (id_segnalazione, id_operatore, id_esperto, assegnato_at) " +
-	                                 "VALUES (?, ?, ?, NOW())";
+	        String sqlAssegnazione = "INSERT INTO assegnazioni (" + COL_ID_SEGNALAZIONE + ", id_operatore, id_esperto, assegnato_at) " +
+                    "VALUES (?, ?, ?, NOW())";
 
 	        stmtAssegnazione = connessione.prepareStatement(sqlAssegnazione);
 	        stmtAssegnazione.setInt(1, idSegnalazione);
@@ -322,10 +326,12 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 
 	        if (righeInserite > 0) {
 	            // Query SQL per aggiornare lo stato della segnalazione a 'In corso'
-	            String sqlAggiornaStato = "UPDATE segnalazioni SET stato = 'In corso' WHERE id_segnalazione = ?";
+	        	String sqlAggiornaStato = "UPDATE segnalazioni SET " + COL_STATO + " = ? WHERE " + COL_ID_SEGNALAZIONE + " = ?";
+
 
 	            stmtAggiornaStato = connessione.prepareStatement(sqlAggiornaStato);
-	            stmtAggiornaStato.setInt(1, idSegnalazione);
+	            stmtAggiornaStato.setString(1, StatoSegnalazione.IN_CORSO.getStato()); // Usa la enum per lo stato 'In corso'
+	            stmtAggiornaStato.setInt(2, idSegnalazione);
 	            stmtAggiornaStato.executeUpdate();
 
 	            connessione.commit(); // Commit della transazione
@@ -346,7 +352,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        try {
 	            if (stmtAssegnazione != null) stmtAssegnazione.close();
 	            if (stmtAggiornaStato != null) stmtAggiornaStato.close();
-	            // if (connessione != null) connessione.close();
+
 	        } catch (SQLException e) {
 	            e.printStackTrace(); // Gestione degli errori di chiusura
 	        }
@@ -366,9 +372,9 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        connessione.setAutoCommit(false); // Imposta la transazione manuale
 
 	        // Query SQL per inserire o aggiornare i punti per la segnalazione
-	        String sqlPunti = "INSERT INTO punti_segnalazioni (id_segnalazione, punti) " +
-	                          "VALUES (?, ?) " +
-	                          "ON DUPLICATE KEY UPDATE punti = ?";
+	        String sqlPunti = "INSERT INTO punti_segnalazioni (" + COL_ID_SEGNALAZIONE + ", " + COL_PUNTI + ") " +
+                    "VALUES (?, ?) " +
+                    "ON DUPLICATE KEY UPDATE " + COL_PUNTI + " = ?";
 
 	        stmtPunti = connessione.prepareStatement(sqlPunti);
 	        stmtPunti.setInt(1, idSegnalazione);  // Imposta l'ID della segnalazione come parametro
@@ -379,9 +385,10 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 
 	        if (righeInserite > 0) {
 	            // Query SQL per aggiornare lo stato della segnalazione a 'Riscontrata'
-	            String sqlAggiornaStato = "UPDATE segnalazioni SET stato = 'Riscontrata' WHERE id_segnalazione = ?";
+	        	String sqlAggiornaStato = "UPDATE segnalazioni SET " + COL_STATO + " = ? WHERE " + COL_ID_SEGNALAZIONE + " = ?";
 	            stmtAggiornaStato = connessione.prepareStatement(sqlAggiornaStato);
-	            stmtAggiornaStato.setInt(1, idSegnalazione);
+	            stmtAggiornaStato.setString(1, StatoSegnalazione.RISCONTRATA.getStato()); // Usa la enum per lo stato 'Riscontrata'
+	            stmtAggiornaStato.setInt(2, idSegnalazione);
 	            stmtAggiornaStato.executeUpdate();
 
 	            connessione.commit(); // Commit della transazione
@@ -402,7 +409,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        try {
 	            if (stmtPunti != null) stmtPunti.close(); // Chiudi il PreparedStatement per i punti
 	            if (stmtAggiornaStato != null) stmtAggiornaStato.close(); // Chiudi il PreparedStatement per l'aggiornamento dello stato
-	            // if (connessione != null) connessione.close();
+
 	        } catch (SQLException e) {
 	            e.printStackTrace(); // Gestione degli errori di chiusura
 	        }
@@ -424,10 +431,10 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        connessione = DBConnection.getConnection();
 
 	        // Query SQL per ottenere le segnalazioni assegnate a un operatore specifico con stato "In corso"
-	        String sql = "SELECT s.id_segnalazione, s.id_utente, s.descrizione, s.foto, s.stato, s.latitudine, s.longitudine " +
-	                     "FROM segnalazioni s " +
-	                     "JOIN assegnazioni a ON s.id_segnalazione = a.id_segnalazione " +
-	                     "WHERE a.id_operatore = ? AND s.stato = ?";
+	        String sql = "SELECT s." + COL_ID_SEGNALAZIONE + ", s." + COL_ID_UTENTE + ", s." + COL_DESCRIZIONE + 
+                    ", s." + COL_FOTO + ", s." + COL_STATO + ", s." + COL_LATITUDINE + ", s." + COL_LONGITUDINE +
+                    " FROM segnalazioni s JOIN assegnazioni a ON s." + COL_ID_SEGNALAZIONE + " = a.id_segnalazione " +
+                    "WHERE a.id_operatore = ? AND s." + COL_STATO + " = ?";
 
 	        stmt = connessione.prepareStatement(sql);
 	        stmt.setInt(1, idOperatore); // Imposta l'ID dell'operatore come parametro
@@ -439,16 +446,13 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        // Itera attraverso i risultati e crea gli oggetti Segnalazione
 	        while (resultSet.next()) {
 	            Segnalazione segnalazione = new Segnalazione();
-
-	            segnalazione.setIdSegnalazione(resultSet.getInt("id_segnalazione"));
-	            segnalazione.setIdUtente(resultSet.getInt("id_utente"));
-	            segnalazione.setDescrizione(resultSet.getString("descrizione"));
-	            segnalazione.setFoto(resultSet.getString("foto")); 
-	            segnalazione.setStato(resultSet.getString("stato"));
-	            segnalazione.setLatitudine(resultSet.getDouble("latitudine"));
-	            segnalazione.setLongitudine(resultSet.getDouble("longitudine"));
-
-	            // Aggiungi la segnalazione alla lista
+	            segnalazione.setIdSegnalazione(resultSet.getInt(COL_ID_SEGNALAZIONE));
+	            segnalazione.setIdUtente(resultSet.getInt(COL_ID_UTENTE));
+	            segnalazione.setDescrizione(resultSet.getString(COL_DESCRIZIONE));
+	            segnalazione.setFoto(resultSet.getString(COL_FOTO));
+	            segnalazione.setStato(resultSet.getString(COL_STATO));
+	            segnalazione.setLatitudine(resultSet.getDouble(COL_LATITUDINE));
+	            segnalazione.setLongitudine(resultSet.getDouble(COL_LONGITUDINE));
 	            segnalazioni.add(segnalazione);
 	        }
 	    } catch (SQLException e) {
@@ -457,7 +461,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        try {
 	            if (resultSet != null) resultSet.close();
 	            if (stmt != null) stmt.close();
-	            // if (connessione != null) connessione.close();
+
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }
@@ -487,10 +491,11 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        connessione = DBConnection.getConnection();
 
 	        // Query SQL per aggiornare lo stato della segnalazione
-	        String sql = "UPDATE segnalazioni SET stato = ? WHERE id_segnalazione = ?";
+	        String sql = "UPDATE segnalazioni SET " + COL_STATO + " = ? WHERE " + COL_ID_SEGNALAZIONE + " = ?";
+
 
 	        stmt = connessione.prepareStatement(sql);
-	        stmt.setString(1, "Risolta"); // Imposta lo stato a "Risolta"
+	        stmt.setString(1, StatoSegnalazione.RISOLTA.getStato()); // Imposta lo stato a "Risolta"
 	        stmt.setInt(2, idSegnalazione); // Imposta l'ID della segnalazione come parametro
 
 	        int righeAggiornate = stmt.executeUpdate();
@@ -511,9 +516,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        }
 	    } finally {
 	        try {
-	            if (stmt != null) stmt.close(); // Chiudi il PreparedStatement
-	            // Se necessario, chiudi anche la connessione qui
-	            // if (connessione != null) connessione.close();
+	            if (stmt != null) stmt.close(); // chiudo il PreparedStatement
 	        } catch (SQLException e) {
 	            e.printStackTrace(); // Gestione degli errori di chiusura
 	        }

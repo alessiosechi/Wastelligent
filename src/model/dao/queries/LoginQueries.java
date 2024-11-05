@@ -7,6 +7,11 @@ import java.sql.SQLException;
 import model.dao.DBConnection;
 
 public class LoginQueries {
+	
+	
+	private LoginQueries() {
+		// costruttore vuoto
+	}
 
     public static ResultSet login(String username, String password) throws SQLException {
         String sql = "SELECT r.nome FROM utenti u JOIN ruoli r ON u.tipo_utente = r.id_ruolo WHERE u.username = ? AND u.password_hash = ?";
