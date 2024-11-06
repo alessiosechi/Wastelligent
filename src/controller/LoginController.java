@@ -16,19 +16,10 @@ public class LoginController {
 	private static LoginDAO loginDAO;
 	private static UtenteFactory utenteFactory = new UtenteFactory();
 
-	private static Conversione conversione = new Conversione();
 	private static final Logger logger = Logger.getLogger(LoginController.class.getName());
 	private static final String REGISTRAZIONE_ERRORE_MSG = "Errore durante la registrazione.";
 
 	private LoginController() {
-		try {
-			// inizializzazione di LoginDAO
-			loginDAO = LoginDAOImplementazione.getInstance();
-
-		} catch (Exception e) {
-			logger.severe("Errore durante l'inizializzazione di LoginDAO: " + e.getMessage());
-			throw new RuntimeException("Impossibile inizializzare LoginDAO");
-		}
 	}
 
 	public static LoginController getInstance() {
@@ -40,6 +31,16 @@ public class LoginController {
 				result = instance;
 				if (result == null) {
 					instance = result = new LoginController();
+					
+					
+					try {
+						// inizializzazione di LoginDAO
+						loginDAO = LoginDAOImplementazione.getInstance();
+
+					} catch (Exception e) {
+						logger.severe("Errore durante l'inizializzazione di LoginDAO: " + e.getMessage());
+						throw new RuntimeException("Impossibile inizializzare LoginDAO");
+					}
 				}
 
 			}
@@ -48,25 +49,6 @@ public class LoginController {
 		return result;
 	}
 
-//	public int effettuaLogin(String username, String password) {
-//		try {
-//			System.out.println("USERNAME: " + username);
-//			System.out.println("PASSWORD: " + password);
-//			int ruoloId = loginDAO.autenticazione(username, password);
-//
-//			int idUtente = loginDAO.getIdByUsername(username);
-//
-//			setUtente(idUtente, username, Ruolo.fromInt(ruoloId));
-//
-//			return 1;
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			logger.severe("Errore durante la fase di login.");
-//			return -1;
-//		}
-//
-//	}
 	public int effettuaLogin(CredenzialiBean credenzialiBean) {
 		try {
 			String username = credenzialiBean.getUsername();
@@ -131,7 +113,7 @@ public class LoginController {
 
 	public UtenteBean getUtente() {
 
-		return conversione.convertToBean(utente);
+		return convertUtenteToBean(utente);
 	}
 
 	public static void logout() { // il logout potrebbe non servire, tanto ad ogni login sovrascrivo l'utente
@@ -158,10 +140,10 @@ public class LoginController {
 //	    }
 //	}
 
-//	public UtenteBean convertToBean(Utente utente) {
-//		UtenteBean utenteBean = new UtenteBean();
-//		utenteBean.setIdUtente(utente.getIdUtente());
-//		utenteBean.setUsername(utente.getUsername());
-//		return utenteBean;
-//	}
+	public UtenteBean convertUtenteToBean(Utente utente) {
+		UtenteBean utenteBean = new UtenteBean();
+		utenteBean.setIdUtente(utente.getIdUtente());
+		utenteBean.setUsername(utente.getUsername());
+		return utenteBean;
+	}
 }

@@ -26,7 +26,7 @@ import model.domain.SegnalazioneBean;
 public class RiscattaRicompensaController {
 
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
-	private static Conversione conversione = new Conversione();
+
 	
 	
 	// i DAO sono stateless, li dichiaro statici
@@ -48,7 +48,7 @@ public class RiscattaRicompensaController {
 
 			if (!ricompenseAPI.isEmpty()) {
 
-				return conversione.convertRicompensaListToBeanList(ricompenseAPI);
+				return convertRicompensaListToBeanList(ricompenseAPI);
 			} else {
 				return new ArrayList<>();
 			}
@@ -65,7 +65,7 @@ public class RiscattaRicompensaController {
 	        ricompenseUtente = ricompensaDAO.getRicompenseByUtente(idUtente);
 
 			if (!ricompenseUtente.isEmpty()) {
-				return conversione.convertRicompensaListToBeanList(ricompenseUtente);
+				return convertRicompensaListToBeanList(ricompenseUtente);
 			} else {
 				return new ArrayList<>();
 			}
@@ -79,9 +79,9 @@ public class RiscattaRicompensaController {
 	public boolean riscatta(RicompensaBean ricompensaBean) throws DailyRedemptionLimitException, InsufficientPointsException{
 
 		try {
-			Ricompensa ricompensa = conversione.convertToEntity(ricompensaBean);
+			Ricompensa ricompensa = convertRicompensaToEntity(ricompensaBean);
 
-			int idUtente = ricompensa.getIdUtente();
+
 			
 			
 	        
@@ -95,14 +95,14 @@ public class RiscattaRicompensaController {
 	        }
 	        
 	        if (numeroRiscattiOggi >= 5) {
-	        	logger.warning(String.format("Limite di 5 riscatti al giorno raggiunto per l'utente %s", idUtente));
+	        	logger.warning("Limite di riscatti giornalieri raggiunto.");
 
 	            throw new DailyRedemptionLimitException("Hai raggiunto il limite giornaliero di riscatti.");
 
 	        }
 			
 			
-			
+			int idUtente = ricompensa.getIdUtente();
 			int puntiUtente = ottieniPuntiUtente(idUtente);
 			int puntiNecessari = calcolaPuntiNecessari(ricompensa.getValore());
 			
@@ -181,7 +181,7 @@ public class RiscattaRicompensaController {
 					s.setPosizione(posizioneTesto);
 				}
 
-				return conversione.convertSegnalazioneRiscontrataListToBeanList(segnalazioniRiscontrate);
+				return convertSegnalazioneRiscontrataListToBeanList(segnalazioniRiscontrate);
 
 			} else {
 				return new ArrayList<>();
@@ -237,59 +237,97 @@ public class RiscattaRicompensaController {
 		return result;
 	}
 
-//	public Ricompensa convertToEntity(RicompensaBean ricompensaBean) {
-//		Ricompensa ricompensa = new Ricompensa();
-//
-//		ricompensa.setIdRicompensa(ricompensaBean.getIdRicompensa());
-//		ricompensa.setIdUtente(ricompensaBean.getIdUtente());
-//		ricompensa.setNome(ricompensaBean.getNome());
-//		ricompensa.setDescrizione(ricompensaBean.getDescrizione());
-//		ricompensa.setValore(ricompensaBean.getValore());
-//		ricompensa.setDataScadenza(ricompensaBean.getDataScadenza());
-//
-//
-//		return ricompensa;
-//	}
+	private Ricompensa convertRicompensaToEntity(RicompensaBean ricompensaBean) {
+		Ricompensa ricompensa = new Ricompensa();
 
-//    private List<RicompensaBean> convertRicompensaListToBeanList(List<Ricompensa> ricompense) {
-//        if (ricompense == null) {
-//            return new ArrayList<>();
-//        }
-//
-//        List<RicompensaBean> ricompensaBeanList = new ArrayList<>();
-//
-//        for (Ricompensa r : ricompense) {
-//            RicompensaBean ricompensaBean = convertToBean(r);
-//            ricompensaBeanList.add(ricompensaBean);
-//        }
-//
-//        return ricompensaBeanList;
-//    }
-//
-//    private RicompensaBean convertToBean(Ricompensa r) {
-//        RicompensaBean ricompensaBean = new RicompensaBean();
-//
-//        ricompensaBean.setIdRicompensa(r.getIdRicompensa());
-//        ricompensaBean.setNome(r.getNome());
-//        ricompensaBean.setValore(r.getValore());
-//        ricompensaBean.setDescrizione(r.getDescrizione());
-//        ricompensaBean.setDataScadenza(r.getDataScadenza());
-//
-//        // impostazione campi opzionali solo se inizializzati
-//        if (r.getIdUtente() > 0) {
-//            ricompensaBean.setIdUtente(r.getIdUtente());
-//        }
-//        if (r.getDataRiscatto() != null) {
-//            ricompensaBean.setDataRiscatto(r.getDataRiscatto());
-//        }
-//        if (r.getCodiceRiscatto() != null) {
-//            ricompensaBean.setCodiceRiscatto(r.getCodiceRiscatto());
-//        }
-//        if (r.getPunti() > 0) {
-//            ricompensaBean.setPunti(r.getPunti());
-//        }
-//
-//        return ricompensaBean;
-//    }
+		ricompensa.setIdRicompensa(ricompensaBean.getIdRicompensa());
+		ricompensa.setIdUtente(ricompensaBean.getIdUtente());
+		ricompensa.setNome(ricompensaBean.getNome());
+		ricompensa.setDescrizione(ricompensaBean.getDescrizione());
+		ricompensa.setValore(ricompensaBean.getValore());
+		ricompensa.setDataScadenza(ricompensaBean.getDataScadenza());
 
+
+		return ricompensa;
+	}
+
+    private List<RicompensaBean> convertRicompensaListToBeanList(List<Ricompensa> ricompense) {
+        if (ricompense == null) {
+            return new ArrayList<>();
+        }
+
+        List<RicompensaBean> ricompensaBeanList = new ArrayList<>();
+
+        for (Ricompensa r : ricompense) {
+            RicompensaBean ricompensaBean = convertRicompensaToBean(r);
+            ricompensaBeanList.add(ricompensaBean);
+        }
+
+        return ricompensaBeanList;
+    }
+
+    private RicompensaBean convertRicompensaToBean(Ricompensa r) {
+        RicompensaBean ricompensaBean = new RicompensaBean();
+
+        ricompensaBean.setIdRicompensa(r.getIdRicompensa());
+        ricompensaBean.setNome(r.getNome());
+        ricompensaBean.setValore(r.getValore());
+        ricompensaBean.setDescrizione(r.getDescrizione());
+        ricompensaBean.setDataScadenza(r.getDataScadenza());
+
+        // impostazione campi opzionali solo se inizializzati
+        if (r.getIdUtente() > 0) {
+            ricompensaBean.setIdUtente(r.getIdUtente());
+        }
+        if (r.getDataRiscatto() != null) {
+            ricompensaBean.setDataRiscatto(r.getDataRiscatto());
+        }
+        if (r.getCodiceRiscatto() != null) {
+            ricompensaBean.setCodiceRiscatto(r.getCodiceRiscatto());
+        }
+        if (r.getPunti() > 0) {
+            ricompensaBean.setPunti(r.getPunti());
+        }
+
+        return ricompensaBean;
+    }
+
+    
+    
+    
+    
+	private List<SegnalazioneBean> convertSegnalazioneRiscontrataListToBeanList(List<Segnalazione> segnalazioniRiscontrate) {
+
+		
+        if (segnalazioniRiscontrate == null) {
+            return new ArrayList<>();
+        }
+
+		List<SegnalazioneBean> segnalazioneBeanList = new ArrayList<>();
+
+        for (Segnalazione s : segnalazioniRiscontrate) {
+            SegnalazioneBean segnalazioneBean = convertSegnalazioneToBean(s);
+            segnalazioneBeanList.add(segnalazioneBean);
+        }
+
+        return segnalazioneBeanList;
+	}
+	
+	
+	
+    private SegnalazioneBean convertSegnalazioneToBean(Segnalazione s) {
+        SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
+        // verificare se servono tutti
+		segnalazioneBean.setDescrizione(s.getDescrizione());
+		segnalazioneBean.setFoto(s.getFoto());
+		segnalazioneBean.setIdUtente(s.getIdUtente());
+		segnalazioneBean.setLatitudine(s.getLatitudine());
+		segnalazioneBean.setLongitudine(s.getLongitudine());
+		segnalazioneBean.setPuntiAssegnati(s.getPuntiAssegnati());
+		segnalazioneBean.setPosizione(s.getPosizione());
+		segnalazioneBean.setStato(s.getStato());
+		segnalazioneBean.setIdSegnalazione(s.getIdSegnalazione());
+
+        return segnalazioneBean;
+    }
 }

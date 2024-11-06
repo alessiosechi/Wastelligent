@@ -36,21 +36,7 @@ public class ViewLoader {
   
             Parent root = loader.load();
 
-            // tramite reflection chiamo il metodo "setPrimaryStage" (se esiste nel controller)
-            if (controller != null) {
-                try {
-                    // ottengo il metodo
-                    Method setPrimaryStageMethod = controller.getClass().getMethod("setPrimaryStage", Stage.class);
-                    
-                    // passo lo stage al metodo
-                    setPrimaryStageMethod.invoke(controller, stage);
-                } catch (NoSuchMethodException e) {
-
-                    logger.info("Il controller non ha il metodo setPrimaryStage: " + e.getMessage());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            setPrimaryStageIfExists(controller, stage);
             
 
             // imposto la nuova scena nello stage
@@ -61,6 +47,24 @@ public class ViewLoader {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    
+    
+    private static void setPrimaryStageIfExists(Object controller, Stage stage) {
+        // tramite reflection chiamo il metodo "setPrimaryStage" (se esiste nel controller)
+        if (controller != null) {
+            try {
+                // Ottengo il metodo setPrimaryStage
+                Method setPrimaryStageMethod = controller.getClass().getMethod("setPrimaryStage", Stage.class);
+
+                // Passo lo stage al metodo
+                setPrimaryStageMethod.invoke(controller, stage);
+            } catch (NoSuchMethodException e) {
+                logger.info("Il controller non ha il metodo setPrimaryStage: " + e.getMessage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

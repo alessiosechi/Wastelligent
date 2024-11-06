@@ -10,12 +10,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
 
 public class RicompensaDAOImplementazione implements RicompensaDAO {
 
 	private static volatile RicompensaDAOImplementazione instance;
-    private static final Logger logger = Logger.getLogger(RicompensaDAOImplementazione.class.getName());
 
 	public static RicompensaDAOImplementazione getInstance() {
 		RicompensaDAOImplementazione result = instance;
@@ -110,7 +109,6 @@ public class RicompensaDAOImplementazione implements RicompensaDAO {
 
 	        // Itera attraverso i risultati e crea gli oggetti Ricompensa
 	        while (resultSet.next()) {
-	            //int idRicompensa = resultSet.getInt("id_ricompensa");
 	        	
 	        	
 	            String nome = resultSet.getString("nome");

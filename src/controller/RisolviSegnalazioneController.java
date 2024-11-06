@@ -26,14 +26,6 @@ public class RisolviSegnalazioneController {
 
 	
 	private RisolviSegnalazioneController() {
-		try {
-
-			segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
-			utenteDAO=UtenteDAOImplementazione.getInstance();
-		} catch (Exception e) {
-	        logger.severe("Errore durante l'inizializzazione di uno dei DAO: " + e.getMessage());
-			throw new RuntimeException("Inizializzazione fallita");
-		}
 	}
 	
 	
@@ -46,6 +38,15 @@ public class RisolviSegnalazioneController {
 				result = instance;
 				if (result == null) {
 					instance = result = new RisolviSegnalazioneController();
+					
+					try {
+
+						segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
+						utenteDAO=UtenteDAOImplementazione.getInstance();
+					} catch (Exception e) {
+				        logger.severe("Errore durante l'inizializzazione di uno dei DAO: " + e.getMessage());
+						throw new RuntimeException("Inizializzazione fallita");
+					}
 				}
 			}
 		}
@@ -68,7 +69,7 @@ public class RisolviSegnalazioneController {
 					s.setPosizione(posizioneTesto);
 				}
 
-				return conversione.convertSegnalazioneRiscontrataListToBeanList(segnalazioniDaCompletare);
+				return convertSegnalazioneListToBeanList(segnalazioniDaCompletare);
 				
 				
 				
@@ -151,7 +152,7 @@ public class RisolviSegnalazioneController {
 					s.setPosizione(posizioneTesto);
 				}
 
-				return conversione.convertSegnalazioneRiscontrataListToBeanList(segnalazioniAssegnate);
+				return convertSegnalazioneListToBeanList(segnalazioniAssegnate);
 				
 				
 				
@@ -204,6 +205,44 @@ public class RisolviSegnalazioneController {
 			return new ArrayList<>();
 		}
 	}
+	
+	
+	
+	
+	private List<SegnalazioneBean> convertSegnalazioneListToBeanList(List<Segnalazione> segnalazioni) {
+
+		
+        if (segnalazioni == null) {
+            return new ArrayList<>();
+        }
+
+		List<SegnalazioneBean> segnalazioneBeanList = new ArrayList<>();
+
+        for (Segnalazione s : segnalazioni) {
+            SegnalazioneBean segnalazioneBean = convertSegnalazioneToBean(s);
+            segnalazioneBeanList.add(segnalazioneBean);
+        }
+
+        return segnalazioneBeanList;
+	}
+	
+	
+	
+    private SegnalazioneBean convertSegnalazioneToBean(Segnalazione s) {
+        SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
+        // verificare se servono tutti
+		segnalazioneBean.setDescrizione(s.getDescrizione());
+		segnalazioneBean.setFoto(s.getFoto());
+		segnalazioneBean.setIdUtente(s.getIdUtente());
+		segnalazioneBean.setLatitudine(s.getLatitudine());
+		segnalazioneBean.setLongitudine(s.getLongitudine());
+		segnalazioneBean.setPuntiAssegnati(s.getPuntiAssegnati());
+		segnalazioneBean.setPosizione(s.getPosizione());
+		segnalazioneBean.setStato(s.getStato());
+		segnalazioneBean.setIdSegnalazione(s.getIdSegnalazione());
+
+        return segnalazioneBean;
+    }
     
 	
 }

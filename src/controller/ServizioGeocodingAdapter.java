@@ -32,21 +32,22 @@ public class ServizioGeocodingAdapter implements ServizioGeocoding {
         connessione.setRequestMethod("GET");
 
         InputStreamReader lettore = new InputStreamReader(connessione.getInputStream());
-        Scanner scanner = new Scanner(lettore);
-        StringBuilder risposta = new StringBuilder();
-        while (scanner.hasNextLine()) {
-            risposta.append(scanner.nextLine());
-        }
+        try (Scanner scanner = new Scanner(lettore)) {
+			StringBuilder risposta = new StringBuilder();
+			while (scanner.hasNextLine()) {
+			    risposta.append(scanner.nextLine());
+			}
 
-        // Analisi della risposta
-        Gson gson = new Gson();
-        JsonObject json = gson.fromJson(risposta.toString(), JsonObject.class);
-        JsonArray risultati = json.getAsJsonArray("results");
-        JsonObject geometria = risultati.get(0).getAsJsonObject().getAsJsonObject("geometry");
-        double latitudine = geometria.get("lat").getAsDouble();
-        double longitudine = geometria.get("lng").getAsDouble();
+			// Analisi della risposta
+			Gson gson = new Gson();
+			JsonObject json = gson.fromJson(risposta.toString(), JsonObject.class);
+			JsonArray risultati = json.getAsJsonArray("results");
+			JsonObject geometria = risultati.get(0).getAsJsonObject().getAsJsonObject("geometry");
+			double latitudine = geometria.get("lat").getAsDouble();
+			double longitudine = geometria.get("lng").getAsDouble();
 
-        return new Posizione(latitudine, longitudine);
+			return new Posizione(latitudine, longitudine);
+		}
     }
     
     @Override

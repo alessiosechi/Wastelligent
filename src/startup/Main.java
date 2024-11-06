@@ -1,14 +1,11 @@
 package startup;
 
 import boundary.LoginViewController;
-import boundary.LoginViewController1;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.Screen;
 
 public class Main extends Application {
     

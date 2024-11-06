@@ -11,14 +11,14 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
 
 public class ListaRicompenseGithubDAOImplementazione implements ListaRicompenseGithubDAO {
 	private static final String API_URL_REWARDS = "https://raw.githubusercontent.com/alessiosechi/API_Rewards_public/main/rewards.json";
     private static final String API_URL_CODES = "https://raw.githubusercontent.com/alessiosechi/API_Rewards_public/main/codes.json";
 
 	private static volatile ListaRicompenseGithubDAOImplementazione instance;
-    private static final Logger logger = Logger.getLogger(ListaRicompenseGithubDAOImplementazione.class.getName());
+
 
 	public static ListaRicompenseGithubDAOImplementazione getInstance() {
 		ListaRicompenseGithubDAOImplementazione result = instance;
@@ -63,7 +63,6 @@ public class ListaRicompenseGithubDAOImplementazione implements ListaRicompenseG
 				// in questo modo, i nomi degli attributi della classe Ricompensa devono corrispondere a quelli nel file json
 
 				int idRicompensa =rewardObj.get("id").getAsInt();
-
 		        String nome = rewardObj.get("nome").getAsString();
 		        int valore = rewardObj.get("valore").getAsInt();
 		        String descrizione = rewardObj.get("descrizione").getAsString();

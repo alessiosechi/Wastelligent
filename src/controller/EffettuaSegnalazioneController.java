@@ -15,18 +15,10 @@ public class EffettuaSegnalazioneController {
 	private static volatile EffettuaSegnalazioneController instance;
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
 
-	private static Conversione conversione = new Conversione();
 	private static SegnalazioneDAO segnalazioneDAO;
 	private static final Logger logger = Logger.getLogger(EffettuaSegnalazioneController.class.getName());
 
 	private EffettuaSegnalazioneController() {
-		try {
-			// inizializzazione di segnalazioneDAO
-			segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
-		} catch (Exception e) {
-			logger.severe("Errore durante l'inizializzazione di segnalazioneDAO: " + e.getMessage());
-			throw new RuntimeException("Impossibile inizializzare segnalazioneDAO");
-		}
 	}
 
 	public static EffettuaSegnalazioneController getInstance() {
@@ -37,6 +29,15 @@ public class EffettuaSegnalazioneController {
 				result = instance;
 				if (result == null) {
 					instance = result = new EffettuaSegnalazioneController();
+					
+					
+					try {
+						// inizializzazione di segnalazioneDAO
+						segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
+					} catch (Exception e) {
+						logger.severe("Errore durante l'inizializzazione di segnalazioneDAO: " + e.getMessage());
+						throw new RuntimeException("Impossibile inizializzare segnalazioneDAO");
+					}
 				}
 			}
 		}
@@ -49,14 +50,14 @@ public class EffettuaSegnalazioneController {
 		Posizione posizione = servizioGeocoding.ottieniCoordinate(location);
 
 
-		return conversione.convertToBean(posizione);
+		return convertPosizioneToBean(posizione);
 	}
 
 
 	public void inviaSegnalazione(SegnalazioneBean segnalazioneBean) throws SegnalazioneVicinaException{
 	    try {
 
-	        Segnalazione segnalazione = conversione.convertToEntity(segnalazioneBean);
+	        Segnalazione segnalazione = convertSegnalazioneToEntity(segnalazioneBean);
 
 	        // verifico se esistono segnalazioni nel raggio di 10 metri
 	        verificaSegnalazioneVicino(segnalazione);
@@ -165,26 +166,26 @@ public class EffettuaSegnalazioneController {
 	
 	
 
-//	public PosizioneBean convertToBean(Posizione posizione) {
-//		PosizioneBean posizioneBean = new PosizioneBean();
-//		posizioneBean.setLatitudine(posizione.getLatitudine());
-//		posizioneBean.setLongitudine(posizione.getLongitudine());
-//		return posizioneBean;
-//	}
-//	
-//	
-//	
-//	
-//	
-//	public Segnalazione convertToEntity(SegnalazioneBean segnalazioneBean) {
-//		Segnalazione segnalazione = new Segnalazione();
-//		segnalazione.setDescrizione(segnalazioneBean.getDescrizione());
-//		segnalazione.setFoto(segnalazioneBean.getFoto());
-//		segnalazione.setStato("Ricevuta"); 
-//		segnalazione.setIdUtente(segnalazioneBean.getIdUtente());
-//		segnalazione.setLatitudine(segnalazioneBean.getLatitudine());
-//		segnalazione.setLongitudine(segnalazioneBean.getLongitudine());
-//		return segnalazione;
-//	}
+	public PosizioneBean convertPosizioneToBean(Posizione posizione) {
+		PosizioneBean posizioneBean = new PosizioneBean();
+		posizioneBean.setLatitudine(posizione.getLatitudine());
+		posizioneBean.setLongitudine(posizione.getLongitudine());
+		return posizioneBean;
+	}
+	
+	
+	
+	
+	
+	public Segnalazione convertSegnalazioneToEntity(SegnalazioneBean segnalazioneBean) {
+		Segnalazione segnalazione = new Segnalazione();
+		segnalazione.setDescrizione(segnalazioneBean.getDescrizione());
+		segnalazione.setFoto(segnalazioneBean.getFoto());
+		segnalazione.setStato("Ricevuta"); 
+		segnalazione.setIdUtente(segnalazioneBean.getIdUtente());
+		segnalazione.setLatitudine(segnalazioneBean.getLatitudine());
+		segnalazione.setLongitudine(segnalazioneBean.getLongitudine());
+		return segnalazione;
+	}
 
 }

@@ -4,13 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 
 import model.dao.queries.LoginQueries;
 
 public class LoginDAOImplementazione implements LoginDAO{
 	private static volatile LoginDAOImplementazione instance;
-    private static final Logger logger = Logger.getLogger(LoginDAOImplementazione.class.getName());
+
 
 
 	private LoginDAOImplementazione() {
@@ -66,7 +65,6 @@ public class LoginDAOImplementazione implements LoginDAO{
 	    } finally {
 	        try {
 	            if (rs != null) rs.close();
-	            //if (stmt != null) stmt.close();
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }

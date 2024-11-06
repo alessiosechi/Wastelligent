@@ -18,19 +18,11 @@ public class AssegnaPuntiController {
 	private static volatile AssegnaPuntiController instance;
 	private static SegnalazioneDAO segnalazioneDAO;
 	private static UtenteDAO utenteDAO;
-	private static Conversione conversione = new Conversione();
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
 	private static final Logger logger = Logger.getLogger(AssegnaPuntiController.class.getName());
 	
 	
 	private AssegnaPuntiController() {
-		try {
-			segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
-			utenteDAO = UtenteDAOImplementazione.getInstance();
-		} catch (Exception e) {
-	        logger.severe("Errore durante l'inizializzazione di uno dei DAO: " + e.getMessage());
-			throw new RuntimeException("Inizializzazione fallita");
-		}
 	}
 	
 
@@ -44,6 +36,14 @@ public class AssegnaPuntiController {
 				result = instance;
 				if (result == null) {
 					instance = result = new AssegnaPuntiController();
+					
+					try {
+						segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
+						utenteDAO = UtenteDAOImplementazione.getInstance();
+					} catch (Exception e) {
+				        logger.severe("Errore durante l'inizializzazione di uno dei DAO: " + e.getMessage());
+						throw new RuntimeException("Inizializzazione fallita");
+					}
 				}
 
 			}
@@ -66,7 +66,7 @@ public class AssegnaPuntiController {
 					s.setPosizione(posizioneTesto);
 				}
 
-				return conversione.convertSegnalazioneRiscontrataListToBeanList(segnalazioniDaCompletare);
+				return convertSegnalazioneListToBeanList(segnalazioniDaCompletare);
 				
 				
 				
@@ -90,13 +90,11 @@ public class AssegnaPuntiController {
 	        int puntiAssegnati = segnalazioneBean.getPuntiAssegnati();
 	        int idUtente=segnalazioneBean.getIdUtente();
 	        
-	        
-	        
+	               
 	        
 	        segnalazioneDAO.assegnaPunti(idSegnalazione, puntiAssegnati);
 	        utenteDAO.aggiungiPuntiUtente(idUtente, puntiAssegnati);
-
-	        
+       
 	        return true;
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -107,7 +105,41 @@ public class AssegnaPuntiController {
 	
 	
 	
+	
+	private List<SegnalazioneBean> convertSegnalazioneListToBeanList(List<Segnalazione> segnalazioni) {
 
+		
+        if (segnalazioni == null) {
+            return new ArrayList<>();
+        }
+
+		List<SegnalazioneBean> segnalazioneBeanList = new ArrayList<>();
+
+        for (Segnalazione s : segnalazioni) {
+            SegnalazioneBean segnalazioneBean = convertSegnalazioneToBean(s);
+            segnalazioneBeanList.add(segnalazioneBean);
+        }
+
+        return segnalazioneBeanList;
+	}
 	
 	
+	
+    private SegnalazioneBean convertSegnalazioneToBean(Segnalazione s) {
+        SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
+        // verificare se servono tutti
+		segnalazioneBean.setDescrizione(s.getDescrizione());
+		segnalazioneBean.setFoto(s.getFoto());
+		segnalazioneBean.setIdUtente(s.getIdUtente());
+		segnalazioneBean.setLatitudine(s.getLatitudine());
+		segnalazioneBean.setLongitudine(s.getLongitudine());
+		segnalazioneBean.setPuntiAssegnati(s.getPuntiAssegnati());
+		segnalazioneBean.setPosizione(s.getPosizione());
+		segnalazioneBean.setStato(s.getStato());
+		segnalazioneBean.setIdSegnalazione(s.getIdSegnalazione());
+
+        return segnalazioneBean;
+    }
+	
+
 }

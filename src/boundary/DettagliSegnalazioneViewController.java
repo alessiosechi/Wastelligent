@@ -64,53 +64,66 @@ public class DettagliSegnalazioneViewController {
 //	public DettagliSegnalazioneViewController() {
 //		instance = this;
 //	}
-
 	@FXML
 	public void initialize() {
+	    stateMachine = new StateMachine();
 
-		stateMachine = new StateMachine();
+	    if (stateMachine != null) {
+	        stateMachine.setState(currentState);
+	    }
 
-		// la configurazione viene gestita dalla state machine
-		if (stateMachine != null) {
-			stateMachine.setState(currentState);
-		}
+	    loadImage();
+	    setupMapView();
+	    setupPositionLabel();
+		exitButton.setOnAction(event -> ViewLoader.caricaView("LoginView.fxml", primaryStage));
+	}
+	private void loadImage() {
+	    if (segnalazioneBean != null && segnalazioneBean.getFoto() != null) {
+	        String imagePath = "file:/" + segnalazioneBean.getFoto().replace("\\", "/");
+	        try {
+	            Image image = new Image(imagePath);
+	            configureImageView(image);
+	            setupImageViewTooltip();
+	            setupImageViewDoubleClick(image);
+	        } catch (Exception e) {
+	            logger.info("Errore durante il caricamento dell'immagine: " + e.getMessage());
+	        }
+	    }
+	}
+	
+	
+	private void configureImageView(Image image) {
+	    imageView.setImage(image);
+	    imageView.setFitWidth(image.getWidth());
+	    imageView.setFitHeight(image.getHeight());
+	    imageScrollPane.setContent(imageView);
+	}
 
-		if (segnalazioneBean != null && segnalazioneBean.getFoto() != null) {
-			String imagePath = "file:/" + segnalazioneBean.getFoto().replace("\\", "/");
-			try {
-				Image image = new Image(imagePath);
-				imageView.setImage(image);
+	private void setupImageViewTooltip() {
+	    Tooltip tooltip = new Tooltip("Fai doppio click per vedere l'immagine intera");
+	    tooltip.setShowDelay(Duration.millis(200));
+	    Tooltip.install(imageView, tooltip);
+	}
 
-				imageView.setFitWidth(image.getWidth());
-				imageView.setFitHeight(image.getHeight());
+	private void setupImageViewDoubleClick(Image image) {
+	    imageView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+	        if (event.getClickCount() == 2) {
+	            showFullImagePopup(image);
+	        }
+	    });
+	}
+	
+	
+	private void setupMapView() {
+	    MapView mapView = new MapView();
+	    mapView.initialize(Configuration.builder().projection(Projection.WEB_MERCATOR).showZoomControls(true).build());
+	    mapPane.getChildren().add(mapView);
+	    mapView.setPrefWidth(mapPane.getPrefWidth());
+	    mapView.setPrefHeight(mapPane.getPrefHeight());
 
-				imageScrollPane.setContent(imageView);
-
-				Tooltip tooltip = new Tooltip("Fai doppio click per vedere l'immagine intera");
-				tooltip.setShowDelay(Duration.millis(200));
-				Tooltip.install(imageView, tooltip);
-
-				imageView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-					if (event.getClickCount() == 2) {
-						showFullImagePopup(image);
-					}
-				});
-			} catch (Exception e) {
-				logger.info("Errore durante il caricamento dell'immagine: " + e.getMessage());
-			}
-		}
-
-		MapView mapView = new MapView();
-		mapView.initialize(Configuration.builder().projection(Projection.WEB_MERCATOR).showZoomControls(true).build());
-
-		mapPane.getChildren().add(mapView);
-		mapView.setPrefWidth(mapPane.getPrefWidth());
-		mapView.setPrefHeight(mapPane.getPrefHeight());
-
-		mapView.initializedProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue) {
-				logger.info("Mappa pronta");
-
+	    mapView.initializedProperty().addListener((observable, oldValue, newValue) -> {
+	        if (newValue) {
+	            logger.info("Mappa pronta");
 				if (segnalazioneBean != null && segnalazioneBean.getLatitudine() != 0
 						&& segnalazioneBean.getLongitudine() != 0) {
 					Coordinate coordinate = new Coordinate(segnalazioneBean.getLatitudine(),
@@ -127,19 +140,17 @@ public class DettagliSegnalazioneViewController {
 						}
 					});
 				}
-			}
-		});
-
-		String testoPosizione = segnalazioneBean.getPosizione();
-		posizioneLabel.setText(testoPosizione);
-
-		Tooltip tooltip = new Tooltip(testoPosizione);
-		Tooltip.install(posizioneLabel, tooltip);
-
-		exitButton.setOnAction(event -> 
-			ViewLoader.caricaView("LoginView.fxml", primaryStage)
-		);
+	        }
+	    });
 	}
+	private void setupPositionLabel() {
+	    String testoPosizione = segnalazioneBean.getPosizione();
+	    posizioneLabel.setText(testoPosizione);
+
+	    Tooltip tooltip = new Tooltip(testoPosizione);
+	    Tooltip.install(posizioneLabel, tooltip);
+	}
+
 
     private void showFullImagePopup(Image image) {
         ImageView fullImageView = new ImageView(image);
