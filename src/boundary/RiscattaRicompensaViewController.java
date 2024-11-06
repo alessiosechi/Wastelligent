@@ -130,7 +130,7 @@ public class RiscattaRicompensaViewController {
 		
 		
 		/*
-		 *  la soluzione sopra presenta un accoppiamento forte con i nomi degli attributi della classe Ricompensabean, 
+		 *  la soluzione con sopra presenta un accoppiamento forte con i nomi degli attributi della classe Ricompensabean, 
 		 *  invece, la soluzione sotto fa riferimento direttamente ai metodi getter di RicompensaBean, in tal modo, qualsiasi 
 		 *  modifica del nome delle proprietà all'interno di RicompensaBean non richiederà modifiche alla configurazione delle 
 		 *  colonne della TableView

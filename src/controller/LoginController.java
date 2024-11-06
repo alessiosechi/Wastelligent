@@ -103,7 +103,6 @@ public class LoginController {
 		if (ruolo == null) {
 			throw new IllegalArgumentException("Ruolo non può essere null");
 		}
-		// stampaDettagliUtenteCorrente();
 		utente = utenteFactory.createUtente(idUtente, username, ruolo);
 	}
 
@@ -121,24 +120,6 @@ public class LoginController {
 		logger.info("Logout effettuato correttamente.");
 	}
 
-//	public void stampaDettagliUtenteCorrente() {
-//	    if (utente != null) {
-//	        System.out.println("Ultimo utente: " + utente.getUsername());
-//	        
-//	        if (utente instanceof UtenteBase) {
-//	            UtenteBase utenteBase = (UtenteBase) utente;
-//	            System.out.println("Dettagli Utente Base: " + utenteBase.getIdUtente());
-//	        } else if (utente instanceof EspertoEcologico) {
-//	            EspertoEcologico esperto = (EspertoEcologico) utente;
-//	            System.out.println("Dettagli Esperto Ecologico: " + esperto.getIdUtente());
-//	        } else if (utente instanceof OperatoreEcologico) {
-//	            OperatoreEcologico operatore = (OperatoreEcologico) utente;
-//	            System.out.println("Dettagli Operatore Ecologico: " + operatore.getIdUtente());
-//	        }
-//	    } else {
-//	        System.out.println("Nessun utente è attualmente autenticato.");
-//	    }
-//	}
 
 	public UtenteBean convertUtenteToBean(Utente utente) {
 		UtenteBean utenteBean = new UtenteBean();

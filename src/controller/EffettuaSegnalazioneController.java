@@ -108,7 +108,6 @@ public class EffettuaSegnalazioneController {
 
 	    } catch (Exception e) {
 	        logger.severe("Errore durante la verifica delle eventuali segnalazioni vicine: " + e.getMessage());
-	        //throw new RuntimeException("Errore imprevisto durante la verifica delle eventuali segnalazioni vicine.", e);
 	    }
 
 	}

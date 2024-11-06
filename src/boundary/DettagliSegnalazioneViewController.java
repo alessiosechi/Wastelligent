@@ -61,9 +61,6 @@ public class DettagliSegnalazioneViewController {
 	private static final Logger logger = Logger.getLogger(DettagliSegnalazioneViewController.class.getName());
 
 
-//	public DettagliSegnalazioneViewController() {
-//		instance = this;
-//	}
 	@FXML
 	public void initialize() {
 	    stateMachine = new StateMachine();
