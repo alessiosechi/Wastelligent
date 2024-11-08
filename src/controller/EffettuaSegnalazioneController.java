@@ -36,7 +36,6 @@ public class EffettuaSegnalazioneController {
 						segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
 					} catch (Exception e) {
 						logger.severe("Errore durante l'inizializzazione di segnalazioneDAO: " + e.getMessage());
-
 					}
 				}
 			}

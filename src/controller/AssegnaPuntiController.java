@@ -10,6 +10,7 @@ import model.dao.UtenteDAO;
 import model.dao.UtenteDAOImplementazione;
 import model.domain.Segnalazione;
 import model.domain.SegnalazioneBean;
+import model.domain.StatoSegnalazione;
 
 public class AssegnaPuntiController {
 
@@ -55,8 +56,7 @@ public class AssegnaPuntiController {
 
         
 		try {
-	    	String stato="Risolta";
-	        List<Segnalazione> segnalazioniDaCompletare=segnalazioneDAO.getSegnalazioniByStato(stato);
+	        List<Segnalazione> segnalazioniDaCompletare=segnalazioneDAO.getSegnalazioniByStato(StatoSegnalazione.RISOLTA.getStato());
 
 			if (!segnalazioniDaCompletare.isEmpty()) {
 				for (Segnalazione s : segnalazioniDaCompletare) {

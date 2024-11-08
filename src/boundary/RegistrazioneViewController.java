@@ -78,8 +78,6 @@ public class RegistrazioneViewController {
         } catch (UsernameAlreadyTakenException e) {
             showAlert(AlertType.ERROR, "Errore di Registrazione", "Il nome utente è già in uso. Scegline un altro.");
 
-        } catch (Exception e) {
-            showAlert(AlertType.ERROR, "Errore di Registrazione", "Registrazione fallita. Riprova.");
         }
         
 

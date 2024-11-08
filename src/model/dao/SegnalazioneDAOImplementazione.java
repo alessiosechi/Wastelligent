@@ -44,7 +44,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	}
 
 	@Override
-	public void salvaSegnalazione(Segnalazione segnalazione) throws SQLException {
+	public void salvaSegnalazione(Segnalazione segnalazione) {
 	    Connection connessione = null;
 	    PreparedStatement stmt = null;
 
@@ -92,8 +92,8 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        
 
 	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        throw e; // Rilancia l'eccezione per la gestione a un livello superiore
+	        e.printStackTrace(); // Gestione degli errori
+
 	    } finally {
 	        try {
 	            if (stmt != null) stmt.close();
@@ -109,7 +109,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	
 	
 	@Override
-	public List<Segnalazione> trovaSegnalazioniRiscontrate(int idUtente) throws SQLException {
+	public List<Segnalazione> trovaSegnalazioniRiscontrate(int idUtente) {
 	    List<Segnalazione> segnalazioni = new ArrayList<>();
 	    Connection connessione = null;
 	    PreparedStatement stmt = null;
@@ -165,7 +165,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 
 	
 	@Override
-	public List<Segnalazione> getSegnalazioni() throws SQLException {
+	public List<Segnalazione> getSegnalazioni()  {
 	    List<Segnalazione> segnalazioni = new ArrayList<>();
 	    Connection connessione = null;
 	    PreparedStatement stmt = null;
@@ -215,7 +215,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	
 	
 	@Override
-	public List<Segnalazione> getSegnalazioniByStato(String stato) throws SQLException {
+	public List<Segnalazione> getSegnalazioniByStato(String stato)  {
 	    List<Segnalazione> segnalazioni = new ArrayList<>();
 	    Connection connessione = null;
 	    PreparedStatement stmt = null;
@@ -267,7 +267,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 
 	
 	@Override
-	public void eliminaSegnalazione(int idSegnalazione) throws SQLException {
+	public void eliminaSegnalazione(int idSegnalazione) {
 	    Connection connessione = null;
 	    PreparedStatement stmt = null;
 
@@ -292,7 +292,6 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	        throw e; // Rilancia l'eccezione per la gestione a un livello superiore
 	    } finally {
 	        try {
 	            if (stmt != null) stmt.close();
@@ -398,7 +397,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	
 	
 	@Override
-	public List<Segnalazione> getSegnalazioniAssegnate(int idOperatore, String stato) throws SQLException {
+	public List<Segnalazione> getSegnalazioniAssegnate(int idOperatore, String stato)  {
 	    List<Segnalazione> segnalazioni = new ArrayList<>();
 	    Connection connessione = null;
 	    PreparedStatement stmt = null;

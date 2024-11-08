@@ -58,8 +58,7 @@ public class RisolviSegnalazioneController {
 
         
 		try {
-	    	String stato="Ricevuta";
-	        List<Segnalazione> segnalazioniDaCompletare=segnalazioneDAO.getSegnalazioniByStato(stato);
+	        List<Segnalazione> segnalazioniDaCompletare=segnalazioneDAO.getSegnalazioniByStato(StatoSegnalazione.RICEVUTA.getStato());
 
 			if (!segnalazioniDaCompletare.isEmpty()) {
 				for (Segnalazione s : segnalazioniDaCompletare) {
@@ -140,9 +139,9 @@ public class RisolviSegnalazioneController {
         
 		try {
 
-			String stato="In corso";
 
-	        List<Segnalazione> segnalazioniAssegnate=segnalazioneDAO.getSegnalazioniAssegnate(idOperatore, stato);
+
+	        List<Segnalazione> segnalazioniAssegnate=segnalazioneDAO.getSegnalazioniAssegnate(idOperatore, StatoSegnalazione.IN_CORSO.getStato());
 
 			if (!segnalazioniAssegnate.isEmpty()) {
 				for (Segnalazione s : segnalazioniAssegnate) {
