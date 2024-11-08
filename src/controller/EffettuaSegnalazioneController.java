@@ -36,7 +36,7 @@ public class EffettuaSegnalazioneController {
 						segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
 					} catch (Exception e) {
 						logger.severe("Errore durante l'inizializzazione di segnalazioneDAO: " + e.getMessage());
-						throw new RuntimeException("Impossibile inizializzare segnalazioneDAO");
+
 					}
 				}
 			}
@@ -68,7 +68,7 @@ public class EffettuaSegnalazioneController {
 
 
 	    } catch (SegnalazioneVicinaException e) {
-	        logger.warning("Tentativo di inviare una segnalazione vicina: " + e.getMessage());
+	        logger.severe("Tentativo di inviare una segnalazione vicina: " + e.getMessage());
 	        throw e; // propago l'eccezione SegnalazioneVicinaException al livello superiore
 
 

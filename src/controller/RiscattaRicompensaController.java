@@ -229,7 +229,6 @@ public class RiscattaRicompensaController {
 	                } catch (Exception e) {
 	                    // Gestione dell'errore durante l'inizializzazione
 	                    logger.severe("Errore durante l'inizializzazione dei DAO: " + e.getMessage());
-	                    throw new RuntimeException("Inizializzazione fallita dei DAO", e);
 	                }
 				}
 

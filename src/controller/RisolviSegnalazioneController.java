@@ -45,7 +45,6 @@ public class RisolviSegnalazioneController {
 						utenteDAO=UtenteDAOImplementazione.getInstance();
 					} catch (Exception e) {
 				        logger.severe("Errore durante l'inizializzazione di uno dei DAO: " + e.getMessage());
-						throw new RuntimeException("Inizializzazione fallita");
 					}
 				}
 			}

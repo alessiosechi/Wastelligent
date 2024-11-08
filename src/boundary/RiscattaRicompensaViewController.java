@@ -181,42 +181,42 @@ public class RiscattaRicompensaViewController {
 
 	private void riscattaSelezione() {
 	    int selectedIndex = comboBoxRicompense.getSelectionModel().getSelectedIndex();
-	    if (selectedIndex >= 0) {
-	        
-	        RicompensaBean ricompensaBean = listaRicompenseAPI.get(selectedIndex);
-	        ricompensaBean.setIdUtente(idUtente);
-
-	        try {
-	            boolean result = riscattaRicompensaController.riscatta(ricompensaBean);
-
-	            String message = result ? "Ricompensa riscattata con successo!" 
-	                                    : "Impossibile riscattare la ricompensa. Riprova.";
-	            showAlert(result ? "Successo" : "Errore", message);
-
-	            if (result) {
-	                // se il riscatto ha avuto successo, aggiorno la pagina
-	                ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage);
-	            }
-
-	        } catch (DailyRedemptionLimitException e) {
-
-	            showAlert("Limite riscatti giornalieri raggiunto", e.getMessage());
-
-	        } catch (InsufficientPointsException e) {
-
-	            showAlert("Punti insufficienti", e.getMessage());
-
-	        } catch (GestioneRiscattoException e) {
-
-	            showAlert("Errore nel recupero del codice di riscatto", e.getMessage());
-
-	        }catch (Exception e) {
-	            showAlert("Errore", "Si è verificato un errore imprevisto. Riprova più tardi.");
-	        }
-	        
-	    } else {
-	        showAlert("Nessuna Ricompensa Selezionata", "Seleziona una ricompensa prima di riscattarla.");
+	    
+	    if (selectedIndex < 0) {
+	        showAlert("Nessuna Ricompensa Selezionata", "Seleziona una ricompensa.");
+	        return;
 	    }
+	    
+        RicompensaBean ricompensaBean = listaRicompenseAPI.get(selectedIndex);
+        ricompensaBean.setIdUtente(idUtente);
+
+        try {
+            boolean result = riscattaRicompensaController.riscatta(ricompensaBean);
+
+            String message = result ? "Ricompensa riscattata con successo!" 
+                                    : "Impossibile riscattare la ricompensa. Riprova.";
+            showAlert(result ? "Successo" : "Errore", message);
+
+            if (result) {
+                // se il riscatto ha avuto successo, aggiorno la pagina
+                ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage);
+            }
+
+        } catch (DailyRedemptionLimitException e) {
+
+            showAlert("Limite riscatti giornalieri raggiunto", e.getMessage());
+
+        } catch (InsufficientPointsException e) {
+
+            showAlert("Punti insufficienti", e.getMessage());
+
+        } catch (GestioneRiscattoException e) {
+
+            showAlert("Errore nel recupero del codice di riscatto", e.getMessage());
+
+        }catch (Exception e) {
+            showAlert("Errore", "Si è verificato un errore imprevisto. Riprova più tardi.");
+        }
 	}
 
 

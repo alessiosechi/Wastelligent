@@ -39,7 +39,6 @@ public class LoginController {
 
 					} catch (Exception e) {
 						logger.severe("Errore durante l'inizializzazione di LoginDAO: " + e.getMessage());
-						throw new RuntimeException("Impossibile inizializzare LoginDAO");
 					}
 				}
 
@@ -54,11 +53,8 @@ public class LoginController {
 			String username = credenzialiBean.getUsername();
 			String password = credenzialiBean.getPassword();
 
-			logger.info(String.format("USERNAME: %s", username));
-			logger.info(String.format("PASSWORD: ****%s", password.substring(password.length() - 2)));
 
 			int ruoloId = loginDAO.autenticazione(username, password);
-
 			int idUtente = loginDAO.getIdByUsername(username);
 
 			setUtente(idUtente, username, Ruolo.fromInt(ruoloId));

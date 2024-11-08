@@ -305,8 +305,6 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	public void assegnaOperatore(int idSegnalazione, int idOperatore, int idEsperto) {
 	    Connection connessione = null;
 	    PreparedStatement stmtAssegnazione = null;
-	    PreparedStatement stmtAggiornaStato = null;
-	    // faccio entrambi insieme nella stessa funzione perchè se fallisce uno dei due non può avere successo l'altro, ci sarebbero dati non coerenti
 
 	    try {
 	        // Ottieni la connessione al database
@@ -333,18 +331,14 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        }
 
 	    } catch (SQLException e) {
-	        e.printStackTrace(); // Gestione degli errori
-	        if (connessione != null) {
-	            try {
-	                connessione.rollback(); // Rollback in caso di errore
-	            } catch (SQLException ex) {
-	                ex.printStackTrace();
-	            }
-	        }
+            try {
+                connessione.rollback(); // Rollback in caso di errore
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
 	    } finally {
 	        try {
 	            if (stmtAssegnazione != null) stmtAssegnazione.close();
-	            if (stmtAggiornaStato != null) stmtAggiornaStato.close();
 
 	        } catch (SQLException e) {
 	            e.printStackTrace(); // Gestione degli errori di chiusura
@@ -357,7 +351,6 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	public void assegnaPunti(int idSegnalazione, int punti) {
 	    Connection connessione = null;
 	    PreparedStatement stmtPunti = null;
-	    PreparedStatement stmtAggiornaStato = null;
 
 	    try {
 	        // Ottieni la connessione al database
@@ -386,18 +379,14 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        }
 
 	    } catch (SQLException e) {
-	        e.printStackTrace(); // Gestione degli errori
-	        if (connessione != null) {
-	            try {
-	                connessione.rollback(); // Rollback in caso di errore
-	            } catch (SQLException rollbackEx) {
-	                rollbackEx.printStackTrace(); // Gestione errore rollback
-	            }
-	        }
+            try {
+                connessione.rollback(); // Rollback in caso di errore
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace(); // Gestione errore rollback
+            }
 	    } finally {
 	        try {
 	            if (stmtPunti != null) stmtPunti.close(); // Chiudi il PreparedStatement per i punti
-	            if (stmtAggiornaStato != null) stmtAggiornaStato.close(); // Chiudi il PreparedStatement per l'aggiornamento dello stato
 
 	        } catch (SQLException e) {
 	            e.printStackTrace(); // Gestione degli errori di chiusura
