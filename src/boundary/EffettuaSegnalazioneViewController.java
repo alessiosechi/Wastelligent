@@ -114,7 +114,6 @@ public class EffettuaSegnalazioneViewController {
                     mapView.setCenter(coordinate);
                     placeMarker(coordinate);
                 } catch (Exception e) {
-                    e.printStackTrace();
                     showAlert("Errore", "Impossibile trovare la posizione.");
                 }
             }
@@ -180,7 +179,6 @@ public class EffettuaSegnalazioneViewController {
             return false;
 
         } catch (Exception e) {
-            e.printStackTrace();
             showAlert("Errore", "Si è verificato un errore durante l'invio della segnalazione.");
             return false;
         }

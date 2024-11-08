@@ -4,7 +4,9 @@ import java.util.List;
 
 import controller.LoginController;
 import controller.RiscattaRicompensaController;
+import exceptions.ConnessioneAPIException;
 import exceptions.DailyRedemptionLimitException;
+import exceptions.GestioneRiscattoException;
 import exceptions.InsufficientPointsException;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -95,7 +97,11 @@ public class RiscattaRicompensaViewController {
 	private void mostraRicompenseDisponibili() {
         // carico le ricompense disponibili solo una volta
         if (listaRicompenseAPI == null) {
-        	listaRicompenseAPI = riscattaRicompensaController.ottieniRicompenseAPI();
+        	try {
+				listaRicompenseAPI = riscattaRicompensaController.ottieniRicompenseAPI();
+			} catch (ConnessioneAPIException e) {
+	            showAlert("Errore di connessione", e.getMessage());
+			}
         }
 		ObservableList<String> ricompense = FXCollections.observableArrayList();
 		listaRicompenseAPI.forEach(r -> ricompense.add(r.getNome()));
@@ -200,9 +206,12 @@ public class RiscattaRicompensaViewController {
 
 	            showAlert("Punti insufficienti", e.getMessage());
 
-	        } catch (Exception e) {
+	        } catch (GestioneRiscattoException e) {
+
+	            showAlert("Errore nel recupero del codice di riscatto", e.getMessage());
+
+	        }catch (Exception e) {
 	            showAlert("Errore", "Si è verificato un errore imprevisto. Riprova più tardi.");
-	            e.printStackTrace();
 	        }
 	        
 	    } else {

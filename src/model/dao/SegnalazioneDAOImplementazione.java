@@ -325,15 +325,8 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        int righeInserite = stmtAssegnazione.executeUpdate();
 
 	        if (righeInserite > 0) {
-	            // Query SQL per aggiornare lo stato della segnalazione a 'In corso'
-	        	String sqlAggiornaStato = "UPDATE segnalazioni SET " + COL_STATO + " = ? WHERE " + COL_ID_SEGNALAZIONE + " = ?";
 
-
-	            stmtAggiornaStato = connessione.prepareStatement(sqlAggiornaStato);
-	            stmtAggiornaStato.setString(1, StatoSegnalazione.IN_CORSO.getStato()); // Usa la enum per lo stato 'In corso'
-	            stmtAggiornaStato.setInt(2, idSegnalazione);
-	            stmtAggiornaStato.executeUpdate();
-
+	            aggiornaStato(idSegnalazione, StatoSegnalazione.IN_CORSO.getStato());
 	            connessione.commit(); // Commit della transazione
 	        } else {
 	            connessione.rollback(); // Rollback della transazione se l'inserimento fallisce
@@ -384,14 +377,10 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        int righeInserite = stmtPunti.executeUpdate();
 
 	        if (righeInserite > 0) {
-	            // Query SQL per aggiornare lo stato della segnalazione a 'Riscontrata'
-	        	String sqlAggiornaStato = "UPDATE segnalazioni SET " + COL_STATO + " = ? WHERE " + COL_ID_SEGNALAZIONE + " = ?";
-	            stmtAggiornaStato = connessione.prepareStatement(sqlAggiornaStato);
-	            stmtAggiornaStato.setString(1, StatoSegnalazione.RISCONTRATA.getStato()); // Usa la enum per lo stato 'Riscontrata'
-	            stmtAggiornaStato.setInt(2, idSegnalazione);
-	            stmtAggiornaStato.executeUpdate();
-
-	            connessione.commit(); // Commit della transazione
+	        	
+	            // Usa `aggiornaStato` per impostare lo stato a 'Riscontrata'
+	            aggiornaStato(idSegnalazione, StatoSegnalazione.RISCONTRATA.getStato());
+	            connessione.commit();
 	        } else {
 	            connessione.rollback(); // Rollback della transazione se l'inserimento fallisce
 	        }
@@ -479,10 +468,10 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	
 	
 	
-	
+	// aggiornare questo metodo per utilizzarlo negli altri
 	
 	@Override
-	public void aggiornaStato(int idSegnalazione) {
+	public void aggiornaStato(int idSegnalazione, String stato) {
 	    Connection connessione = null;
 	    PreparedStatement stmt = null;
 
@@ -495,7 +484,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 
 
 	        stmt = connessione.prepareStatement(sql);
-	        stmt.setString(1, StatoSegnalazione.RISOLTA.getStato()); // Imposta lo stato a "Risolta"
+	        stmt.setString(1, stato); // Imposta lo stato a "Risolta"
 	        stmt.setInt(2, idSegnalazione); // Imposta l'ID della segnalazione come parametro
 
 	        int righeAggiornate = stmt.executeUpdate();
@@ -507,13 +496,11 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 
 	    } catch (SQLException e) {
 	        e.printStackTrace(); // Gestione degli errori
-	        if (connessione != null) {
-	            try {
-	                connessione.rollback(); // Rollback in caso di errore
-	            } catch (SQLException rollbackEx) {
-	                rollbackEx.printStackTrace(); // Gestione errore rollback
-	            }
-	        }
+            try {
+                connessione.rollback(); // Rollback in caso di errore
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace(); // Gestione errore rollback
+            }
 	    } finally {
 	        try {
 	            if (stmt != null) stmt.close(); // chiudo il PreparedStatement

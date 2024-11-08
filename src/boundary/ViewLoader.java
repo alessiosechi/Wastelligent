@@ -40,13 +40,12 @@ public class ViewLoader {
             
 
             // imposto la nuova scena nello stage
-            stage.setScene(new Scene(root));
-              
+            stage.setScene(new Scene(root));       
             stage.setTitle(controllerGraficoFactory.getTitolo(percorsoFXML));
 
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.severe("Si è verificato un errore: "+e.getMessage());
         }
     }
     
@@ -63,7 +62,7 @@ public class ViewLoader {
             } catch (NoSuchMethodException e) {
                 logger.info("Il controller non ha il metodo setPrimaryStage: " + e.getMessage());
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.severe("Si è verificato un errore: "+e.getMessage());
             }
         }
     }

@@ -53,9 +53,7 @@ public class LoginViewController {
     // il metodo seguente viene eseguito al click del button "LOGIN"
     @FXML
     private void handleLoginButtonAction(ActionEvent event) {
-        // utilizzo il design pattern decorator
-        ValidaInput usernameValidatore = new ValidatoreSpaziVuoti(new ValidatoreLunghezzaMinima(new ValidatoreBase(), 5));
-        ValidaInput passwordValidatore = new ValidatoreSpaziVuoti(new ValidatoreLunghezzaMinima(new ValidatoreBase(), 8));
+
 
         String username=usernameField.getText();
         String password= passwordField.getText();
@@ -81,17 +79,7 @@ public class LoginViewController {
         //String username = usernameField.getText();
         //String password = passwordField.getText();
 
-        // se l'username non è valido, mostro un alert
-        if (!usernameValidatore.valida(username)) {
-            showAlert(Alert.AlertType.WARNING, "Errore Validazione", usernameValidatore.getMessaggioErrore());
-            return;
-        }
 
-        // se la password non è valida, mostro un alert
-        if (!passwordValidatore.valida(password)) {
-            showAlert(Alert.AlertType.WARNING, "Errore Validazione", passwordValidatore.getMessaggioErrore());
-            return;
-        }
 
         int interfacciaSelezionata = interfaceOption1.isSelected() ? 1 : 2;
 

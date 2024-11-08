@@ -10,6 +10,9 @@ public class AssegnaPuntiViewState implements State {
 	@Override
 	public void configureView(DettagliSegnalazioneViewController dettagliSegnalazioneViewController) {
 
+
+		
+		
 		logger.info("Configurazione DettagliSegnalazione per AssegnaPuntiView");
 
 		dettagliSegnalazioneViewController.indietroButton.setOnAction(event -> 

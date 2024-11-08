@@ -12,13 +12,13 @@ import model.domain.AssegnazioneBean;
 import model.domain.OperatoreEcologico;
 import model.domain.Segnalazione;
 import model.domain.SegnalazioneBean;
+import model.domain.StatoSegnalazione;
 import model.domain.UtenteBean;
 
 public class RisolviSegnalazioneController {
 
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
 	private static volatile RisolviSegnalazioneController instance;
-	private static Conversione conversione = new Conversione();
 	private static SegnalazioneDAO segnalazioneDAO;
 	private static UtenteDAO utenteDAO;
 	private static final Logger logger = Logger.getLogger(RisolviSegnalazioneController.class.getName());
@@ -108,7 +108,7 @@ public class RisolviSegnalazioneController {
 
 	        List<OperatoreEcologico> operatoriEcologici = utenteDAO.estraiOperatoriEcologiciDisponibili();
 
-	        return conversione.convertOperatoriEcologiciListToBeanList(operatoriEcologici);
+	        return convertOperatoriEcologiciListToBeanList(operatoriEcologici);
 
 	    } catch (Exception e) {
 	        logger.severe("Errore nel recupero degli operatori ecologici: " + e.getMessage());
@@ -178,7 +178,7 @@ public class RisolviSegnalazioneController {
 
     public boolean completaSegnalazione(int idSegnalazione) {
 	    try {
-	        segnalazioneDAO.aggiornaStato(idSegnalazione);
+	        segnalazioneDAO.aggiornaStato(idSegnalazione, StatoSegnalazione.RISOLTA.getStato());
 
 	        return true;
 	    } catch (Exception e) {
@@ -243,6 +243,9 @@ public class RisolviSegnalazioneController {
 
         return segnalazioneBean;
     }
+    
+    
+    
     
 	
 }

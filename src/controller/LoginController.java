@@ -55,7 +55,6 @@ public class LoginController {
 			String password = credenzialiBean.getPassword();
 
 			logger.info(String.format("USERNAME: %s", username));
-
 			logger.info(String.format("PASSWORD: ****%s", password.substring(password.length() - 2)));
 
 			int ruoloId = loginDAO.autenticazione(username, password);
@@ -119,6 +118,7 @@ public class LoginController {
 		utente = null;
 		logger.info("Logout effettuato correttamente.");
 	}
+
 
 
 	public UtenteBean convertUtenteToBean(Utente utente) {

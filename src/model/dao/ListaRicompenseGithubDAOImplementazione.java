@@ -4,13 +4,19 @@ import model.domain.Ricompensa;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 
+import exceptions.CodiceRiscattoNonTrovatoException;
+import exceptions.ConnessioneAPIException;
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 public class ListaRicompenseGithubDAOImplementazione implements ListaRicompenseGithubDAO {
@@ -18,7 +24,7 @@ public class ListaRicompenseGithubDAOImplementazione implements ListaRicompenseG
     private static final String API_URL_CODES = "https://raw.githubusercontent.com/alessiosechi/API_Rewards_public/main/codes.json";
 
 	private static volatile ListaRicompenseGithubDAOImplementazione instance;
-
+	private static final Logger logger = Logger.getLogger(ListaRicompenseGithubDAOImplementazione.class.getName());
 
 	public static ListaRicompenseGithubDAOImplementazione getInstance() {
 		ListaRicompenseGithubDAOImplementazione result = instance;
@@ -38,7 +44,7 @@ public class ListaRicompenseGithubDAOImplementazione implements ListaRicompenseG
 	}
 
 	@Override
-	public List<Ricompensa> getRicompense() { // restituisco una lista di oggetti Ricompensa
+	public List<Ricompensa> getRicompense() throws ConnessioneAPIException { // restituisco una lista di oggetti Ricompensa
 		List<Ricompensa> ricompense = new ArrayList<>();
 
 		try {
@@ -52,6 +58,10 @@ public class ListaRicompenseGithubDAOImplementazione implements ListaRicompenseG
 			//Gson gson = new Gson();
 			JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 			JsonArray rewardsArray = jsonObject.getAsJsonArray("rewards");
+			
+
+			
+			
 
 			// convert
 			for (int i = 0; i < rewardsArray.size(); i++) {
@@ -75,8 +85,12 @@ public class ListaRicompenseGithubDAOImplementazione implements ListaRicompenseG
 				// aggiungo la ricompensa alla lista di ricompense
 				ricompense.add(ricompensa);
 			}
-		} catch (Exception e) {
-			e.printStackTrace(); // Gestione degli errori
+		} catch (IOException | InterruptedException e) {
+            throw new ConnessioneAPIException("Errore durante la connessione a Github", e);
+        } catch (JsonSyntaxException e) {
+            throw new ConnessioneAPIException("Errore nel parsing del JSON", e);
+        }catch (Exception e) {
+            logger.severe("Si è verificato un errore imprevisto: "+ e.getMessage());
 		}
 
 		return ricompense;
@@ -85,7 +99,7 @@ public class ListaRicompenseGithubDAOImplementazione implements ListaRicompenseG
 	
 	
 	
-    public String getCodiceRiscatto(int idRicompensa) {
+    public String getCodiceRiscatto(int idRicompensa) throws ConnessioneAPIException, CodiceRiscattoNonTrovatoException{
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder().uri(URI.create(API_URL_CODES)).build();
@@ -103,10 +117,23 @@ public class ListaRicompenseGithubDAOImplementazione implements ListaRicompenseG
                     return codeObj.get("reward_code").getAsString(); // Restituisce il codice di riscatto
                 }
             }
+            throw new CodiceRiscattoNonTrovatoException("Codice riscatto non trovato"); 
+            
+        } catch (IOException | InterruptedException e) {
+            // Gestione di errori di connessione
+            throw new ConnessioneAPIException("Errore durante la connessione a Github", e);
+        } catch (JsonSyntaxException e) {
+            // Gestione di errori di parsing JSON
+            throw new ConnessioneAPIException("Errore nel parsing del JSON", e);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.severe("Si è verificato un errore imprevisto: "+ e.getMessage());
         }
-
-        return null; // Restituisce null se non viene trovato alcun codice per l'idRicompensa
+		return null;
     }
+	
+	
+	
+	
+	
+
 }

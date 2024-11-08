@@ -3,9 +3,11 @@ package model.dao;
 import java.io.*;
 import java.sql.*;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class DBConnection {
 	private static Connection connection;
+	private static final Logger logger = Logger.getLogger(DBConnection.class.getName());
 
 	private DBConnection() {
 	}
@@ -23,7 +25,7 @@ public class DBConnection {
 
 			connection = DriverManager.getConnection(connectionUrl, user, pass);
 		} catch (IOException | SQLException e) {
-			e.printStackTrace();
+			logger.severe("Si è verificato un errore: " + e.getMessage());
 		}
 	}
 

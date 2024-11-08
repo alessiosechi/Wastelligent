@@ -8,7 +8,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import exceptions.CodiceRiscattoNonTrovatoException;
+import exceptions.ConnessioneAPIException;
 import exceptions.DailyRedemptionLimitException;
+import exceptions.GestioneRiscattoException;
 import exceptions.InsufficientPointsException;
 import model.dao.ListaRicompenseGithubDAO;
 import model.dao.ListaRicompenseGithubDAOImplementazione;
@@ -42,7 +45,7 @@ public class RiscattaRicompensaController {
 	private RiscattaRicompensaController() {
 	}
 
-	public List<RicompensaBean> ottieniRicompenseAPI() {
+	public List<RicompensaBean> ottieniRicompenseAPI() throws ConnessioneAPIException {
 		try {
 			List<Ricompensa> ricompenseAPI = listaRicompenseDAO.getRicompense();
 
@@ -53,8 +56,10 @@ public class RiscattaRicompensaController {
 				return new ArrayList<>();
 			}
 
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (ConnessioneAPIException e) {
+			// qui rilancio sostituendo il messaggio con uno più generico e comprendibile per l'utente
+			throw new ConnessioneAPIException("Si è verificato un errore durante la connessione al server.",e);
+		}catch (Exception e) {
 			return new ArrayList<>();
 		}
 	}
@@ -76,15 +81,11 @@ public class RiscattaRicompensaController {
 		}
 	}
 
-	public boolean riscatta(RicompensaBean ricompensaBean) throws DailyRedemptionLimitException, InsufficientPointsException{
+	public boolean riscatta(RicompensaBean ricompensaBean) throws DailyRedemptionLimitException, InsufficientPointsException, GestioneRiscattoException{
 
 		try {
 			Ricompensa ricompensa = convertRicompensaToEntity(ricompensaBean);
 
-
-			
-			
-	        
 	        // controllo il numero di riscatti effettuati oggi
 	        int numeroRiscattiOggi = 0;
 	        for (Ricompensa r : ricompenseUtente) {
@@ -95,10 +96,7 @@ public class RiscattaRicompensaController {
 	        }
 	        
 	        if (numeroRiscattiOggi >= 5) {
-	        	logger.warning("Limite di riscatti giornalieri raggiunto.");
-
 	            throw new DailyRedemptionLimitException("Hai raggiunto il limite giornaliero di riscatti.");
-
 	        }
 			
 			
@@ -106,22 +104,16 @@ public class RiscattaRicompensaController {
 			int puntiUtente = ottieniPuntiUtente(idUtente);
 			int puntiNecessari = calcolaPuntiNecessari(ricompensa.getValore());
 			
-			
-			
 	        if (puntiUtente < puntiNecessari) {
-	        	logger.warning(String.format("Punti insufficienti per riscattare la ricompensa per l'utente %s", idUtente));
-
 	            throw new InsufficientPointsException("Punti insufficienti per riscattare la ricompensa.");
 	        }
-
+	        
 			ricompensa.setPunti(puntiNecessari);
-
-			String codiceRiscatto = listaRicompenseDAO.getCodiceRiscatto(ricompensa.getIdRicompensa());
+	        String codiceRiscatto = ottieniCodiceRiscatto(ricompensa.getIdRicompensa());
 			ricompensa.setCodiceRiscatto(codiceRiscatto);
 
-			logger.info(String.format("ID RICOMPENSA: %d, CODICE RISCATTO: %s", ricompensa.getIdRicompensa(), codiceRiscatto));
-
-
+	
+			// queste due operazioni dovrebbero essere transazionali
 			// registro il riscatto
 			ricompensaDAO.registraRicompensaRiscattata(ricompensa);
 
@@ -130,18 +122,28 @@ public class RiscattaRicompensaController {
 
 			return true; // riscatto riuscito
 
-		}catch (DailyRedemptionLimitException | InsufficientPointsException e) {
+		}catch (DailyRedemptionLimitException | InsufficientPointsException | GestioneRiscattoException e) {
 		    throw e; 
 		} catch (Exception e) {
 	        logger.severe("Errore durante il riscatto della ricompensa: " + e.getMessage());
-			e.printStackTrace();
 			return false;
 		}
 
 	}
+
+	private static String ottieniCodiceRiscatto(int idRicompensa) throws GestioneRiscattoException  {
+	    try {
+	        return listaRicompenseDAO.getCodiceRiscatto(idRicompensa);
+	    } catch (ConnessioneAPIException e) {
+	    	// messaggio che deve essere mostrato all'utente (nascondo l'errore interno)
+            throw new GestioneRiscattoException("Impossibile connettersi per ottenere il codice di riscatto. Riprova più tardi.", e);
+        } catch (CodiceRiscattoNonTrovatoException e) {
+            throw new GestioneRiscattoException("Nessun codice di riscatto trovato per la ricompensa selezionata.", e);
+        }
+	}
+
 	
-	
-	
+
 	
 	
 	
