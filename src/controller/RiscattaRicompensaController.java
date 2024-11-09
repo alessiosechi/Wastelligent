@@ -44,6 +44,37 @@ public class RiscattaRicompensaController {
 
 	private RiscattaRicompensaController() {
 	}
+	
+	
+	
+	public static RiscattaRicompensaController getInstance() {
+		RiscattaRicompensaController result = instance;
+
+		if (instance == null) {
+			// blocco sincronizzato
+			synchronized (RiscattaRicompensaController.class) {
+				result = instance;
+				if (result == null) {
+					instance = result = new RiscattaRicompensaController();
+					
+					
+					// inizializzo i DAO solo una volta, quando viene creata l'istanza di RiscattaRicompensaController
+	                try {
+	                    listaRicompenseDAO = ListaRicompenseGithubDAOImplementazione.getInstance();
+	                    ricompensaDAO = RicompensaDAOImplementazione.getInstance();
+	                    utenteDAO = UtenteDAOImplementazione.getInstance();
+	                    segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
+	                } catch (Exception e) {
+	                    // Gestione dell'errore durante l'inizializzazione
+	                    logger.severe("Errore durante l'inizializzazione dei DAO: " + e.getMessage());
+	                }
+				}
+
+			}
+		}
+
+		return result;
+	}
 
 	public List<RicompensaBean> ottieniRicompenseAPI() throws ConnessioneAPIException {
 		try {
@@ -209,34 +240,7 @@ public class RiscattaRicompensaController {
 		}
 	}
 
-	public static RiscattaRicompensaController getInstance() {
-		RiscattaRicompensaController result = instance;
 
-		if (instance == null) {
-			// blocco sincronizzato
-			synchronized (RiscattaRicompensaController.class) {
-				result = instance;
-				if (result == null) {
-					instance = result = new RiscattaRicompensaController();
-					
-					
-					// inizializzo i DAO solo una volta, quando viene creata l'istanza di RiscattaRicompensaController
-	                try {
-	                    listaRicompenseDAO = ListaRicompenseGithubDAOImplementazione.getInstance();
-	                    ricompensaDAO = RicompensaDAOImplementazione.getInstance();
-	                    utenteDAO = UtenteDAOImplementazione.getInstance();
-	                    segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
-	                } catch (Exception e) {
-	                    // Gestione dell'errore durante l'inizializzazione
-	                    logger.severe("Errore durante l'inizializzazione dei DAO: " + e.getMessage());
-	                }
-				}
-
-			}
-		}
-
-		return result;
-	}
 
 	private Ricompensa convertRicompensaToEntity(RicompensaBean ricompensaBean) {
 		Ricompensa ricompensa = new Ricompensa();

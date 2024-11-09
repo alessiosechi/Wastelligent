@@ -2,6 +2,7 @@ package controller;
 
 import java.util.logging.Logger;
 
+import exceptions.RegistrazioneUtenteException;
 import exceptions.UsernameAlreadyTakenException;
 import model.dao.LoginDAO;
 import model.dao.LoginDAOImplementazione;
@@ -17,7 +18,6 @@ public class LoginController {
 	private static UtenteFactory utenteFactory = new UtenteFactory();
 
 	private static final Logger logger = Logger.getLogger(LoginController.class.getName());
-	private static final String REGISTRAZIONE_ERRORE_MSG = "Errore durante la registrazione.";
 
 	private LoginController() {
 	}
@@ -38,7 +38,7 @@ public class LoginController {
 						loginDAO = LoginDAOImplementazione.getInstance();
 
 					} catch (Exception e) {
-						logger.severe("Errore durante l'inizializzazione di LoginDAO: " + e.getMessage());
+						logger.severe("Errore durante l'inizializzazione del DAO: " + e.getMessage());
 					}
 				}
 
@@ -69,30 +69,7 @@ public class LoginController {
 
 	}
 
-	public void registraUtente(CredenzialiBean credenzialiBean) throws UsernameAlreadyTakenException {
-		try {
 
-			// controllo se lo username è già stato preso
-			if (loginDAO.isUsernameTaken(credenzialiBean.getUsername())) {
-				throw new UsernameAlreadyTakenException();
-			}
-
-			int success = loginDAO.registraUtente(credenzialiBean.getUsername(), credenzialiBean.getPassword());
-
-			if (success != 1) {
-				throw new RuntimeException(REGISTRAZIONE_ERRORE_MSG);
-			}
-
-		} catch (UsernameAlreadyTakenException e) {
-			logger.warning("Il nome utente è già in uso: " + credenzialiBean.getUsername());
-			throw e; // rilancio l'eccezione che ho appena catturato, la passo al livello superiore
-
-		} catch (Exception e) {
-			logger.severe(REGISTRAZIONE_ERRORE_MSG + e.getMessage());
-			throw new RuntimeException(REGISTRAZIONE_ERRORE_MSG, e);
-		}
-
-	}
 
 	private static void setUtente(int idUtente, String username, Ruolo ruolo) {
 		if (ruolo == null) {
@@ -109,6 +86,27 @@ public class LoginController {
 
 		return convertUtenteToBean(utente);
 	}
+	
+	public void registraUtente(CredenzialiBean credenzialiBean) throws UsernameAlreadyTakenException, RegistrazioneUtenteException {
+		// controllo se lo username è già stato preso
+		if (loginDAO.isUsernameTaken(credenzialiBean.getUsername())) {
+			throw new UsernameAlreadyTakenException("Il nome utente è già in uso. Scegline un altro.");
+		}
+		boolean success=loginDAO.registraUtente(credenzialiBean.getUsername(), credenzialiBean.getPassword());
+	    if (!success) {
+	        throw new RegistrazioneUtenteException("Errore durante la registrazione dell'utente.");
+	    }
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	public static void logout() { // il logout potrebbe non servire, tanto ad ogni login sovrascrivo l'utente
 		utente = null;

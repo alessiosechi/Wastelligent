@@ -84,22 +84,17 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	         * Io non chiudo la connessione, ma utilizzo la stessa, pertanto devo gestire questo aspetto.
 	         */
 	        
-	        
-	        
-	        
-	        
-	        
-	        
 
-	    } catch (SQLException e) {
-	        e.printStackTrace(); // Gestione degli errori
-
+		} catch (SQLException e) {
+			logger.severe("Errore durante la registrazione della segnalazione: " + e.getMessage());
+		} catch (Exception e) {
+			logger.severe("Errore inaspettato: " + e.getMessage());
 	    } finally {
 	        try {
 	            if (stmt != null) stmt.close();
 
 	        } catch (SQLException e) {
-	            e.printStackTrace();
+	        	logger.warning("Errore durante la chiusura dello statement: " + e.getMessage());
 	        }
 	    }
 	}
@@ -150,6 +145,8 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace(); // Gestione degli errori
+	    } catch (Exception e) {
+			logger.severe("Errore inaspettato: " + e.getMessage());
 	    } finally {
 	        try {
 	            if (resultSet != null) resultSet.close();
@@ -172,20 +169,16 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	    ResultSet resultSet = null;
 
 	    try {
-	        // Ottieni la connessione al database
 	        connessione = DBConnection.getConnection();
 
-	        // Query SQL per ottenere tutte le segnalazioni
 			String sql = "SELECT " + COL_ID_SEGNALAZIONE + ", " + COL_ID_UTENTE + ", " + COL_DESCRIZIONE + ", "
 					+ COL_FOTO + ", " + COL_STATO + ", " + COL_LATITUDINE + ", " + COL_LONGITUDINE
 					+ " FROM segnalazioni";
 
 	        stmt = connessione.prepareStatement(sql);
 
-	        // Esegui la query
 	        resultSet = stmt.executeQuery();
 
-	        // Itera attraverso i risultati e crea gli oggetti Segnalazione
 	        while (resultSet.next()) {
                 Segnalazione segnalazione = new Segnalazione();
                 segnalazione.setIdSegnalazione(resultSet.getInt(COL_ID_SEGNALAZIONE));
@@ -196,11 +189,10 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
                 segnalazione.setLatitudine(resultSet.getDouble(COL_LATITUDINE));
                 segnalazione.setLongitudine(resultSet.getDouble(COL_LONGITUDINE));
 
-	            // Aggiungi la segnalazione alla lista
 	            segnalazioni.add(segnalazione);
 	        }
 	    } catch (SQLException e) {
-	        e.printStackTrace(); // Gestione degli errori
+	        logger.severe("Errore durante il recupero delle segnalazioni: " + e.getMessage());
 	    } finally {
 	        try {
 	            if (resultSet != null) resultSet.close();

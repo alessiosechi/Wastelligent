@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.domain.CredenzialiBean;
 import controller.LoginController;  // Controller della logica di business
+import exceptions.RegistrazioneUtenteException;
 import exceptions.UsernameAlreadyTakenException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -76,9 +77,11 @@ public class RegistrazioneViewController {
             ViewLoader.caricaView("LoginView.fxml", primaryStage);
 
         } catch (UsernameAlreadyTakenException e) {
-            showAlert(AlertType.ERROR, "Errore di Registrazione", "Il nome utente è già in uso. Scegline un altro.");
+            showAlert(AlertType.ERROR, "Errore Registrazione", e.getMessage());
 
-        }
+        } catch (RegistrazioneUtenteException e) {
+            showAlert(AlertType.ERROR, "Errore Registrazione", e.getMessage());
+		}
         
 
     }

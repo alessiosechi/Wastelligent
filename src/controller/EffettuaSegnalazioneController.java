@@ -35,7 +35,7 @@ public class EffettuaSegnalazioneController {
 						// inizializzazione di segnalazioneDAO
 						segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
 					} catch (Exception e) {
-						logger.severe("Errore durante l'inizializzazione di segnalazioneDAO: " + e.getMessage());
+						logger.severe("Errore durante l'inizializzazione del DAO: " + e.getMessage());
 					}
 				}
 			}
@@ -48,66 +48,44 @@ public class EffettuaSegnalazioneController {
 	public PosizioneBean getCoordinates(String location) throws Exception {
 		Posizione posizione = servizioGeocoding.ottieniCoordinate(location);
 
-
 		return convertPosizioneToBean(posizione);
 	}
 
 
 	public void inviaSegnalazione(SegnalazioneBean segnalazioneBean) throws SegnalazioneVicinaException{
-	    try {
+        Segnalazione segnalazione = convertSegnalazioneToEntity(segnalazioneBean);
 
-	        Segnalazione segnalazione = convertSegnalazioneToEntity(segnalazioneBean);
+        // verifico se esistono segnalazioni nel raggio di 10 metri
+        if(verificaSegnalazioniVicine(segnalazione)) {
+        	throw new SegnalazioneVicinaException("Segnalazione troppo vicina a un'altra esistente."); 
+        }
 
-	        // verifico se esistono segnalazioni nel raggio di 10 metri
-	        verificaSegnalazioneVicino(segnalazione);
-
-	        // se non ci sono segnalazioni troppo vicine, salvo la segnalazione
-	        segnalazioneDAO.salvaSegnalazione(segnalazione);
-
-
-
-	    } catch (SegnalazioneVicinaException e) {
-	        logger.severe("Tentativo di inviare una segnalazione vicina: " + e.getMessage());
-	        throw e; // propago l'eccezione SegnalazioneVicinaException al livello superiore
-
-
-	    } catch (Exception e) {
-	        logger.severe("Errore durante l'invio della segnalazione: " + e.getMessage());
-
-	    }
+        // se non ci sono segnalazioni troppo vicine, salvo la segnalazione
+        segnalazioneDAO.salvaSegnalazione(segnalazione);
 	}
 
 	
 	
 	
-	
-	
-	private void verificaSegnalazioneVicino(Segnalazione segnalazione) throws SegnalazioneVicinaException{
-	    try {
+	private boolean verificaSegnalazioniVicine(Segnalazione segnalazione) {
+        List<Segnalazione> segnalazioniEsistenti = segnalazioneDAO.getSegnalazioni();
 
-	        List<Segnalazione> segnalazioniEsistenti = segnalazioneDAO.getSegnalazioni();
+        // calcolo la distanza e verifico se è entro 20 metri
+        for (Segnalazione esistente : segnalazioniEsistenti) {
+            double distanza = calcolaDistanza(
+                segnalazione.getLatitudine(),
+                segnalazione.getLongitudine(),
+                esistente.getLatitudine(),
+                esistente.getLongitudine()
+            );
 
-	        // calcolo la distanza e verifico se è entro 20 metri
-	        for (Segnalazione esistente : segnalazioniEsistenti) {
-	            double distanza = calcolaDistanza(
-	                segnalazione.getLatitudine(),
-	                segnalazione.getLongitudine(),
-	                esistente.getLatitudine(),
-	                esistente.getLongitudine()
-	            );
-
-	            double max=20.0;
-	            if (distanza <= max) { 
-	                throw new SegnalazioneVicinaException("Segnalazione troppo vicina a un'altra esistente."); 
-
-	            }
-	        }	    
-	    } catch (SegnalazioneVicinaException e) {
-	        throw e; // rilancio l'eccezione che ho appena catturato, la passo al livello superiore
-
-	    } catch (Exception e) {
-	        logger.severe("Errore durante la verifica delle eventuali segnalazioni vicine: " + e.getMessage());
-	    }
+            double max=20.0;
+            if (distanza <= max) { 
+                
+            	return true;
+            }
+        }
+        return false;
 
 	}
 

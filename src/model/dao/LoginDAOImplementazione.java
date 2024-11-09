@@ -4,11 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import model.dao.queries.LoginQueries;
 
 public class LoginDAOImplementazione implements LoginDAO{
 	private static volatile LoginDAOImplementazione instance;
+	private static final Logger logger = Logger.getLogger(LoginDAOImplementazione.class.getName());
 
 
 
@@ -107,7 +109,7 @@ public class LoginDAOImplementazione implements LoginDAO{
     }
     
     @Override
-    public int registraUtente(String username, String password) {
+    public boolean registraUtente(String username, String password) {
         Connection connessione = null;
         PreparedStatement stmt = null;
 
@@ -121,15 +123,15 @@ public class LoginDAOImplementazione implements LoginDAO{
             stmt.setInt(3, 1); // imposto il ruolo di UTENTE_BASE
 
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0 ? 1 : -1;
+            return rowsAffected > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
+            logger.severe("Errore durante la registrazione dell'utente: " + e.getMessage());
+            return false;
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.severe("Errore nella chiusura delle risorse: " + e.getMessage());
             }
         }
     }
