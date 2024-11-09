@@ -221,7 +221,6 @@ public class RiscattaRicompensaController {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			return new ArrayList<>();
 		}
 	}

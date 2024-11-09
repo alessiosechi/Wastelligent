@@ -76,12 +76,10 @@ public class RegistrazioneViewController {
             showAlert(AlertType.INFORMATION, "Registrazione avvenuta", "La registrazione è avvenuta con successo.");
             ViewLoader.caricaView("LoginView.fxml", primaryStage);
 
-        } catch (UsernameAlreadyTakenException e) {
+        } catch (UsernameAlreadyTakenException | RegistrazioneUtenteException e) {
             showAlert(AlertType.ERROR, "Errore Registrazione", e.getMessage());
 
-        } catch (RegistrazioneUtenteException e) {
-            showAlert(AlertType.ERROR, "Errore Registrazione", e.getMessage());
-		}
+        }
         
 
     }
