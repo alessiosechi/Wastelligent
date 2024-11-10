@@ -74,7 +74,7 @@ public class RegistrazioneViewController {
             loginController.registraUtente(credenzialiBean);
 
             showAlert(AlertType.INFORMATION, "Registrazione avvenuta", "La registrazione è avvenuta con successo.");
-            ViewLoader.caricaView("LoginView.fxml", primaryStage);
+            ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage);
 
         } catch (UsernameAlreadyTakenException | RegistrazioneUtenteException e) {
             showAlert(AlertType.ERROR, "Errore Registrazione", e.getMessage());
@@ -88,7 +88,7 @@ public class RegistrazioneViewController {
     @FXML
     private void handleLoginLinkAction(ActionEvent event) {
 
-        ViewLoader.caricaView("LoginView.fxml", primaryStage);
+        ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage);
     }
 
     private void showAlert(AlertType alertType, String title, String content) {

@@ -72,11 +72,11 @@ public class StoricoViewController {
 	private void configuraPulsanti() {
 		vediDettagliButton.setDisable(true);
 		
-		vediDettagliButton.setOnAction(event -> ViewLoader.caricaView("DettagliSegnalazioneView.fxml", primaryStage));
-		indietroButton.setOnAction(event -> ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage));
-		exitButton.setOnAction(event -> ViewLoader.caricaView("LoginView.fxml", primaryStage));
-		riscattaRicompensaButton.setOnAction(event -> ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage));
-		nuovaSegnalazioneButton.setOnAction(event -> ViewLoader.caricaView("EffettuaSegnalazioneView.fxml", primaryStage));
+		vediDettagliButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW, primaryStage));
+		indietroButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.RISCATTA_RICOMPENSA_VIEW, primaryStage));
+		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage));
+		riscattaRicompensaButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.RISCATTA_RICOMPENSA_VIEW, primaryStage));
+		nuovaSegnalazioneButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.EFFETTUA_SEGNALAZIONE_VIEW, primaryStage));
 	}
 	
 	private void impostaListenerSelezione() {

@@ -57,7 +57,7 @@ public class GestisciSegnalazioniViewController {
 	private static final Logger logger = Logger.getLogger(GestisciSegnalazioniViewController.class.getName());
     
 	private void configureButtons() {
-	    exitButton.setOnAction(event -> ViewLoader.caricaView("LoginView.fxml", primaryStage));
+	    exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage));
 	    vediDettagliButton.setDisable(true);
 	    eliminaButton.setDisable(true);
 	}
@@ -83,10 +83,10 @@ public class GestisciSegnalazioniViewController {
 	    }
 	}
 	private void configureHandlers() {
-	    vediDettagliButton.setOnAction(event -> ViewLoader.caricaView("DettagliSegnalazioneView.fxml", primaryStage));
+	    vediDettagliButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW, primaryStage));
 	    eliminaButton.setOnAction(event -> handleEliminaAction());
 	    assegnaButton.setOnAction(event -> handleAssegnaAction());
-	    assegnaPuntiButton.setOnAction(event -> ViewLoader.caricaView("AssegnaPuntiView.fxml", primaryStage));
+	    assegnaPuntiButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW, primaryStage));
 	}
 	private void handleEliminaAction() {
 	    Optional<ButtonType> result = showAlert("Conferma Eliminazione", "Sei sicuro di voler eliminare la segnalazione selezionata?");
@@ -94,7 +94,7 @@ public class GestisciSegnalazioniViewController {
 	        SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
 	        if (segnalazioneSelezionata != null) {
 	            risolviSegnalazioneController.eliminaSegnalazione(segnalazioneSelezionata.getIdSegnalazione());
-	            ViewLoader.caricaView("GestisciSegnalazioniView.fxml", primaryStage);
+	            ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW, primaryStage);
 	        } else {
 	            logger.info("Nessuna segnalazione selezionata.");
 	        }
@@ -114,7 +114,7 @@ public class GestisciSegnalazioniViewController {
 	        
 	        if (risolviSegnalazioneController.assegnaOperatore(assegnazioneBean)) {
 	            logger.info("Segnalazione assegnata con successo a " + operatoreSelezionato.getUsername());
-	            ViewLoader.caricaView("GestisciSegnalazioniView.fxml", primaryStage);
+	            ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW, primaryStage);
 	        } else {
 	            showAlert("Errore Assegnazione", "Si è verificato un errore durante l'assegnazione della segnalazione.");
 	        }

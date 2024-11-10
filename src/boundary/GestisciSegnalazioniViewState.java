@@ -11,17 +11,17 @@ public class GestisciSegnalazioniViewState implements State {
 		logger.info("Configurazione DettagliSegnalazione per GestisciSegnalazioniView");
 
 		dettagliSegnalazioneViewController.indietroButton.setOnAction(event -> 
-			ViewLoader.caricaView("GestisciSegnalazioniView.fxml",
+			ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW,
 					dettagliSegnalazioneViewController.getPrimaryStage())
 		);
 
 		dettagliSegnalazioneViewController.button1.setOnAction(event -> 
-			ViewLoader.caricaView("GestisciSegnalazioniView.fxml",
+			ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW,
 					dettagliSegnalazioneViewController.getPrimaryStage())
 		);
 
 		dettagliSegnalazioneViewController.button2.setOnAction(event -> 
-			ViewLoader.caricaView("AssegnaPuntiView.fxml", dettagliSegnalazioneViewController.getPrimaryStage())
+			ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW, dettagliSegnalazioneViewController.getPrimaryStage())
 
 		);
 

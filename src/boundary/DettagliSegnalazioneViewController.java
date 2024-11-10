@@ -72,7 +72,7 @@ public class DettagliSegnalazioneViewController {
 	    loadImage();
 	    setupMapView();
 	    setupPositionLabel();
-		exitButton.setOnAction(event -> ViewLoader.caricaView("LoginView.fxml", primaryStage));
+		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage));
 	}
 	private void loadImage() {
 	    if (segnalazioneBean != null && segnalazioneBean.getFoto() != null) {

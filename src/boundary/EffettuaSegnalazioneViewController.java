@@ -102,7 +102,7 @@ public class EffettuaSegnalazioneViewController {
             String photoPath = photoField.getText();
             boolean success= inviaSegnalazione(description, photoPath);
             if(success) {
-                ViewLoader.caricaView("EffettuaSegnalazioneView.fxml", primaryStage);
+                ViewLoader.caricaView(ViewInfo.EFFETTUA_SEGNALAZIONE_VIEW, primaryStage);
             }
         });
 
@@ -138,12 +138,12 @@ public class EffettuaSegnalazioneViewController {
         
         // azione associata al pulsante redeemRewardButton
         redeemRewardButton.setOnAction(event -> 	
-        	ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage)
+        	ViewLoader.caricaView(ViewInfo.RISCATTA_RICOMPENSA_VIEW, primaryStage)
         );
         
         // azione associata al pulsante exitButton
         exitButton.setOnAction(event ->
-        	ViewLoader.caricaView("LoginView.fxml", primaryStage)	
+        	ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage)	
         );
     }
 

@@ -9,9 +9,8 @@ import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
 public class ViewLoader {
-    private static ControllerGraficoFactory controllerGraficoFactory = new ControllerGraficoFactory();
 	private static final Logger logger = Logger.getLogger(ViewLoader.class.getName());
-	
+    private static ControllerGraficoFactory controllerGraficoFactory = new ControllerGraficoFactory();
 	
 	
 	
@@ -25,13 +24,13 @@ public class ViewLoader {
     }
 
 
-    public static void caricaView(String percorsoFXML, Stage stage) {
+    public static void caricaView(ViewInfo viewInfo, Stage stage) {
         try {
             // carico la nuova view
-            FXMLLoader loader = new FXMLLoader(ViewLoader.class.getResource(percorsoFXML));
+            FXMLLoader loader = new FXMLLoader(ViewLoader.class.getResource(viewInfo.getFxmlPath()));
 
-            // ottengo il controller grafico associato alla view dalla factory
-            Object controller = controllerGraficoFactory.getController(percorsoFXML);
+            // ottengo il controller grafico associato alla view tramite reflection
+            Object controller = controllerGraficoFactory.createController(viewInfo);
             loader.setController(controller);
   
             Parent root = loader.load();
@@ -41,13 +40,16 @@ public class ViewLoader {
 
             // imposto la nuova scena nello stage
             stage.setScene(new Scene(root));       
-            stage.setTitle(controllerGraficoFactory.getTitolo(percorsoFXML));
+            stage.setTitle(viewInfo.getTitle());
 
             stage.show();
-        } catch (IOException e) {
-            logger.severe("Si è verificato un errore: "+e.getMessage());
+        } catch (IOException | IllegalArgumentException  e) {
+            logger.severe("Errore durante il caricamento della view: "+e.getMessage());
         }
     }
+    
+
+    
     
     
     private static void setPrimaryStageIfExists(Object controller, Stage stage) {

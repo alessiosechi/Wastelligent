@@ -11,16 +11,16 @@ public class StoricoViewState implements State {
 		logger.info("Configurazione DettagliSegnalazione per StoricoView");
 		dettagliSegnalazioneViewController.indietroButton.setOnAction(event -> 
 
-			ViewLoader.caricaView("StoricoView.fxml", dettagliSegnalazioneViewController.getPrimaryStage())
+			ViewLoader.caricaView(ViewInfo.STORICO_VIEW, dettagliSegnalazioneViewController.getPrimaryStage())
 		);
 
 		dettagliSegnalazioneViewController.button1.setOnAction(event -> 
-			ViewLoader.caricaView("EffettuaSegnalazioneView.fxml",
+			ViewLoader.caricaView(ViewInfo.EFFETTUA_SEGNALAZIONE_VIEW,
 					dettagliSegnalazioneViewController.getPrimaryStage())
 		);
 
 		dettagliSegnalazioneViewController.button2.setOnAction(event -> 
-			ViewLoader.caricaView("RiscattaRicompensaView.fxml", dettagliSegnalazioneViewController.getPrimaryStage())
+			ViewLoader.caricaView(ViewInfo.RISCATTA_RICOMPENSA_VIEW, dettagliSegnalazioneViewController.getPrimaryStage())
 		);
 
 		dettagliSegnalazioneViewController.button1.setText("NUOVA\nSEGNALAZIONE");

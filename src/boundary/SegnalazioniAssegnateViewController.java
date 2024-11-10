@@ -45,7 +45,7 @@ public class SegnalazioniAssegnateViewController {
     
     
     public void initialize() {
-		exitButton.setOnAction(event -> ViewLoader.caricaView("LoginView.fxml", primaryStage));
+		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage));
 		
 		caricaAssegnazioni();
 
@@ -69,7 +69,7 @@ public class SegnalazioniAssegnateViewController {
         });
         
         dettagliButton.setOnAction(event -> 
-            ViewLoader.caricaView("DettagliSegnalazioneView.fxml", primaryStage)
+            ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW, primaryStage)
         ); 
         
 
@@ -85,7 +85,7 @@ public class SegnalazioniAssegnateViewController {
                 if (successo) {
                     logger.info("Segnalazione completata!");
 
-                	ViewLoader.caricaView("SegnalazioniAssegnateView.fxml", primaryStage);
+                	ViewLoader.caricaView(ViewInfo.SEGNALAZIONI_ASSEGNATE_VIEW, primaryStage);
                 } else {
                     showAlert("Errore Completamento", "Si è verificato un errore durante il completamento della segnalazione.");
                 }

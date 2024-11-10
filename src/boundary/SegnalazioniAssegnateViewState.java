@@ -12,7 +12,7 @@ public class SegnalazioniAssegnateViewState implements State {
 
 		dettagliSegnalazioneViewController.indietroButton.setOnAction(event -> 
 
-			ViewLoader.caricaView("SegnalazioniAssegnateView.fxml",
+			ViewLoader.caricaView(ViewInfo.SEGNALAZIONI_ASSEGNATE_VIEW,
 					dettagliSegnalazioneViewController.getPrimaryStage())
 		);
 
@@ -24,7 +24,7 @@ public class SegnalazioniAssegnateViewState implements State {
 		dettagliSegnalazioneViewController.button1.setText("VISUALIZZA\nASSEGNAZIONI");
 
 		dettagliSegnalazioneViewController.button1.setOnAction(event -> 
-			ViewLoader.caricaView("SegnalazioniAssegnateView.fxml",
+			ViewLoader.caricaView(ViewInfo.SEGNALAZIONI_ASSEGNATE_VIEW,
 					dettagliSegnalazioneViewController.getPrimaryStage())
 		);
 

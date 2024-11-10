@@ -102,9 +102,9 @@ public class RiscattaRicompensaViewController {
 	}
 
 	private void setupEventHandlers() {
-		nuovaSegnalazioneButton.setOnAction(event -> ViewLoader.caricaView("EffettuaSegnalazioneView.fxml", primaryStage));
-		exitButton.setOnAction(event -> ViewLoader.caricaView("LoginView.fxml", primaryStage));
-		visualizzaStoricoButton.setOnAction(event -> ViewLoader.caricaView("StoricoView.fxml", primaryStage));
+		nuovaSegnalazioneButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.EFFETTUA_SEGNALAZIONE_VIEW, primaryStage));
+		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage));
+		visualizzaStoricoButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.STORICO_VIEW, primaryStage));
 		btnRiscatta.setOnAction(event -> riscattaSelezione());
 
 		
@@ -192,7 +192,7 @@ public class RiscattaRicompensaViewController {
 
             if (result) {
                 // se il riscatto ha avuto successo, aggiorno la pagina
-                ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage);
+                ViewLoader.caricaView(ViewInfo.RISCATTA_RICOMPENSA_VIEW, primaryStage);
             }
 
         } catch (DailyRedemptionLimitException e) {

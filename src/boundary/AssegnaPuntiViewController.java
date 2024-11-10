@@ -68,12 +68,12 @@ public class AssegnaPuntiViewController {
 	private void configuraPulsanti() {
 		
 		dettagliButton.setDisable(true);
-		dettagliButton.setOnAction(event -> ViewLoader.caricaView("DettagliSegnalazioneView.fxml", primaryStage));
+		dettagliButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW, primaryStage));
         assegnaButton.setOnAction(event -> assegnaPuntiSegnalazione());
 
-		exitButton.setOnAction(event -> ViewLoader.caricaView("LoginView.fxml", primaryStage));
+		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage));
 		gestisciSegnalazioniButton
-				.setOnAction(event -> ViewLoader.caricaView("GestisciSegnalazioniView.fxml", primaryStage));
+				.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW, primaryStage));
 	}
 	private void assegnaPuntiSegnalazione() {
 		SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
@@ -99,7 +99,7 @@ public class AssegnaPuntiViewController {
 
 			if (successo) {
 
-				ViewLoader.caricaView("AssegnaPuntiView.fxml", primaryStage);
+				ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW, primaryStage);
 			} else {
 				showAlert("Errore Assegnazione", "Si è verificato un errore durante l'assegnazione dei punti.");
 			}
