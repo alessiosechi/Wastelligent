@@ -9,64 +9,79 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
+
 public class ViewLoader {
-	private static final Logger logger = Logger.getLogger(ViewLoader.class.getName());
-    private static ControllerGraficoFactory controllerGraficoFactory = new ControllerGraficoFactory();	
+    private static final Logger logger = Logger.getLogger(ViewLoader.class.getName());
 
+    private ViewLoader() {}
 
-	
-
-    private ViewLoader() {
-        /* 
-         * Costruttore privato per nascondere il costruttore pubblico predefinito.
-         * La classe ViewLoader contiene solo metodi e variabili static, infatti è una classe di utility e non 
-         * dovrebbe essere istanziata.
-         */
-    }
-
-
+    // Metodo generico per caricare dinamicamente una view specifica
     public static void caricaView(ViewInfo viewInfo, Stage stage) {
-        try {
-            // carico la nuova view
-            FXMLLoader loader = new FXMLLoader(ViewLoader.class.getResource(viewInfo.getFxmlPath()));
-
-            // ottengo il controller grafico associato alla view tramite reflection
-            Object controller = controllerGraficoFactory.createController(viewInfo);
-            loader.setController(controller);
-  
-            Parent root = loader.load();
-
-            setPrimaryStageIfExists(controller, stage);
-            
-
-            // imposto la nuova scena nello stage
-            stage.setScene(new Scene(root));       
-            stage.setTitle(viewInfo.getTitle());
-
-            stage.show();
-        } catch (IOException | IllegalArgumentException  e) {
-            logger.severe("Errore durante il caricamento della view: "+e.getMessage());
+        // Ottieni il controller corrispondente
+        Object controller = getControllerInstance(viewInfo);
+        if (controller != null) {
+            caricaView(viewInfo.getFxmlPath(), viewInfo.getTitle(), stage, controller);
+        } else {
+            logger.severe("Controller non trovato per la view: " + viewInfo);
         }
     }
-    
 
-    
-    
-    
+    // Metodo per caricare la view con FXML, titolo e controller specifico
+    private static void caricaView(String fxmlPath, String title, Stage stage, Object controller) {
+        try {
+            FXMLLoader loader = new FXMLLoader(ViewLoader.class.getResource(fxmlPath));
+            loader.setController(controller);
+            Parent root = loader.load();
+            setPrimaryStageIfExists(controller, stage);
+            stage.setScene(new Scene(root));
+            stage.setTitle(title);
+            stage.show();
+        } catch (IOException e) {
+            logger.severe("Errore durante il caricamento della view: " + e.getMessage());
+        }
+    }
+
+    // Metodo per ottenere il controller singleton associato a ogni view
+    private static Object getControllerInstance(ViewInfo viewInfo) {
+        switch (viewInfo) {
+            case LOGIN_VIEW:
+                return LoginViewController.getInstance();
+            case REGISTRAZIONE_VIEW:
+                return RegistrazioneViewController.getInstance();
+            case EFFETTUA_SEGNALAZIONE_VIEW:
+                return EffettuaSegnalazioneViewController.getInstance();
+            case RISCATTA_RICOMPENSA_VIEW:
+                return RiscattaRicompensaViewController.getInstance();
+            case STORICO_VIEW:
+                return StoricoViewController.getInstance();
+            case GESTISCI_SEGNALAZIONI_VIEW:
+                return GestisciSegnalazioniViewController.getInstance();
+            case ASSEGNA_PUNTI_VIEW:
+                return AssegnaPuntiViewController.getInstance();
+            case SEGNALAZIONI_ASSEGNATE_VIEW:
+                return SegnalazioniAssegnateViewController.getInstance();
+            case DETTAGLI_VIEW:
+                return DettagliSegnalazioneViewController.getInstance();
+            default:
+                return null;
+        }
+    }
+
     private static void setPrimaryStageIfExists(Object controller, Stage stage) {
-        // tramite reflection chiamo il metodo "setPrimaryStage" (se esiste nel controller)
         if (controller != null) {
             try {
-                // Ottengo il metodo setPrimaryStage
                 Method setPrimaryStageMethod = controller.getClass().getMethod("setPrimaryStage", Stage.class);
-
-                // Passo lo stage al metodo
                 setPrimaryStageMethod.invoke(controller, stage);
             } catch (NoSuchMethodException e) {
-                logger.info("Il controller non ha il metodo setPrimaryStage: " + e.getMessage());
+                logger.info("Il controller non ha il metodo setPrimaryStage.");
             } catch (Exception e) {
-                logger.severe("Si è verificato un errore: "+e.getMessage());
+                logger.severe("Si è verificato un errore: " + e.getMessage());
             }
         }
     }
+
+    
+
 }
+
+

@@ -46,6 +46,7 @@ public class AssegnaPuntiViewController {
 	private static AssegnaPuntiViewController instance;
 	private Stage primaryStage;
 	private AssegnaPuntiController assegnaPuntiController = AssegnaPuntiController.getInstance();
+	
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
 	
 	
