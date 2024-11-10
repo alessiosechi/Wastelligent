@@ -42,7 +42,6 @@ public class RiscattaRicompensaController {
 	private static volatile RiscattaRicompensaController instance;
 	private static final Logger logger = Logger.getLogger(RiscattaRicompensaController.class.getName());
     private List<Ricompensa> ricompenseUtente = new ArrayList<>();
-    private static UtenteCorrente utente;
     private static int idUtente;
 
 	private RiscattaRicompensaController() {
@@ -68,7 +67,7 @@ public class RiscattaRicompensaController {
 	                    utenteDAO = UtenteDAOImplementazione.getInstance();
 	                    segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
 	                    
-	                    utente=UtenteCorrente.getInstance();
+	                    UtenteCorrente utente=UtenteCorrente.getInstance();
 	                    idUtente=utente.getUtente().getIdUtente();
 	                } catch (Exception e) {
 	                    // Gestione dell'errore durante l'inizializzazione

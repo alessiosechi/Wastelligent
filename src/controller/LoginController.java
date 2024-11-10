@@ -84,10 +84,6 @@ public class LoginController {
 		return utente.getViewIniziale(interfacciaSelezionata);
 	}
 
-//	public UtenteBean getUtente() {
-//
-//		return convertUtenteToBean(utente);
-//	}
 	
 	public void registraUtente(CredenzialiBean credenzialiBean) throws UsernameAlreadyTakenException, RegistrazioneUtenteException {
 		// controllo se lo username è già stato preso
@@ -101,26 +97,8 @@ public class LoginController {
 
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-
 	public static void logout() { // il logout potrebbe non servire, tanto ad ogni login sovrascrivo l'utente
 		utente = null;
 		logger.info("Logout effettuato correttamente.");
 	}
-
-
-
-//	public UtenteBean convertUtenteToBean(Utente utente) {
-//		UtenteBean utenteBean = new UtenteBean();
-//		utenteBean.setIdUtente(utente.getIdUtente());
-//		utenteBean.setUsername(utente.getUsername());
-//		return utenteBean;
-//	}
 }

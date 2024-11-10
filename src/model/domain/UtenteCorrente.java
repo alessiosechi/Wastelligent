@@ -21,8 +21,4 @@ public class UtenteCorrente {
     public void setUtente(Utente utente) {
         this.utente = utente;
     }
-
-//    public void clear() {
-//        this.utente = null;
-//    }
 }

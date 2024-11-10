@@ -56,8 +56,6 @@ public class EffettuaSegnalazioneController {
 
 	public void inviaSegnalazione(SegnalazioneBean segnalazioneBean) throws SegnalazioneVicinaException{
         Segnalazione segnalazione = convertSegnalazioneToEntity(segnalazioneBean);
-        
-        //segnalazione.setIdUtente(LoginController.getInstance().getUtente().getIdUtente());
 
         // verifico se esistono segnalazioni nel raggio di 10 metri
         if(verificaSegnalazioniVicine(segnalazione)) {
