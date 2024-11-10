@@ -48,26 +48,32 @@ public class EffettuaSegnalazioneViewController {
     private Pane mapPane; 
 
     private MapView mapView; 
-    private Marker currentMarker;
-    
+    private Marker currentMarker; 
     private static EffettuaSegnalazioneViewController instance;
     private EffettuaSegnalazioneController effettuaSegnalazioneController = EffettuaSegnalazioneController.getInstance();
     private Stage primaryStage;
-
-
+    
+    
+    
+    
+    
+    
     @FXML
-    public void initialize() { // questo metodo viene chiamato automaticamente per l'inizializzazione dell'interfaccia
-    	
-        // inizializzazione della mappa
+    public void initialize() { // questo metodo viene chiamato automaticamente per l'inizializzazione dell'interfaccia   	
+        initMapView();
+        initButtonActions();        
+    }
+
+    private void initMapView() {
         mapView = new MapView();
         mapView.initialize(Configuration.builder()
-                .projection(Projection.WEB_MERCATOR)
-                .showZoomControls(true)
-                .build());
+            .projection(Projection.WEB_MERCATOR)
+            .showZoomControls(true)
+            .build());
 
         mapView.setZoom(12); // imposto lo zoom a 12
         mapView.setCenter(new Coordinate(41.9028, 12.4964)); // coordinate di Roma
-
+        
         // aggiungo la mappa al Pane
         mapPane.getChildren().add(mapView);
         mapView.setPrefWidth(mapPane.getPrefWidth());
@@ -78,7 +84,8 @@ public class EffettuaSegnalazioneViewController {
             Coordinate coordinate = event.getCoordinate().normalize();
             placeMarker(coordinate);
         });
-
+    }
+    private void initButtonActions() {
         // azione associata al pulsante browseButton
         browseButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
@@ -118,11 +125,14 @@ public class EffettuaSegnalazioneViewController {
 
         // azione associata al pulsante resetButton
         resetButton.setOnAction(event -> {
+            mapView.removeMarker(currentMarker);
             mapView.setCenter(new Coordinate(41.9028, 12.4964)); // reset sulla posizione di Roma
+            
 
             searchField.clear();
             descriptionField.clear();
             photoField.clear();
+            
         });
         
         
@@ -135,8 +145,8 @@ public class EffettuaSegnalazioneViewController {
         exitButton.setOnAction(event ->
         	ViewLoader.caricaView("LoginView.fxml", primaryStage)	
         );
-             
     }
+
 
     private void placeMarker(Coordinate coordinate) {
         if (currentMarker != null) {

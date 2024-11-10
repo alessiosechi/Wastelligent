@@ -43,20 +43,43 @@ public class StoricoViewController {
 	private RiscattaRicompensaController riscattaRicompensaController = RiscattaRicompensaController.getInstance();
     private static StoricoViewController instance;
     private Stage primaryStage;
-
-
-
+    
+    
+    
     @FXML
     public void initialize() {
     	
+        configuraColonneTabella();  
+        caricaSegnalazioni();
+        configuraPulsanti();
+        impostaListenerSelezione();
+    }
+    
+    private void caricaSegnalazioni() {
+		
+        List<SegnalazioneBean> segnalazioni = riscattaRicompensaController.ottieniSegnalazioniRiscontrate();
+
+        ObservableList<SegnalazioneBean> segnalazioniRiscontrate = FXCollections.observableArrayList(segnalazioni);
+        tableViewSegnalazioni.setItems(segnalazioniRiscontrate);
+    }
+
+    private void configuraColonneTabella() {
 		colDescrizione.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescrizione()));
 		colPosizione.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPosizione()));
 		colPunti.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getPuntiAssegnati()).asObject());
-        
-        caricaSegnalazioni();
-    	
-        vediDettagliButton.setDisable(true);
-
+    }
+    
+	private void configuraPulsanti() {
+		vediDettagliButton.setDisable(true);
+		
+		vediDettagliButton.setOnAction(event -> ViewLoader.caricaView("DettagliSegnalazioneView.fxml", primaryStage));
+		indietroButton.setOnAction(event -> ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage));
+		exitButton.setOnAction(event -> ViewLoader.caricaView("LoginView.fxml", primaryStage));
+		riscattaRicompensaButton.setOnAction(event -> ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage));
+		nuovaSegnalazioneButton.setOnAction(event -> ViewLoader.caricaView("EffettuaSegnalazioneView.fxml", primaryStage));
+	}
+	
+	private void impostaListenerSelezione() {
         tableViewSegnalazioni.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 // abilito il pulsante "DETTAGLI" quando una segnalazione è selezionata
@@ -69,43 +92,8 @@ public class StoricoViewController {
                 vediDettagliButton.setDisable(true);
             }
         });
-        
-        vediDettagliButton.setOnAction(event -> 
-            ViewLoader.caricaView("DettagliSegnalazioneView.fxml", primaryStage)
-        );  
-        
+	}
 
-        indietroButton.setOnAction(event -> 	
-        	ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage)	
-        );
-        
-        exitButton.setOnAction(event ->
-        	ViewLoader.caricaView("LoginView.fxml", primaryStage) 	     	
-        );
-    	
-        riscattaRicompensaButton.setOnAction(event -> 
-        	ViewLoader.caricaView("RiscattaRicompensaView.fxml", primaryStage)
-        );
-           
-        nuovaSegnalazioneButton.setOnAction(event -> 	
-        	ViewLoader.caricaView("EffettuaSegnalazioneView.fxml", primaryStage)
-        		
-        );
-    }
-
-    
-    
-    private void caricaSegnalazioni() {
-		
-        List<SegnalazioneBean> segnalazioni = riscattaRicompensaController.ottieniSegnalazioniRiscontrate();
-
-        ObservableList<SegnalazioneBean> segnalazioniRiscontrate = FXCollections.observableArrayList(segnalazioni);
-        tableViewSegnalazioni.setItems(segnalazioniRiscontrate);
-    }
-    
-    
-    
-    
 
     public static StoricoViewController getInstance() {
         if (instance == null) {
