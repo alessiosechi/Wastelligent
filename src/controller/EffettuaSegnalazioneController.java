@@ -10,6 +10,7 @@ import model.domain.Posizione;
 import model.domain.PosizioneBean;
 import model.domain.Segnalazione;
 import model.domain.SegnalazioneBean;
+import model.domain.UtenteCorrente;
 
 public class EffettuaSegnalazioneController {
 	private static volatile EffettuaSegnalazioneController instance;
@@ -23,6 +24,7 @@ public class EffettuaSegnalazioneController {
 
 	public static EffettuaSegnalazioneController getInstance() {
 		EffettuaSegnalazioneController result = instance;
+
 
 		if (instance == null) {
 			synchronized (EffettuaSegnalazioneController.class) {
@@ -45,7 +47,7 @@ public class EffettuaSegnalazioneController {
 	}
 
 	// metodo che restituisce le coordinate in base alla posizione fornita
-	public PosizioneBean getCoordinates(String location) throws Exception {
+	public PosizioneBean getCoordinates(String location) {
 		Posizione posizione = servizioGeocoding.ottieniCoordinate(location);
 
 		return convertPosizioneToBean(posizione);
@@ -54,13 +56,18 @@ public class EffettuaSegnalazioneController {
 
 	public void inviaSegnalazione(SegnalazioneBean segnalazioneBean) throws SegnalazioneVicinaException{
         Segnalazione segnalazione = convertSegnalazioneToEntity(segnalazioneBean);
+        
+        //segnalazione.setIdUtente(LoginController.getInstance().getUtente().getIdUtente());
 
         // verifico se esistono segnalazioni nel raggio di 10 metri
         if(verificaSegnalazioniVicine(segnalazione)) {
         	throw new SegnalazioneVicinaException("Segnalazione troppo vicina a un'altra esistente."); 
         }
 
-        // se non ci sono segnalazioni troppo vicine, salvo la segnalazione
+        // se non ci sono segnalazioni troppo vicine, recupero l' idUtente e salvo la segnalazione
+        UtenteCorrente utente=UtenteCorrente.getInstance();
+        segnalazione.setIdUtente(utente.getUtente().getIdUtente());
+
         segnalazioneDAO.salvaSegnalazione(segnalazione);
 	}
 

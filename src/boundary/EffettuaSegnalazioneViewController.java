@@ -15,12 +15,10 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import controller.LoginController;
 import exceptions.SegnalazioneVicinaException;
 import controller.EffettuaSegnalazioneController;
 import model.domain.PosizioneBean;
 import model.domain.SegnalazioneBean;
-import model.domain.UtenteBean;
 
 
 
@@ -54,7 +52,6 @@ public class EffettuaSegnalazioneViewController {
     
     private static EffettuaSegnalazioneViewController instance;
     private EffettuaSegnalazioneController effettuaSegnalazioneController = EffettuaSegnalazioneController.getInstance();
-    private LoginController loginController = LoginController.getInstance();
     private Stage primaryStage;
 
 
@@ -163,9 +160,6 @@ public class EffettuaSegnalazioneViewController {
                 segnalazioneBean.setLatitudine(currentMarker.getPosition().getLatitude());
                 segnalazioneBean.setLongitudine(currentMarker.getPosition().getLongitude());
             }
-
-            UtenteBean utenteBean = loginController.getUtente();
-            segnalazioneBean.setIdUtente(utenteBean.getIdUtente());
 
             // invio della segnalazione
             effettuaSegnalazioneController.inviaSegnalazione(segnalazioneBean);

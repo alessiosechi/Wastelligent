@@ -85,7 +85,7 @@ public class ListaRicompenseGithubDAOImplementazione implements ListaRicompenseG
 				// aggiungo la ricompensa alla lista di ricompense
 				ricompense.add(ricompensa);
 			}
-		} catch (IOException | InterruptedException e) {
+		} catch (IOException e) {
             throw new ConnessioneAPIException("Errore durante la connessione a Github", e);
         } catch (JsonSyntaxException e) {
             throw new ConnessioneAPIException("Errore nel parsing del JSON", e);
@@ -119,7 +119,7 @@ public class ListaRicompenseGithubDAOImplementazione implements ListaRicompenseG
             }
             throw new CodiceRiscattoNonTrovatoException("Codice riscatto non trovato"); 
             
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             // Gestione di errori di connessione
             throw new ConnessioneAPIException("Errore durante la connessione a Github", e);
         } catch (JsonSyntaxException e) {

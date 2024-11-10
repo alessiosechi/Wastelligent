@@ -1,8 +1,4 @@
 
-
-
-
-
 package model.domain;
 
 public class Ricompensa {

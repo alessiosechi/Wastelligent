@@ -18,7 +18,4 @@ public interface SegnalazioneDAO {
     void assegnaOperatore(int idSegnalazione, int idOperatore, int idEsperto);
     void assegnaPunti(int idSegnalazione, int punti);
     
-
-
-
 }

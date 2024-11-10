@@ -6,7 +6,7 @@ public enum StatoSegnalazione {
     RISOLTA("Risolta"),
     RISCONTRATA("Riscontrata");
 	
-    private final String stato;
+    private final String stato; // variabile immutabile per ciascuna costante
 
     StatoSegnalazione(String stato) {
         this.stato = stato;

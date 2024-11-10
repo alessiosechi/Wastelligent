@@ -2,7 +2,6 @@ package boundary;
 
 import java.util.List;
 
-import controller.LoginController;
 import controller.RiscattaRicompensaController;
 import exceptions.ConnessioneAPIException;
 import exceptions.DailyRedemptionLimitException;
@@ -25,8 +24,6 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import model.domain.RicompensaBean;
-
-import model.domain.UtenteBean;
 
 public class RiscattaRicompensaViewController {
 
@@ -68,16 +65,12 @@ public class RiscattaRicompensaViewController {
 	private static RiscattaRicompensaViewController instance;
 	private Stage primaryStage;
 	private RiscattaRicompensaController riscattaRicompensaController = RiscattaRicompensaController.getInstance();
-	private LoginController loginController = LoginController.getInstance();
-    private int idUtente;
     private List<RicompensaBean> listaRicompenseAPI;
 	
 	
 
 	@FXML
 	public void initialize() {
-		UtenteBean utente = loginController.getUtente();
-		idUtente = utente.getIdUtente();
 
 		caricaPuntiUtente();
 		mostraRicompenseDisponibili();
@@ -89,7 +82,7 @@ public class RiscattaRicompensaViewController {
 	
 	private void caricaPuntiUtente() {
 		// idUtente è un intero, un tipo primitivo, non utilizzo Bean
-		int puntiUtente = riscattaRicompensaController.ottieniPuntiUtente(idUtente);
+		int puntiUtente = riscattaRicompensaController.ottieniPuntiUtente();
 		labelSaldoPunti.setText(String.valueOf(puntiUtente));
 		
 	}
@@ -162,7 +155,7 @@ public class RiscattaRicompensaViewController {
 
 
 	private List<RicompensaBean> getRicompenseRiscattate() {
-		return riscattaRicompensaController.ottieniRicompenseUtente(idUtente);
+		return riscattaRicompensaController.ottieniRicompenseUtente();
 	}
 
 	private void mostraDettagliRicompensa(RicompensaBean ricompensaBean) {
@@ -188,7 +181,7 @@ public class RiscattaRicompensaViewController {
 	    }
 	    
         RicompensaBean ricompensaBean = listaRicompenseAPI.get(selectedIndex);
-        ricompensaBean.setIdUtente(idUtente);
+
 
         try {
             boolean result = riscattaRicompensaController.riscatta(ricompensaBean);

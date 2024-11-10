@@ -14,6 +14,7 @@ import model.domain.Segnalazione;
 import model.domain.SegnalazioneBean;
 import model.domain.StatoSegnalazione;
 import model.domain.UtenteBean;
+import model.domain.UtenteCorrente;
 
 public class RisolviSegnalazioneController {
 
@@ -118,9 +119,9 @@ public class RisolviSegnalazioneController {
 
 	    	int idSegnalazione = assegnazioneBean.getSegnalazione().getIdSegnalazione();
 	    	int idOperatore=assegnazioneBean.getOperatore().getIdUtente();
-	    	int idEsperto=assegnazioneBean.getEsperto().getIdUtente();
 	    	
-	        segnalazioneDAO.assegnaOperatore(idSegnalazione, idOperatore, idEsperto);
+	    	UtenteCorrente utente=UtenteCorrente.getInstance();
+	        segnalazioneDAO.assegnaOperatore(idSegnalazione, idOperatore, utente.getUtente().getIdUtente());
 	        
 	        
 	        return true;
@@ -133,14 +134,12 @@ public class RisolviSegnalazioneController {
 	
 
 	
-    public List<SegnalazioneBean> getSegnalazioniAssegnate(int idOperatore) {
+    public List<SegnalazioneBean> getSegnalazioniAssegnate() {
 
-        
+    	UtenteCorrente utente=UtenteCorrente.getInstance();
+    	   
 		try {
-
-
-
-	        List<Segnalazione> segnalazioniAssegnate=segnalazioneDAO.getSegnalazioniAssegnate(idOperatore, StatoSegnalazione.IN_CORSO.getStato());
+	        List<Segnalazione> segnalazioniAssegnate=segnalazioneDAO.getSegnalazioniAssegnate(utente.getUtente().getIdUtente(), StatoSegnalazione.IN_CORSO.getStato());
 
 			if (!segnalazioniAssegnate.isEmpty()) {
 				for (Segnalazione s : segnalazioniAssegnate) {

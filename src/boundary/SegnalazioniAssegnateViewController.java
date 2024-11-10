@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import controller.LoginController;
 import controller.RisolviSegnalazioneController;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,7 +17,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import model.domain.SegnalazioneBean;
-import model.domain.UtenteBean;
 
 public class SegnalazioniAssegnateViewController {
 	
@@ -40,7 +38,6 @@ public class SegnalazioniAssegnateViewController {
 	
 	
     private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
-    private LoginController loginController = LoginController.getInstance(); 
 	private Stage primaryStage;
     private static SegnalazioniAssegnateViewController instance;
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
@@ -112,10 +109,8 @@ public class SegnalazioniAssegnateViewController {
         
 
     private void caricaAssegnazioni() {
-    	UtenteBean utente = loginController.getUtente();
-    	int idOperatore= utente.getIdUtente();
     	
-        List<SegnalazioneBean> segnalazioniAssegnate = risolviSegnalazioneController.getSegnalazioniAssegnate(idOperatore);
+        List<SegnalazioneBean> segnalazioniAssegnate = risolviSegnalazioneController.getSegnalazioniAssegnate();
           
         ObservableList<SegnalazioneBean> segnalazioni = FXCollections.observableArrayList(segnalazioniAssegnate);
         segnalazioniTable.setItems(segnalazioni);

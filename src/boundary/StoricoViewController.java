@@ -3,7 +3,6 @@ package boundary;
 
 import java.util.List;
 
-import controller.LoginController;
 import controller.RiscattaRicompensaController;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -14,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
 import model.domain.SegnalazioneBean;
-import model.domain.UtenteBean;
 import javafx.scene.control.TableView;
 
 public class StoricoViewController {
@@ -43,7 +41,6 @@ public class StoricoViewController {
     
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
 	private RiscattaRicompensaController riscattaRicompensaController = RiscattaRicompensaController.getInstance();
-	private LoginController loginController = LoginController.getInstance();
     private static StoricoViewController instance;
     private Stage primaryStage;
 
@@ -99,10 +96,8 @@ public class StoricoViewController {
     
     
     private void caricaSegnalazioni() {
-		UtenteBean utente = loginController.getUtente();
-		int idUtente = utente.getIdUtente();
 		
-        List<SegnalazioneBean> segnalazioni = riscattaRicompensaController.ottieniSegnalazioniRiscontrate(idUtente);
+        List<SegnalazioneBean> segnalazioni = riscattaRicompensaController.ottieniSegnalazioniRiscontrate();
 
         ObservableList<SegnalazioneBean> segnalazioniRiscontrate = FXCollections.observableArrayList(segnalazioni);
         tableViewSegnalazioni.setItems(segnalazioniRiscontrate);

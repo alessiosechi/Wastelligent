@@ -1,10 +1,9 @@
 package model.domain;
 
-public class AssegnazioneBean {
+public class AssegnazioneBean { // DA RIVEDERE BENE!
 	
     private SegnalazioneBean segnalazione;
     private UtenteBean operatore;
-    private UtenteBean esperto;
     
     public SegnalazioneBean getSegnalazione() {
         return segnalazione;
@@ -21,11 +20,5 @@ public class AssegnazioneBean {
     public void setOperatore(UtenteBean operatore) {
         this.operatore = operatore;
     }
-    public UtenteBean getEsperto() {
-        return esperto;
-    }
 
-    public void setEsperto(UtenteBean esperto) {
-        this.esperto = esperto;
-    }
 }

@@ -1,12 +1,22 @@
 package model.domain;
 
-public interface Utente { 
-    int getIdUtente();
-	
-	public String getUsername();  
-	
-	public String getViewIniziale(int interfacciaSelezionata);
-	
+public abstract class Utente  { 	
+    private int idUtente;
+    private String username;
 
-	
+    public Utente(int idUtente, String username) {
+        this.idUtente = idUtente;
+        this.username = username;
+    }
+    
+    // comportamenti comuni
+    public int getIdUtente() {
+        return idUtente;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+    
+	public abstract String getViewIniziale(int interfacciaSelezionata);
 }

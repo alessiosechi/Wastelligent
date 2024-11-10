@@ -7,17 +7,15 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import model.dao.queries.LoginQueries;
+import model.domain.Ruolo;
 
 public class LoginDAOImplementazione implements LoginDAO{
 	private static volatile LoginDAOImplementazione instance;
 	private static final Logger logger = Logger.getLogger(LoginDAOImplementazione.class.getName());
 
-
-
 	private LoginDAOImplementazione() {
 	}
 	
-
 	public static LoginDAOImplementazione getInstance() {
 		LoginDAOImplementazione result = instance;
 
@@ -27,15 +25,10 @@ public class LoginDAOImplementazione implements LoginDAO{
 				if (result == null) {
 					instance = result = new LoginDAOImplementazione();
 				}
-
 			}
 		}
-
 		return result;
 	}
-	
-	
-	
 	
 	
 	public int autenticazione(String username, String password) {
@@ -73,9 +66,6 @@ public class LoginDAOImplementazione implements LoginDAO{
 	    }
 	}
 
-	
-	
-	
 	
     @Override
     public int getIdByUsername(String username) {
@@ -120,7 +110,7 @@ public class LoginDAOImplementazione implements LoginDAO{
             stmt = connessione.prepareStatement(sql);
             stmt.setString(1, username);
             stmt.setString(2, password); 
-            stmt.setInt(3, 1); // imposto il ruolo di UTENTE_BASE
+            stmt.setInt(3, Ruolo.UTENTE_BASE.getId()); 
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;

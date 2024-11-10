@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import model.domain.OperatoreEcologico;
+import model.domain.Ruolo;
 
 public class UtenteDAOImplementazione implements UtenteDAO {
 
@@ -150,7 +151,7 @@ public class UtenteDAOImplementazione implements UtenteDAO {
                          "WHERE tipo_utente = ?";
 
             stmt = connessione.prepareStatement(sql);
-            stmt.setInt(1, 3); // Imposta tipo_utente come 3 per filtrare gli operatori ecologici
+            stmt.setInt(1, Ruolo.OPERATORE_ECOLOGICO.getId()); // Imposta tipo_utente come 3 per filtrare gli operatori ecologici
 
             // Esegui la query
             resultSet = stmt.executeQuery();

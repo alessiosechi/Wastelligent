@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import controller.LoginController;
 import controller.RisolviSegnalazioneController;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -54,7 +53,6 @@ public class GestisciSegnalazioniViewController {
     private static GestisciSegnalazioniViewController instance;
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
     private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
-    private LoginController loginController = LoginController.getInstance();
     private Stage primaryStage;
 	private static final Logger logger = Logger.getLogger(GestisciSegnalazioniViewController.class.getName());
     
@@ -109,12 +107,10 @@ public class GestisciSegnalazioniViewController {
 	    UtenteBean operatoreSelezionato = operatoriEcologiciComboBox.getSelectionModel().getSelectedItem();
 	    SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
 	    if (operatoreSelezionato != null && segnalazioneSelezionata != null) {
-	        UtenteBean utente = loginController.getUtente();
 
 	        AssegnazioneBean assegnazioneBean = new AssegnazioneBean();
 	        assegnazioneBean.setSegnalazione(segnalazioneSelezionata);
 	        assegnazioneBean.setOperatore(operatoreSelezionato);
-	        assegnazioneBean.setEsperto(utente);
 	        
 	        if (risolviSegnalazioneController.assegnaOperatore(assegnazioneBean)) {
 	            logger.info("Segnalazione assegnata con successo a " + operatoreSelezionato.getUsername());

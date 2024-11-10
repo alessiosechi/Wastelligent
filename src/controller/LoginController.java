@@ -8,7 +8,7 @@ import model.dao.LoginDAO;
 import model.dao.LoginDAOImplementazione;
 import model.domain.CredenzialiBean;
 import model.domain.Utente;
-import model.domain.UtenteBean;
+import model.domain.UtenteCorrente;
 import model.domain.Ruolo;
 
 public class LoginController {
@@ -16,6 +16,7 @@ public class LoginController {
 	private static Utente utente = null;
 	private static LoginDAO loginDAO;
 	private static UtenteFactory utenteFactory = new UtenteFactory();
+	private static UtenteCorrente utenteCorrente=UtenteCorrente.getInstance();
 
 	private static final Logger logger = Logger.getLogger(LoginController.class.getName());
 
@@ -75,17 +76,18 @@ public class LoginController {
 		if (ruolo == null) {
 			throw new IllegalArgumentException("Ruolo non può essere null");
 		}
-		utente = utenteFactory.createUtente(idUtente, username, ruolo);
+		utente = utenteFactory.createUtente(idUtente, username, ruolo);	
+		utenteCorrente.setUtente(utente);
 	}
 
 	public String ottieniView(int interfacciaSelezionata) { // restituisce la view iniziale da caricare
 		return utente.getViewIniziale(interfacciaSelezionata);
 	}
 
-	public UtenteBean getUtente() {
-
-		return convertUtenteToBean(utente);
-	}
+//	public UtenteBean getUtente() {
+//
+//		return convertUtenteToBean(utente);
+//	}
 	
 	public void registraUtente(CredenzialiBean credenzialiBean) throws UsernameAlreadyTakenException, RegistrazioneUtenteException {
 		// controllo se lo username è già stato preso
@@ -115,10 +117,10 @@ public class LoginController {
 
 
 
-	public UtenteBean convertUtenteToBean(Utente utente) {
-		UtenteBean utenteBean = new UtenteBean();
-		utenteBean.setIdUtente(utente.getIdUtente());
-		utenteBean.setUsername(utente.getUsername());
-		return utenteBean;
-	}
+//	public UtenteBean convertUtenteToBean(Utente utente) {
+//		UtenteBean utenteBean = new UtenteBean();
+//		utenteBean.setIdUtente(utente.getIdUtente());
+//		utenteBean.setUsername(utente.getUsername());
+//		return utenteBean;
+//	}
 }

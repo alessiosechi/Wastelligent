@@ -25,6 +25,7 @@ import model.domain.Ricompensa;
 import model.domain.RicompensaBean;
 import model.domain.Segnalazione;
 import model.domain.SegnalazioneBean;
+import model.domain.UtenteCorrente;
 
 public class RiscattaRicompensaController {
 
@@ -41,6 +42,8 @@ public class RiscattaRicompensaController {
 	private static volatile RiscattaRicompensaController instance;
 	private static final Logger logger = Logger.getLogger(RiscattaRicompensaController.class.getName());
     private List<Ricompensa> ricompenseUtente = new ArrayList<>();
+    private static UtenteCorrente utente;
+    private static int idUtente;
 
 	private RiscattaRicompensaController() {
 	}
@@ -64,9 +67,12 @@ public class RiscattaRicompensaController {
 	                    ricompensaDAO = RicompensaDAOImplementazione.getInstance();
 	                    utenteDAO = UtenteDAOImplementazione.getInstance();
 	                    segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
+	                    
+	                    utente=UtenteCorrente.getInstance();
+	                    idUtente=utente.getUtente().getIdUtente();
 	                } catch (Exception e) {
 	                    // Gestione dell'errore durante l'inizializzazione
-	                    logger.severe("Errore durante l'inizializzazione dei DAO: " + e.getMessage());
+	                    logger.severe("Errore durante l'inizializzazione: " + e.getMessage());
 	                }
 				}
 
@@ -95,7 +101,7 @@ public class RiscattaRicompensaController {
 		}
 	}
 
-	public List<RicompensaBean> ottieniRicompenseUtente(int idUtente) {
+	public List<RicompensaBean> ottieniRicompenseUtente() {
 		try {
 
 	        ricompenseUtente = ricompensaDAO.getRicompenseByUtente(idUtente);
@@ -131,8 +137,8 @@ public class RiscattaRicompensaController {
 	        }
 			
 			
-			int idUtente = ricompensa.getIdUtente();
-			int puntiUtente = ottieniPuntiUtente(idUtente);
+
+			int puntiUtente = ottieniPuntiUtente();
 			int puntiNecessari = calcolaPuntiNecessari(ricompensa.getValore());
 			
 	        if (puntiUtente < puntiNecessari) {
@@ -146,6 +152,7 @@ public class RiscattaRicompensaController {
 	
 			// queste due operazioni dovrebbero essere transazionali
 			// registro il riscatto
+			ricompensa.setIdUtente(idUtente);
 			ricompensaDAO.registraRicompensaRiscattata(ricompensa);
 
 			// sottraggo i punti all'utente
@@ -196,13 +203,13 @@ public class RiscattaRicompensaController {
 	    }
 	}
 
-	public int ottieniPuntiUtente(int idUtente) {
+	public int ottieniPuntiUtente() {
 
 		return utenteDAO.estraiPuntiUtente(idUtente);
 
 	}
 
-	public List<SegnalazioneBean> ottieniSegnalazioniRiscontrate(int idUtente) {
+	public List<SegnalazioneBean> ottieniSegnalazioniRiscontrate() {
 		try {
 			List<Segnalazione> segnalazioniRiscontrate = segnalazioneDAO.trovaSegnalazioniRiscontrate(idUtente);
 
