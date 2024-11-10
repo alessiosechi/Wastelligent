@@ -4,13 +4,11 @@ package boundary;
 public class ControllerGraficoFactory {
 
     public Object createController(ViewInfo viewInfo) {
-        switch (viewInfo) {
-            case LOGIN_VIEW:
-                return LoginViewController.getInstance();
-            case EFFETTUA_SEGNALAZIONE_VIEW:
-                return EffettuaSegnalazioneViewController.getInstance();
-            default:
-                throw new IllegalArgumentException("View non trovata per il tipo: " + viewInfo);
+        try {
+            // Restituisce l'istanza singleton del controller tramite il metodo getInstance()
+            return viewInfo.getControllerClass().getMethod("getInstance").invoke(null);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Errore nella creazione del controller per: " + viewInfo, e);
         }
     }
 }

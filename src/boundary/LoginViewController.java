@@ -73,11 +73,7 @@ public class LoginViewController {
 			 username = "operatore_eco1";
 			 password = "password3";
 		}
-		
 
-		
-        //String username = usernameField.getText();
-        //String password = passwordField.getText();
 
 
 

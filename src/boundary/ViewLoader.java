@@ -4,15 +4,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
 public class ViewLoader {
 	private static final Logger logger = Logger.getLogger(ViewLoader.class.getName());
-    private static ControllerGraficoFactory controllerGraficoFactory = new ControllerGraficoFactory();
-	
-	
+    private static ControllerGraficoFactory controllerGraficoFactory = new ControllerGraficoFactory();	
+
+
 	
 
     private ViewLoader() {
