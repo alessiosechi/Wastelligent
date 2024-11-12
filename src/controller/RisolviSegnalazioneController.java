@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import logic.observer.Observer;
 import model.dao.SegnalazioneDAO;
 import model.dao.SegnalazioneDAOImplementazione;
 import model.dao.UtenteDAO;
 import model.dao.UtenteDAOImplementazione;
 import model.domain.AssegnazioneBean;
+import model.domain.ListaSegnalazioniAssegnate;
+import model.domain.ListaSegnalazioniAttive;
 import model.domain.OperatoreEcologico;
 import model.domain.Segnalazione;
 import model.domain.SegnalazioneBean;
 import model.domain.StatoSegnalazione;
-import model.domain.UtenteBean;
+import model.domain.OperatoreEcologicoBean;
 import model.domain.UtenteCorrente;
 
 public class RisolviSegnalazioneController {
@@ -23,8 +26,8 @@ public class RisolviSegnalazioneController {
 	private static SegnalazioneDAO segnalazioneDAO;
 	private static UtenteDAO utenteDAO;
 	private static final Logger logger = Logger.getLogger(RisolviSegnalazioneController.class.getName());
-	
-
+	private static ListaSegnalazioniAttive segnalazioniAttive;
+	private static ListaSegnalazioniAssegnate segnalazioniAssegnate;
 	
 	private RisolviSegnalazioneController() {
 	}
@@ -39,7 +42,9 @@ public class RisolviSegnalazioneController {
 				result = instance;
 				if (result == null) {
 					instance = result = new RisolviSegnalazioneController();
-					
+					segnalazioniAttive=ListaSegnalazioniAttive.getInstance();
+					segnalazioniAssegnate=ListaSegnalazioniAssegnate.getInstance();
+
 					try {
 
 						segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
@@ -47,6 +52,8 @@ public class RisolviSegnalazioneController {
 					} catch (Exception e) {
 				        logger.severe("Errore durante l'inizializzazione dei DAO: " + e.getMessage());
 					}
+					
+					
 				}
 			}
 		}
@@ -54,20 +61,37 @@ public class RisolviSegnalazioneController {
 		return result;
 	}
 	
+    public void registraOsservatoreSegnalazioniAttive(Observer observer) {
+    	segnalazioniAttive.registraOsservatore(observer);
+    }
+    public void registraOsservatoreSegnalazioniAssegnate(Observer observer) {
+    	segnalazioniAssegnate.registraOsservatore(observer);
+    }
+    
+    public List<SegnalazioneBean> getSegnalazioniAttive() {   
+    	return convertSegnalazioneListToBeanList(segnalazioniAttive.getSegnalazioniAttive());  
+    }
+    public List<SegnalazioneBean> getSegnalazioniAssegnate() {   
+    	return convertSegnalazioneListToBeanList(segnalazioniAssegnate.getSegnalazioniAssegnate());  
+    }
+	
 
     public List<SegnalazioneBean> getSegnalazioniRicevute() {
 
         
 		try {
 	        List<Segnalazione> segnalazioniDaCompletare=segnalazioneDAO.getSegnalazioniByStato(StatoSegnalazione.RICEVUTA.getStato());
+	        
+	        
 
 			if (!segnalazioniDaCompletare.isEmpty()) {
 				for (Segnalazione s : segnalazioniDaCompletare) {
 			        String posizioneTesto = servizioGeocoding.ottieniPosizione(s.getLatitudine(), s.getLongitudine());
-
 					s.setPosizione(posizioneTesto);
 				}
-
+				
+				
+				segnalazioniAttive.setSegnalazioniAttive(segnalazioniDaCompletare);
 				return convertSegnalazioneListToBeanList(segnalazioniDaCompletare);
 				
 				
@@ -88,12 +112,12 @@ public class RisolviSegnalazioneController {
 
 
 
-	public void eliminaSegnalazione(int idSegnalazione) {
+	public void eliminaSegnalazione(SegnalazioneBean segnalazioneBean) {
 		
 		try {
 			
-
-			segnalazioneDAO.eliminaSegnalazione(idSegnalazione);
+			segnalazioneDAO.eliminaSegnalazione(segnalazioneBean.getIdSegnalazione());
+			segnalazioniAttive.rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,7 +125,7 @@ public class RisolviSegnalazioneController {
 		}
 	}
 	
-	public List<UtenteBean> getOperatoriEcologiciDisponibili() {
+	public List<OperatoreEcologicoBean> getOperatoriEcologiciDisponibili() {
 	    try {
 
 	        List<OperatoreEcologico> operatoriEcologici = utenteDAO.estraiOperatoriEcologiciDisponibili();
@@ -118,9 +142,12 @@ public class RisolviSegnalazioneController {
 	    try {
 
 	    	int idSegnalazione = assegnazioneBean.getSegnalazione().getIdSegnalazione();
-	    	int idOperatore=assegnazioneBean.getOperatore().getIdUtente();
-	    	
+	    	int idOperatore=assegnazioneBean.getOperatore().getIdUtente();	
 	    	UtenteCorrente utente=UtenteCorrente.getInstance();
+	    	
+	    	Segnalazione s = convertSegnalazioneBeanToEntity(assegnazioneBean.getSegnalazione());
+	    	segnalazioniAttive.rimuoviSegnalazione(s);
+	    	
 	        segnalazioneDAO.assegnaOperatore(idSegnalazione, idOperatore, utente.getUtente().getIdUtente());
 	        
 	        
@@ -134,21 +161,22 @@ public class RisolviSegnalazioneController {
 	
 
 	
-    public List<SegnalazioneBean> getSegnalazioniAssegnate() {
+    public List<SegnalazioneBean> getSegnalazioniDaRisolvere() {
 
     	UtenteCorrente utente=UtenteCorrente.getInstance();
     	   
 		try {
-	        List<Segnalazione> segnalazioniAssegnate=segnalazioneDAO.getSegnalazioniAssegnate(utente.getUtente().getIdUtente(), StatoSegnalazione.IN_CORSO.getStato());
+	        List<Segnalazione> segnalazioniDaRisolvere=segnalazioneDAO.getSegnalazioniAssegnate(utente.getUtente().getIdUtente(), StatoSegnalazione.IN_CORSO.getStato());
 
-			if (!segnalazioniAssegnate.isEmpty()) {
-				for (Segnalazione s : segnalazioniAssegnate) {
+			if (!segnalazioniDaRisolvere.isEmpty()) {
+				for (Segnalazione s : segnalazioniDaRisolvere) {
 			        String posizioneTesto = servizioGeocoding.ottieniPosizione(s.getLatitudine(), s.getLongitudine());
 
 					s.setPosizione(posizioneTesto);
 				}
 
-				return convertSegnalazioneListToBeanList(segnalazioniAssegnate);
+				segnalazioniAssegnate.setSegnalazioniAssegnate(segnalazioniDaRisolvere);
+				return convertSegnalazioneListToBeanList(segnalazioniDaRisolvere);
 				
 				
 				
@@ -172,9 +200,10 @@ public class RisolviSegnalazioneController {
 	
 	
 
-    public boolean completaSegnalazione(int idSegnalazione) {
+    public boolean completaSegnalazione(SegnalazioneBean segnalazioneBean) {
 	    try {
-	        segnalazioneDAO.aggiornaStato(idSegnalazione, StatoSegnalazione.RISOLTA.getStato());
+	        segnalazioneDAO.aggiornaStato(segnalazioneBean.getIdSegnalazione(), StatoSegnalazione.RISOLTA.getStato());
+	        segnalazioniAssegnate.rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean));
 
 	        return true;
 	    } catch (Exception e) {
@@ -185,15 +214,15 @@ public class RisolviSegnalazioneController {
     
     
     
-	public List<UtenteBean> convertOperatoriEcologiciListToBeanList(List<OperatoreEcologico> operatoriEcologici) {
+	public List<OperatoreEcologicoBean> convertOperatoriEcologiciListToBeanList(List<OperatoreEcologico> operatoriEcologici) {
 		if (operatoriEcologici != null) {
-			List<UtenteBean> operatoriBeanList = new ArrayList<>();
+			List<OperatoreEcologicoBean> operatoriBeanList = new ArrayList<>();
 
 			for (OperatoreEcologico operatore : operatoriEcologici) {
-				UtenteBean utenteBean = new UtenteBean();
-				utenteBean.setIdUtente(operatore.getIdUtente());
-				utenteBean.setUsername(operatore.getUsername());
-				operatoriBeanList.add(utenteBean);
+				OperatoreEcologicoBean operatoreEcologicoBean = new OperatoreEcologicoBean();
+				operatoreEcologicoBean.setIdUtente(operatore.getIdUtente());
+				operatoreEcologicoBean.setUsername(operatore.getUsername());
+				operatoriBeanList.add(operatoreEcologicoBean);
 			}
 
 			return operatoriBeanList;
@@ -240,7 +269,21 @@ public class RisolviSegnalazioneController {
         return segnalazioneBean;
     }
     
-    
+    private Segnalazione convertSegnalazioneBeanToEntity(SegnalazioneBean s) {
+        Segnalazione segnalazione = new Segnalazione();
+        // verificare se servono tutti
+		segnalazione.setDescrizione(s.getDescrizione());
+		segnalazione.setFoto(s.getFoto());
+		segnalazione.setIdUtente(s.getIdUtente());
+		segnalazione.setLatitudine(s.getLatitudine());
+		segnalazione.setLongitudine(s.getLongitudine());
+		segnalazione.setPuntiAssegnati(s.getPuntiAssegnati());
+		segnalazione.setPosizione(s.getPosizione());
+		segnalazione.setStato(s.getStato());
+		segnalazione.setIdSegnalazione(s.getIdSegnalazione());
+
+        return segnalazione;
+    }
     
     
 	

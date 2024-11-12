@@ -1,10 +1,10 @@
 package model.domain;
 
-public class UtenteBean { 
+public class OperatoreEcologicoBean { 
     private int idUtente;
 	private String username;  
 	
-	public UtenteBean() {
+	public OperatoreEcologicoBean() {
         // Costruttore vuoto
 	}
 

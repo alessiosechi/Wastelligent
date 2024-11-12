@@ -18,11 +18,12 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import logic.observer.Observer;
 import model.domain.AssegnazioneBean;
 import model.domain.SegnalazioneBean;
-import model.domain.UtenteBean;
+import model.domain.OperatoreEcologicoBean;
 
-public class GestisciSegnalazioniViewController {
+public class GestisciSegnalazioniViewController implements Observer{
 
     @FXML
     private Button exitButton;
@@ -47,7 +48,7 @@ public class GestisciSegnalazioniViewController {
     private TableColumn<SegnalazioneBean, String> statoColumn;
     
     @FXML
-    private ComboBox<UtenteBean> operatoriEcologiciComboBox;
+    private ComboBox<OperatoreEcologicoBean> operatoriEcologiciComboBox;
 
 	
     private static GestisciSegnalazioniViewController instance;
@@ -55,6 +56,7 @@ public class GestisciSegnalazioniViewController {
     private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
     private Stage primaryStage;
 	private static final Logger logger = Logger.getLogger(GestisciSegnalazioniViewController.class.getName());
+    private boolean osservatoreRegistrato = false; 
     
 	private void configureButtons() {
 	    exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage));
@@ -80,6 +82,8 @@ public class GestisciSegnalazioniViewController {
 	        dettagliSegnalazioneViewController.setState(new GestisciSegnalazioniViewState());
 	    } else {
 	        vediDettagliButton.setDisable(true);
+	        eliminaButton.setDisable(true);
+	        operatoriEcologiciComboBox.getSelectionModel().clearSelection();
 	    }
 	}
 	private void configureHandlers() {
@@ -93,8 +97,7 @@ public class GestisciSegnalazioniViewController {
 	    if (result.isPresent() && result.get() == ButtonType.OK) {
 	        SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
 	        if (segnalazioneSelezionata != null) {
-	            risolviSegnalazioneController.eliminaSegnalazione(segnalazioneSelezionata.getIdSegnalazione());
-	            ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW, primaryStage);
+	            risolviSegnalazioneController.eliminaSegnalazione(segnalazioneSelezionata);
 	        } else {
 	            logger.info("Nessuna segnalazione selezionata.");
 	        }
@@ -104,7 +107,7 @@ public class GestisciSegnalazioniViewController {
 	}
 
 	private void handleAssegnaAction() {
-	    UtenteBean operatoreSelezionato = operatoriEcologiciComboBox.getSelectionModel().getSelectedItem();
+	    OperatoreEcologicoBean operatoreSelezionato = operatoriEcologiciComboBox.getSelectionModel().getSelectedItem();
 	    SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
 	    if (operatoreSelezionato != null && segnalazioneSelezionata != null) {
 
@@ -114,7 +117,7 @@ public class GestisciSegnalazioniViewController {
 	        
 	        if (risolviSegnalazioneController.assegnaOperatore(assegnazioneBean)) {
 	            logger.info("Segnalazione assegnata con successo a " + operatoreSelezionato.getUsername());
-	            ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW, primaryStage);
+
 	        } else {
 	            showAlert("Errore Assegnazione", "Si è verificato un errore durante l'assegnazione della segnalazione.");
 	        }
@@ -124,23 +127,18 @@ public class GestisciSegnalazioniViewController {
 	}
     
     public void initialize() {
-    	
         configureButtons();
         configureColumns();
-    	
 		caricaSegnalazioniDaRisolvere();
 	    caricaOperatoriEcologici();
-    	
-
         configureTableSelection();
         configureHandlers();
-    	
-
-		
-
-
-
-		
+        
+        // Verifica se l'osservatore è già stato registrato
+        if (!osservatoreRegistrato) {
+            risolviSegnalazioneController.registraOsservatoreSegnalazioniAttive(this);
+            osservatoreRegistrato = true;  // Segna l'osservatore come registrato
+        }
     }
 
     private void caricaSegnalazioniDaRisolvere() {
@@ -154,15 +152,15 @@ public class GestisciSegnalazioniViewController {
     private void caricaOperatoriEcologici() {
     	
         // ottengo la lista di operatori dal controller applicativo
-        List<UtenteBean> operatoriEcologici = risolviSegnalazioneController.getOperatoriEcologiciDisponibili();
+        List<OperatoreEcologicoBean> operatoriEcologici = risolviSegnalazioneController.getOperatoriEcologiciDisponibili();
 
-        ObservableList<UtenteBean> operatori = FXCollections.observableArrayList(operatoriEcologici);
+        ObservableList<OperatoreEcologicoBean> operatori = FXCollections.observableArrayList(operatoriEcologici);
         operatoriEcologiciComboBox.setItems(operatori);
         
 
-        operatoriEcologiciComboBox.setCellFactory(cell -> new ListCell<UtenteBean>() {
+        operatoriEcologiciComboBox.setCellFactory(cell -> new ListCell<OperatoreEcologicoBean>() {
             @Override
-            protected void updateItem(UtenteBean item, boolean empty) {
+            protected void updateItem(OperatoreEcologicoBean item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty ? "" : item.getUsername());
             }
@@ -171,7 +169,7 @@ public class GestisciSegnalazioniViewController {
 
         operatoriEcologiciComboBox.setButtonCell(new ListCell<>() {
             @Override
-            protected void updateItem(UtenteBean item, boolean empty) {
+            protected void updateItem(OperatoreEcologicoBean item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? "Seleziona Operatore" : item.getUsername());
             }
@@ -201,5 +199,16 @@ public class GestisciSegnalazioniViewController {
         
         return alert.showAndWait();
     }
+    
+    
+    
+    
+	@Override
+	public void update() {
+        List<SegnalazioneBean> segnalazioniDaRisolvere = risolviSegnalazioneController.getSegnalazioniAttive();   
+        ObservableList<SegnalazioneBean> segnalazioniData = FXCollections.observableArrayList(segnalazioniDaRisolvere);
+        segnalazioniTable.setItems(segnalazioniData);
+		
+	}
 
 }

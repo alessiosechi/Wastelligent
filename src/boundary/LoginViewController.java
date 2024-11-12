@@ -103,10 +103,13 @@ public class LoginViewController {
 
         // carico la nuova vista dopo il login
         String viewIniziale=loginController.ottieniView(interfacciaSelezionata);
+        
+        
         ViewLoader.caricaView(ViewInfo.fromFxmlPath(viewIniziale), primaryStage);
+
     }
 
-
+// Effettsegnalazione-->caricaview-->prendicontroller --> controllergrafico inziiale .instance
 
     @FXML
     private void handleRegisterLinkAction() {

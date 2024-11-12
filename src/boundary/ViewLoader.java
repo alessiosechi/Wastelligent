@@ -32,7 +32,8 @@ public class ViewLoader {
             FXMLLoader loader = new FXMLLoader(ViewLoader.class.getResource(fxmlPath));
             loader.setController(controller);
             Parent root = loader.load();
-            setPrimaryStageIfExists(controller, stage);
+            
+            setPrimaryStageIfExists(controller, stage); // reflection
             stage.setScene(new Scene(root));
             stage.setTitle(title);
             stage.show();
@@ -66,6 +67,10 @@ public class ViewLoader {
                 return null;
         }
     }
+    
+    //UI:elimino segnalazione-->Controller applicativo: chiama DAO-->DAO:restituisce merda-->Controller applicativo: chiama classe segnalazioni, aggiungi segnalazione-->
+    //Segnalazioni:aggiunge segnalazione e notifica osservatori
+    //caricaview(this)
 
     private static void setPrimaryStageIfExists(Object controller, Stage stage) {
         if (controller != null) {
@@ -79,6 +84,11 @@ public class ViewLoader {
             }
         }
     }
+    
+    
+    
+    
+    
 
     
 

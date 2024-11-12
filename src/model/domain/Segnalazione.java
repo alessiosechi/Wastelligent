@@ -1,5 +1,7 @@
 package model.domain;
 
+import java.util.Objects;
+
 // a ogni classe entità dovrebbe corrispondere un DAO
 
 public class Segnalazione {
@@ -23,7 +25,20 @@ public class Segnalazione {
     }
 
 
+    // Sovrascrivi il metodo equals per confrontare le segnalazioni tramite l'idSegnalazione
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Segnalazione that = (Segnalazione) o;
+        return idSegnalazione == that.idSegnalazione;
+    }
 
+    // Sovrascrivi anche il metodo hashCode per mantenere il contratto con equals
+    @Override
+    public int hashCode() {
+        return Objects.hash(idSegnalazione);
+    }
 
 
     public String getDescrizione() {

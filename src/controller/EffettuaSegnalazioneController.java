@@ -15,7 +15,6 @@ import model.domain.UtenteCorrente;
 public class EffettuaSegnalazioneController {
 	private static volatile EffettuaSegnalazioneController instance;
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
-
 	private static SegnalazioneDAO segnalazioneDAO;
 	private static final Logger logger = Logger.getLogger(EffettuaSegnalazioneController.class.getName());
 
@@ -30,12 +29,13 @@ public class EffettuaSegnalazioneController {
 			synchronized (EffettuaSegnalazioneController.class) {
 				result = instance;
 				if (result == null) {
-					instance = result = new EffettuaSegnalazioneController();
-					
+					instance = result = new EffettuaSegnalazioneController();		
+
 					
 					try {
 						// inizializzazione di segnalazioneDAO
 						segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
+
 					} catch (Exception e) {
 						logger.severe("Errore durante l'inizializzazione del DAO: " + e.getMessage());
 					}
@@ -45,6 +45,11 @@ public class EffettuaSegnalazioneController {
 
 		return result;
 	}
+	
+	
+	
+	
+
 
 	// metodo che restituisce le coordinate in base alla posizione fornita
 	public PosizioneBean getCoordinates(String location) {
@@ -65,6 +70,7 @@ public class EffettuaSegnalazioneController {
         // se non ci sono segnalazioni troppo vicine, recupero l' idUtente e salvo la segnalazione
         UtenteCorrente utente=UtenteCorrente.getInstance();
         segnalazione.setIdUtente(utente.getUtente().getIdUtente());
+
 
         segnalazioneDAO.salvaSegnalazione(segnalazione);
 	}
@@ -122,7 +128,7 @@ public class EffettuaSegnalazioneController {
 	
 	
 	
-	
+
 	
 	
 	

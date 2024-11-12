@@ -16,9 +16,10 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import logic.observer.Observer;
 import model.domain.SegnalazioneBean;
 
-public class SegnalazioniAssegnateViewController {
+public class SegnalazioniAssegnateViewController implements Observer{
 	
 	@FXML
 	private Button exitButton;
@@ -42,7 +43,7 @@ public class SegnalazioniAssegnateViewController {
     private static SegnalazioniAssegnateViewController instance;
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
 	private static final Logger logger = Logger.getLogger(SegnalazioniAssegnateViewController.class.getName());
-    
+    private boolean osservatoreRegistrato = false; 
     
     public void initialize() {
 		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage));
@@ -79,13 +80,11 @@ public class SegnalazioniAssegnateViewController {
 
             if (segnalazioneSelezionata != null) {
 
-            	int idSegnalazione= segnalazioneSelezionata.getIdSegnalazione();
-                boolean successo = risolviSegnalazioneController.completaSegnalazione(idSegnalazione);
+                boolean successo = risolviSegnalazioneController.completaSegnalazione(segnalazioneSelezionata);
 
                 if (successo) {
                     logger.info("Segnalazione completata!");
 
-                	ViewLoader.caricaView(ViewInfo.SEGNALAZIONI_ASSEGNATE_VIEW, primaryStage);
                 } else {
                     showAlert("Errore Completamento", "Si è verificato un errore durante il completamento della segnalazione.");
                 }
@@ -94,6 +93,17 @@ public class SegnalazioniAssegnateViewController {
                 showAlert("Selezione Mancante", "Seleziona una segnalazione.");
             }
         });
+        
+        
+        
+        
+        
+        
+        // Verifica se l'osservatore è già stato registrato
+        if (!osservatoreRegistrato) {
+        	risolviSegnalazioneController.registraOsservatoreSegnalazioniAssegnate(this);
+            osservatoreRegistrato = true;  // Segna l'osservatore come registrato
+        }
          
     }
         
@@ -110,7 +120,7 @@ public class SegnalazioniAssegnateViewController {
 
     private void caricaAssegnazioni() {
     	
-        List<SegnalazioneBean> segnalazioniAssegnate = risolviSegnalazioneController.getSegnalazioniAssegnate();
+        List<SegnalazioneBean> segnalazioniAssegnate = risolviSegnalazioneController.getSegnalazioniDaRisolvere();
           
         ObservableList<SegnalazioneBean> segnalazioni = FXCollections.observableArrayList(segnalazioniAssegnate);
         segnalazioniTable.setItems(segnalazioni);
@@ -130,5 +140,15 @@ public class SegnalazioniAssegnateViewController {
         }
         return instance;
     }
+
+
+	@Override
+	public void update() {
+        List<SegnalazioneBean> segnalazioniAssegnate = risolviSegnalazioneController.getSegnalazioniAssegnate();
+        
+        ObservableList<SegnalazioneBean> segnalazioni = FXCollections.observableArrayList(segnalazioniAssegnate);
+        segnalazioniTable.setItems(segnalazioni);
+		
+	}
 	
 }

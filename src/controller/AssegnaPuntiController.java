@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import logic.observer.Observer;
 import model.dao.SegnalazioneDAO;
 import model.dao.SegnalazioneDAOImplementazione;
 import model.dao.UtenteDAO;
 import model.dao.UtenteDAOImplementazione;
+import model.domain.ListaSegnalazioniRisolte;
 import model.domain.Segnalazione;
 import model.domain.SegnalazioneBean;
 import model.domain.StatoSegnalazione;
@@ -21,11 +23,18 @@ public class AssegnaPuntiController {
 	private static UtenteDAO utenteDAO;
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
 	private static final Logger logger = Logger.getLogger(AssegnaPuntiController.class.getName());
-	
+	private static ListaSegnalazioniRisolte segnalazioniRisolte;
 	
 	private AssegnaPuntiController() {
 	}
-	
+    public List<SegnalazioneBean> getSegnalazioniRisolte() {   
+    	return convertSegnalazioneListToBeanList(segnalazioniRisolte.getSegnalazioniRisolte());  
+    }
+    
+    
+    public void registraOsservatoreSegnalazioniRisolte(Observer observer) {
+    	segnalazioniRisolte.registraOsservatore(observer);
+    }
 
 	
 	public static AssegnaPuntiController getInstance() {
@@ -37,7 +46,7 @@ public class AssegnaPuntiController {
 				result = instance;
 				if (result == null) {
 					instance = result = new AssegnaPuntiController();
-					
+					segnalazioniRisolte=ListaSegnalazioniRisolte.getInstance();
 					try {
 						segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
 						utenteDAO = UtenteDAOImplementazione.getInstance();
@@ -52,20 +61,20 @@ public class AssegnaPuntiController {
 		return result;
 	}
 	
-    public List<SegnalazioneBean> getSegnalazioniRisolte() {
+    public List<SegnalazioneBean> getSegnalazioniDaRiscontrare() {
 
         
 		try {
-	        List<Segnalazione> segnalazioniDaCompletare=segnalazioneDAO.getSegnalazioniByStato(StatoSegnalazione.RISOLTA.getStato());
+	        List<Segnalazione> segnalazioniDaRiscontrare=segnalazioneDAO.getSegnalazioniByStato(StatoSegnalazione.RISOLTA.getStato());
 
-			if (!segnalazioniDaCompletare.isEmpty()) {
-				for (Segnalazione s : segnalazioniDaCompletare) {
+			if (!segnalazioniDaRiscontrare.isEmpty()) {
+				for (Segnalazione s : segnalazioniDaRiscontrare) {
 			        String posizioneTesto = servizioGeocoding.ottieniPosizione(s.getLatitudine(), s.getLongitudine());
 
 					s.setPosizione(posizioneTesto);
 				}
-
-				return convertSegnalazioneListToBeanList(segnalazioniDaCompletare);
+				segnalazioniRisolte.setSegnalazioniRisolte(segnalazioniDaRiscontrare);
+				return convertSegnalazioneListToBeanList(segnalazioniDaRiscontrare);
 				
 				
 				
@@ -89,8 +98,8 @@ public class AssegnaPuntiController {
 	        int puntiAssegnati = segnalazioneBean.getPuntiAssegnati();
 	        int idUtente=segnalazioneBean.getIdUtente();
 	        
-	               
 	        
+	        segnalazioniRisolte.rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean));
 	        segnalazioneDAO.assegnaPunti(idSegnalazione, puntiAssegnati);
 	        utenteDAO.aggiungiPuntiUtente(idUtente, puntiAssegnati);
        
@@ -139,6 +148,20 @@ public class AssegnaPuntiController {
 
         return segnalazioneBean;
     }
-	
+    private Segnalazione convertSegnalazioneBeanToEntity(SegnalazioneBean s) {
+        Segnalazione segnalazione = new Segnalazione();
+        // verificare se servono tutti
+		segnalazione.setDescrizione(s.getDescrizione());
+		segnalazione.setFoto(s.getFoto());
+		segnalazione.setIdUtente(s.getIdUtente());
+		segnalazione.setLatitudine(s.getLatitudine());
+		segnalazione.setLongitudine(s.getLongitudine());
+		segnalazione.setPuntiAssegnati(s.getPuntiAssegnati());
+		segnalazione.setPosizione(s.getPosizione());
+		segnalazione.setStato(s.getStato());
+		segnalazione.setIdSegnalazione(s.getIdSegnalazione());
+
+        return segnalazione;
+    }
 
 }

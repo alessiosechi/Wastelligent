@@ -3,7 +3,7 @@ package model.domain;
 public class AssegnazioneBean { // DA RIVEDERE BENE!
 	
     private SegnalazioneBean segnalazione;
-    private UtenteBean operatore;
+    private OperatoreEcologicoBean operatore;
     
     public SegnalazioneBean getSegnalazione() {
         return segnalazione;
@@ -13,11 +13,11 @@ public class AssegnazioneBean { // DA RIVEDERE BENE!
         this.segnalazione = segnalazione;
     }
 
-    public UtenteBean getOperatore() {
+    public OperatoreEcologicoBean getOperatore() {
         return operatore;
     }
 
-    public void setOperatore(UtenteBean operatore) {
+    public void setOperatore(OperatoreEcologicoBean operatore) {
         this.operatore = operatore;
     }
 

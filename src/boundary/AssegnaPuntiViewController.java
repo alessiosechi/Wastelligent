@@ -16,9 +16,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import logic.observer.Observer;
 import model.domain.SegnalazioneBean;
 
-public class AssegnaPuntiViewController {
+public class AssegnaPuntiViewController implements Observer{
 
 	@FXML
 	private Button exitButton;
@@ -42,21 +43,30 @@ public class AssegnaPuntiViewController {
 
 	@FXML
 	private TableColumn<SegnalazioneBean, String> operatoreColumn;
+	
+	private String valoreInizialeTextField; 
 
 	private static AssegnaPuntiViewController instance;
 	private Stage primaryStage;
 	private AssegnaPuntiController assegnaPuntiController = AssegnaPuntiController.getInstance();
 	
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
-	
+    private boolean osservatoreRegistrato = false; 
 	
 	
 	@FXML
 	public void initialize() {
+	    valoreInizialeTextField = puntiTextField.getText();
         caricaSegnalazioniRisolte();    
         configuraColonneTabella();
         configuraPulsanti();
         impostaListenerSelezione();
+        
+        // Verifica se l'osservatore è già stato registrato
+        if (!osservatoreRegistrato) {
+        	assegnaPuntiController.registraOsservatoreSegnalazioniRisolte(this);
+            osservatoreRegistrato = true;  // Segna l'osservatore come registrato
+        }
 	}
 	
 	
@@ -98,10 +108,7 @@ public class AssegnaPuntiViewController {
 
 			boolean successo = assegnaPuntiController.assegnaPunti(segnalazioneSelezionata);
 
-			if (successo) {
-
-				ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW, primaryStage);
-			} else {
+			if (!successo) {
 				showAlert("Errore Assegnazione", "Si è verificato un errore durante l'assegnazione dei punti.");
 			}
 		} else {
@@ -117,13 +124,14 @@ public class AssegnaPuntiViewController {
                 dettagliSegnalazioneViewController.setState(new AssegnaPuntiViewState());
             } else {
 				dettagliButton.setDisable(true);
+				puntiTextField.setText(valoreInizialeTextField);
             }
         });
     }
 
 
 	private void caricaSegnalazioniRisolte() {
-		List<SegnalazioneBean> segnalazioniRisolte = assegnaPuntiController.getSegnalazioniRisolte();
+		List<SegnalazioneBean> segnalazioniRisolte = assegnaPuntiController.getSegnalazioniDaRiscontrare();
 
 		ObservableList<SegnalazioneBean> segnalazioni = FXCollections.observableArrayList(segnalazioniRisolte);
 		segnalazioniTable.setItems(segnalazioni);
@@ -148,6 +156,15 @@ public class AssegnaPuntiViewController {
 			instance = new AssegnaPuntiViewController();
 		}
 		return instance;
+	}
+
+
+	@Override
+	public void update() {
+		List<SegnalazioneBean> segnalazioniRisolte = assegnaPuntiController.getSegnalazioniRisolte();
+
+		ObservableList<SegnalazioneBean> segnalazioni = FXCollections.observableArrayList(segnalazioniRisolte);
+		segnalazioniTable.setItems(segnalazioni);
 	}
 
 }
