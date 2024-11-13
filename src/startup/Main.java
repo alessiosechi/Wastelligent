@@ -23,6 +23,7 @@ public class Main extends Application {
         primaryStage.setResizable(false); // non si può ridimensionare la finestra
         Scene scene = new Scene(root); // contenitore di tutto ciò che viene visualizzato nella finestra
         primaryStage.setScene(scene);
+        // Imposta la scena dello StageManager
         primaryStage.setTitle("Login");
         primaryStage.show();  
     }

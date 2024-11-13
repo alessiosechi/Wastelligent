@@ -1,4 +1,4 @@
-package boundary;
+package logic.decorator;
 
 //ConcreteDecoratorB
 public class ValidatoreSpaziVuoti extends ValidatoreInputDecorator {

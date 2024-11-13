@@ -63,7 +63,7 @@ public class SegnalazioniAssegnateViewController implements Observer{
 
 
                 dettagliSegnalazioneViewController.setSegnalazioneBean(newValue);
-                dettagliSegnalazioneViewController.setState(new SegnalazioniAssegnateViewState());
+                dettagliSegnalazioneViewController.setCallerType(CallerType.CONTROLLER3);
             } else {
                 dettagliButton.setDisable(true);
             }

@@ -1,4 +1,4 @@
-package boundary;
+package logic.decorator;
 
 // ConcreteDecoratorA
 public class ValidatoreLunghezzaMinima extends ValidatoreInputDecorator {

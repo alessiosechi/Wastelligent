@@ -56,19 +56,59 @@ public class DettagliSegnalazioneViewController {
 
     private static DettagliSegnalazioneViewController instance;
     private SegnalazioneBean segnalazioneBean;
-    private StateMachine stateMachine;
-    private State currentState;
-	private static final Logger logger = Logger.getLogger(DettagliSegnalazioneViewController.class.getName());
 
+	private static final Logger logger = Logger.getLogger(DettagliSegnalazioneViewController.class.getName());
+    private CallerType callerType;
+    
+    
+    
+    
+    public void setCallerType(CallerType callerType) {
+        this.callerType = callerType;
+
+    }
+    private void configureView() {
+        switch (callerType) {
+            case CONTROLLER1:
+				indietroButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW, primaryStage));
+				button1.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW, primaryStage));
+				button2.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW, primaryStage));
+				button1.setText("GESTISCI\nSEGNALAZIONI");
+				button2.setText("ASSEGNA\nPUNTI");
+				line.setLayoutX(645.0);
+                break;
+            case CONTROLLER2:
+				indietroButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW, primaryStage));
+				button1.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW, primaryStage));
+				button2.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW, primaryStage));
+				button1.setText("GESTISCI\nSEGNALAZIONI");
+				button2.setText("ASSEGNA\nPUNTI");
+				line.setLayoutX(429.75);
+                break;
+            case CONTROLLER3:
+				indietroButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.SEGNALAZIONI_ASSEGNATE_VIEW, primaryStage));
+				button2.setDisable(true);
+				button2.setVisible(false);
+				button1.setLayoutX(537.375);
+				line.setLayoutX(537.375);
+				button1.setText("VISUALIZZA\nASSEGNAZIONI");
+				button1.setOnAction(event -> ViewLoader.caricaView(ViewInfo.SEGNALAZIONI_ASSEGNATE_VIEW, primaryStage));
+                break;
+            case CONTROLLER4:
+				indietroButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.STORICO_VIEW, primaryStage));
+				button1.setOnAction(event -> ViewLoader.caricaView(ViewInfo.EFFETTUA_SEGNALAZIONE_VIEW, primaryStage));
+				button2.setOnAction(event -> ViewLoader.caricaView(ViewInfo.RISCATTA_RICOMPENSA_VIEW, primaryStage));
+				button1.setText("NUOVA\nSEGNALAZIONE");
+				button2.setText("RISCATTA\nRICOMPENSA");
+				line.setLayoutX(645.0);
+                break;
+        }
+    }
 
 	@FXML
 	public void initialize() {
-	    stateMachine = new StateMachine();
 
-	    if (stateMachine != null) {
-	        stateMachine.setState(currentState);
-	    }
-
+        configureView();
 	    loadImage();
 	    setupMapView();
 	    setupPositionLabel();
@@ -169,12 +209,7 @@ public class DettagliSegnalazioneViewController {
         return instance;
     }
     
-    public void setState(State state) {
-        this.currentState = state;  // salvo lo stato
-        if (stateMachine != null) {
-            stateMachine.setState(state);  // imposto lo stato nella state machine
-        }
-    }
+
     
     
     // getter per recuperare la segnalazione selezionata

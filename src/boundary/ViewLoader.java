@@ -33,7 +33,9 @@ public class ViewLoader {
             loader.setController(controller);
             Parent root = loader.load();
             
+            
             setPrimaryStageIfExists(controller, stage); // reflection
+ 
             stage.setScene(new Scene(root));
             stage.setTitle(title);
             stage.show();

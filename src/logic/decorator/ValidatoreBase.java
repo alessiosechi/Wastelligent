@@ -1,4 +1,4 @@
-package boundary;
+package logic.decorator;
 
 // ConcreteComponent
 public class ValidatoreBase implements ValidaInput {

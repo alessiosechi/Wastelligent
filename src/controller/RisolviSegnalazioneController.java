@@ -129,6 +129,13 @@ public class RisolviSegnalazioneController {
 	    try {
 
 	        List<OperatoreEcologico> operatoriEcologici = utenteDAO.estraiOperatoriEcologiciDisponibili();
+	        
+	        /*
+	         * Come gestisco questo per la versione DEMO? Potrei fare una cosa del genere:
+	         * 		private List<OperatoreEcologico> operatoriEcologici = new ArrayList<>();
+	         *      operatoriEcologici.add(new OperatoreEcologico("op1", "Mario Rossi", "mario@wastelligent.com"));
+	         *      operatoriEcologici.add(new OperatoreEcologico("op2", "Luca Bianchi", "luca@wastelligent.com"));
+	         */
 
 	        return convertOperatoriEcologiciListToBeanList(operatoriEcologici);
 

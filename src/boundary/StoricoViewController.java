@@ -86,7 +86,7 @@ public class StoricoViewController {
                 vediDettagliButton.setDisable(false);
                            
                 dettagliSegnalazioneViewController.setSegnalazioneBean(newValue);
-                dettagliSegnalazioneViewController.setState(new StoricoViewState());
+                dettagliSegnalazioneViewController.setCallerType(CallerType.CONTROLLER4);
 
             } else {
                 vediDettagliButton.setDisable(true);

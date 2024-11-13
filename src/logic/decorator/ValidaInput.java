@@ -1,4 +1,4 @@
-package boundary;
+package logic.decorator;
 
 // Component
 

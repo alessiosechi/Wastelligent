@@ -121,7 +121,7 @@ public class AssegnaPuntiViewController implements Observer{
             if (newValue != null) {
 				dettagliButton.setDisable(false);
                 dettagliSegnalazioneViewController.setSegnalazioneBean(newValue);
-                dettagliSegnalazioneViewController.setState(new AssegnaPuntiViewState());
+                dettagliSegnalazioneViewController.setCallerType(CallerType.CONTROLLER1);
             } else {
 				dettagliButton.setDisable(true);
 				puntiTextField.setText(valoreInizialeTextField);
@@ -166,5 +166,7 @@ public class AssegnaPuntiViewController implements Observer{
 		ObservableList<SegnalazioneBean> segnalazioni = FXCollections.observableArrayList(segnalazioniRisolte);
 		segnalazioniTable.setItems(segnalazioni);
 	}
+
+
 
 }

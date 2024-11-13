@@ -104,7 +104,7 @@ public class LoginViewController {
         // carico la nuova vista dopo il login
         String viewIniziale=loginController.ottieniView(interfacciaSelezionata);
         
-        
+        System.out.println("in login "+primaryStage);
         ViewLoader.caricaView(ViewInfo.fromFxmlPath(viewIniziale), primaryStage);
 
     }

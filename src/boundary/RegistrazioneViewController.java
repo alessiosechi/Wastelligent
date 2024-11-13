@@ -14,6 +14,11 @@ import exceptions.UsernameAlreadyTakenException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+import logic.decorator.ValidaInput;
+import logic.decorator.ValidatoreSpaziVuoti;
+import logic.decorator.ValidatoreLunghezzaMinima;
+import logic.decorator.ValidatoreBase;
+
 public class RegistrazioneViewController {
 
     @FXML

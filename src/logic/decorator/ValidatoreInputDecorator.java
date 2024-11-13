@@ -1,4 +1,4 @@
-package boundary;
+package logic.decorator;
 
 // Decorator
 public abstract class ValidatoreInputDecorator implements ValidaInput {
