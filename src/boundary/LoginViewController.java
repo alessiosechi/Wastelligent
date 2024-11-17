@@ -46,7 +46,7 @@ public class LoginViewController {
         interfaceOption1.setToggleGroup(toggleGroup);
         interfaceOption2.setToggleGroup(toggleGroup);
         
-        
+        registerLink.setOnAction(event -> ViewLoader.caricaView(ViewInfo.REGISTRAZIONE_VIEW, primaryStage));
 
     }
 
@@ -112,7 +112,7 @@ public class LoginViewController {
     @FXML
     private void handleRegisterLinkAction() {
         
-        ViewLoader.caricaView(ViewInfo.REGISTRAZIONE_VIEW, primaryStage);
+        //ViewLoader.caricaView(ViewInfo.REGISTRAZIONE_VIEW, primaryStage);
     }
 
 
