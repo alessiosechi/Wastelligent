@@ -190,10 +190,10 @@ public class RiscattaRicompensaViewController {
                                     : "Impossibile riscattare la ricompensa. Riprova.";
             showAlert(result ? "Successo" : "Errore", message);
 
-            if (result) {
-                // se il riscatto ha avuto successo, aggiorno la pagina
-                ViewLoader.caricaView(ViewInfo.RISCATTA_RICOMPENSA_VIEW, primaryStage);
-            }
+//            if (result) {
+//                // se il riscatto ha avuto successo, aggiorno la pagina
+//                ViewLoader.caricaView(ViewInfo.RISCATTA_RICOMPENSA_VIEW, primaryStage);
+//            }
 
         } catch (DailyRedemptionLimitException e) {
 

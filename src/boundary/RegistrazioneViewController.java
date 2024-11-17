@@ -79,6 +79,8 @@ public class RegistrazioneViewController {
             loginController.registraUtente(credenzialiBean);
 
             showAlert(AlertType.INFORMATION, "Registrazione avvenuta", "La registrazione è avvenuta con successo.");
+            
+            
             ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage);
 
         } catch (UsernameAlreadyTakenException | RegistrazioneUtenteException e) {
