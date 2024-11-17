@@ -70,9 +70,7 @@ public class ViewLoader {
         }
     }
     
-    //UI:elimino segnalazione-->Controller applicativo: chiama DAO-->DAO:restituisce merda-->Controller applicativo: chiama classe segnalazioni, aggiungi segnalazione-->
-    //Segnalazioni:aggiunge segnalazione e notifica osservatori
-    //caricaview(this)
+
 
     private static void setPrimaryStageIfExists(Object controller, Stage stage) {
         if (controller != null) {

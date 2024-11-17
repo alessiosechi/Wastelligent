@@ -79,6 +79,7 @@ public class GestisciSegnalazioniViewController implements Observer{
 	        vediDettagliButton.setDisable(false);
 	        eliminaButton.setDisable(false);
 	        
+
             dettagliSegnalazioneViewController.setSegnalazioneBean(newValue);
             dettagliSegnalazioneViewController.setCallerType(CallerType.CONTROLLER2);
 	    } else {
@@ -135,10 +136,10 @@ public class GestisciSegnalazioniViewController implements Observer{
         configureTableSelection();
         configureHandlers();
         
-        // Verifica se l'osservatore è già stato registrato
+        // verifico se l'osservatore è già stato registrato
         if (!osservatoreRegistrato) {
             risolviSegnalazioneController.registraOsservatoreSegnalazioniAttive(this);
-            osservatoreRegistrato = true;  // Segna l'osservatore come registrato
+            osservatoreRegistrato = true;  
         }
     }
 

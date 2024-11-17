@@ -85,6 +85,7 @@ public class StoricoViewController {
                 // abilito il pulsante "DETTAGLI" quando una segnalazione è selezionata
                 vediDettagliButton.setDisable(false);
                            
+                
                 dettagliSegnalazioneViewController.setSegnalazioneBean(newValue);
                 dettagliSegnalazioneViewController.setCallerType(CallerType.CONTROLLER4);
 

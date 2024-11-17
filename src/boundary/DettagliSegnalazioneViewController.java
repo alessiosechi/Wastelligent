@@ -31,14 +31,13 @@ import model.domain.SegnalazioneBean;
 public class DettagliSegnalazioneViewController {
 
     @FXML 
-    protected Button indietroButton;
+    private Button indietroButton;
     @FXML 
-    protected Button button1;
+    private Button button1;
     @FXML 
-    protected Button button2;
+    private Button button2;
     @FXML
-    protected Line line;
-    
+    private Line line;
     @FXML 
     private Button exitButton;
     @FXML 
@@ -55,11 +54,9 @@ public class DettagliSegnalazioneViewController {
     private Stage primaryStage;
 
     private static DettagliSegnalazioneViewController instance;
-    private SegnalazioneBean segnalazioneBean;
-
 	private static final Logger logger = Logger.getLogger(DettagliSegnalazioneViewController.class.getName());
     private CallerType callerType;
-    
+    private SegnalazioneBean segnalazioneBean; 
     
     
     
@@ -213,9 +210,9 @@ public class DettagliSegnalazioneViewController {
     
     
     // getter per recuperare la segnalazione selezionata
-    public SegnalazioneBean getSegnalazioneBean() {
-        return segnalazioneBean;
-    }
+//    public SegnalazioneBean getSegnalazioneBean() {
+//        return segnalazioneBean;
+//    }
 
     // setter per impostare la segnalazione selezionata
     public void setSegnalazioneBean(SegnalazioneBean segnalazioneBean) {
@@ -225,7 +222,7 @@ public class DettagliSegnalazioneViewController {
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
+//    public Stage getPrimaryStage() {
+//        return primaryStage;
+//    }
 }

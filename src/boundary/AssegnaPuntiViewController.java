@@ -120,6 +120,7 @@ public class AssegnaPuntiViewController implements Observer{
         segnalazioniTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
 				dettagliButton.setDisable(false);
+				
                 dettagliSegnalazioneViewController.setSegnalazioneBean(newValue);
                 dettagliSegnalazioneViewController.setCallerType(CallerType.CONTROLLER1);
             } else {

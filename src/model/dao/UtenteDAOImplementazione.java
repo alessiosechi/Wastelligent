@@ -14,7 +14,7 @@ import model.domain.Ruolo;
 public class UtenteDAOImplementazione implements UtenteDAO {
 
     private static volatile UtenteDAOImplementazione instance;
-    private static final Logger logger = Logger.getLogger(UtenteDAOImplementazione.class.getName());
+    //private static final Logger logger = Logger.getLogger(UtenteDAOImplementazione.class.getName());
 
     public static UtenteDAOImplementazione getInstance() {
         UtenteDAOImplementazione result = instance;
@@ -166,14 +166,14 @@ public class UtenteDAOImplementazione implements UtenteDAO {
                 operatoriEcologici.add(operatore);
             }
         } catch (SQLException e) {
-			logger.severe("Errore durante l'esecuzione della query: " + e.getMessage());
+			//logger.severe("Errore durante l'esecuzione della query: " + e.getMessage());
         } finally {
             try {
                 if (resultSet != null) resultSet.close();
                 if (stmt != null) stmt.close();
 
             } catch (SQLException e) {
-    			logger.severe("Errore durante la chiusura dello statement: " + e.getMessage());
+    			//logger.severe("Errore durante la chiusura dello statement: " + e.getMessage());
             }
         }
 
