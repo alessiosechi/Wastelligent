@@ -51,7 +51,6 @@ public class DettagliSegnalazioneViewController {
 
 
     private Marker marker;
-    private Stage primaryStage;
 
     private static DettagliSegnalazioneViewController instance;
 	private static final Logger logger = Logger.getLogger(DettagliSegnalazioneViewController.class.getName());
@@ -67,34 +66,34 @@ public class DettagliSegnalazioneViewController {
     private void configureView() {
         switch (callerType) {
             case CONTROLLER1:
-				indietroButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW, primaryStage));
-				button1.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW, primaryStage));
-				button2.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW, primaryStage));
+				indietroButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW));
+				button1.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW));
+				button2.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW));
 				button1.setText("GESTISCI\nSEGNALAZIONI");
 				button2.setText("ASSEGNA\nPUNTI");
 				line.setLayoutX(645.0);
                 break;
             case CONTROLLER2:
-				indietroButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW, primaryStage));
-				button1.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW, primaryStage));
-				button2.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW, primaryStage));
+				indietroButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW));
+				button1.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW));
+				button2.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW));
 				button1.setText("GESTISCI\nSEGNALAZIONI");
 				button2.setText("ASSEGNA\nPUNTI");
 				line.setLayoutX(429.75);
                 break;
             case CONTROLLER3:
-				indietroButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.SEGNALAZIONI_ASSEGNATE_VIEW, primaryStage));
+				indietroButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.SEGNALAZIONI_ASSEGNATE_VIEW));
 				button2.setDisable(true);
 				button2.setVisible(false);
 				button1.setLayoutX(537.375);
 				line.setLayoutX(537.375);
 				button1.setText("VISUALIZZA\nASSEGNAZIONI");
-				button1.setOnAction(event -> ViewLoader.caricaView(ViewInfo.SEGNALAZIONI_ASSEGNATE_VIEW, primaryStage));
+				button1.setOnAction(event -> ViewLoader.caricaView(ViewInfo.SEGNALAZIONI_ASSEGNATE_VIEW));
                 break;
             case CONTROLLER4:
-				indietroButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.STORICO_VIEW, primaryStage));
-				button1.setOnAction(event -> ViewLoader.caricaView(ViewInfo.EFFETTUA_SEGNALAZIONE_VIEW, primaryStage));
-				button2.setOnAction(event -> ViewLoader.caricaView(ViewInfo.RISCATTA_RICOMPENSA_VIEW, primaryStage));
+				indietroButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.STORICO_VIEW));
+				button1.setOnAction(event -> ViewLoader.caricaView(ViewInfo.EFFETTUA_SEGNALAZIONE_VIEW));
+				button2.setOnAction(event -> ViewLoader.caricaView(ViewInfo.RISCATTA_RICOMPENSA_VIEW));
 				button1.setText("NUOVA\nSEGNALAZIONE");
 				button2.setText("RISCATTA\nRICOMPENSA");
 				line.setLayoutX(645.0);
@@ -109,7 +108,7 @@ public class DettagliSegnalazioneViewController {
 	    loadImage();
 	    setupMapView();
 	    setupPositionLabel();
-		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage));
+		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW));
 	}
 	private void loadImage() {
 	    if (segnalazioneBean != null && segnalazioneBean.getFoto() != null) {
@@ -208,21 +207,13 @@ public class DettagliSegnalazioneViewController {
     
 
     
-    
-    // getter per recuperare la segnalazione selezionata
-//    public SegnalazioneBean getSegnalazioneBean() {
-//        return segnalazioneBean;
-//    }
+  
 
     // setter per impostare la segnalazione selezionata
     public void setSegnalazioneBean(SegnalazioneBean segnalazioneBean) {
         this.segnalazioneBean = segnalazioneBean;
     }
     
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-    }
-//    public Stage getPrimaryStage() {
-//        return primaryStage;
-//    }
+
+
 }

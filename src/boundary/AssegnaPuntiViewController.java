@@ -15,7 +15,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import logic.observer.Observer;
 import model.domain.SegnalazioneBean;
 
@@ -47,9 +46,7 @@ public class AssegnaPuntiViewController implements Observer{
 	private String valoreInizialeTextField; 
 
 	private static AssegnaPuntiViewController instance;
-	private Stage primaryStage;
 	private AssegnaPuntiController assegnaPuntiController = AssegnaPuntiController.getInstance();
-	
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
     private boolean osservatoreRegistrato = false; 
 	
@@ -79,12 +76,12 @@ public class AssegnaPuntiViewController implements Observer{
 	private void configuraPulsanti() {
 		
 		dettagliButton.setDisable(true);
-		dettagliButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW, primaryStage));
+		dettagliButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW));
         assegnaButton.setOnAction(event -> assegnaPuntiSegnalazione());
 
-		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage));
+		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW));
 		gestisciSegnalazioniButton
-				.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW, primaryStage));
+				.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW));
 	}
 	private void assegnaPuntiSegnalazione() {
 		SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
@@ -147,10 +144,7 @@ public class AssegnaPuntiViewController implements Observer{
 		return alert.showAndWait();
 	}
 
-	public void setPrimaryStage(Stage primaryStage) {
-		this.primaryStage = primaryStage;
 
-	}
 
 	public static AssegnaPuntiViewController getInstance() {
 		if (instance == null) {

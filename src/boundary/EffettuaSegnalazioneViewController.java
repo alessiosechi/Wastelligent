@@ -13,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import exceptions.SegnalazioneVicinaException;
 import controller.EffettuaSegnalazioneController;
@@ -51,7 +50,6 @@ public class EffettuaSegnalazioneViewController {
     private Marker currentMarker; 
     private static EffettuaSegnalazioneViewController instance;
     private EffettuaSegnalazioneController effettuaSegnalazioneController = EffettuaSegnalazioneController.getInstance();
-    private Stage primaryStage;
     
     
     
@@ -102,7 +100,7 @@ public class EffettuaSegnalazioneViewController {
             String photoPath = photoField.getText();
             boolean success= inviaSegnalazione(description, photoPath);
             if(success) {
-                ViewLoader.caricaView(ViewInfo.EFFETTUA_SEGNALAZIONE_VIEW, primaryStage);
+                ViewLoader.caricaView(ViewInfo.EFFETTUA_SEGNALAZIONE_VIEW);
             }
         });
 
@@ -138,12 +136,12 @@ public class EffettuaSegnalazioneViewController {
         
         // azione associata al pulsante redeemRewardButton
         redeemRewardButton.setOnAction(event -> 	
-        	ViewLoader.caricaView(ViewInfo.RISCATTA_RICOMPENSA_VIEW, primaryStage)
+        	ViewLoader.caricaView(ViewInfo.RISCATTA_RICOMPENSA_VIEW)
         );
         
         // azione associata al pulsante exitButton
         exitButton.setOnAction(event ->
-        	ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage)	
+        	ViewLoader.caricaView(ViewInfo.LOGIN_VIEW)	
         );
     }
 
@@ -204,9 +202,7 @@ public class EffettuaSegnalazioneViewController {
         return instance;
     }
     
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-    }
+
     
     
 }

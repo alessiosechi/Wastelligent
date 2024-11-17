@@ -6,9 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import model.domain.CredenzialiBean;
-import controller.LoginController;  // Controller della logica di business
+import controller.LoginController;  
 import exceptions.RegistrazioneUtenteException;
 import exceptions.UsernameAlreadyTakenException;
 import javafx.scene.control.Alert;
@@ -35,7 +34,6 @@ public class RegistrazioneViewController {
 
     private static RegistrazioneViewController instance;
     private LoginController loginController = LoginController.getInstance();  
-    private Stage primaryStage;
 
     @FXML
     private void handleRegistratiButtonAction(ActionEvent event) {
@@ -81,7 +79,7 @@ public class RegistrazioneViewController {
             showAlert(AlertType.INFORMATION, "Registrazione avvenuta", "La registrazione è avvenuta con successo.");
             
             
-            //ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage);
+            ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);
 
         } catch (UsernameAlreadyTakenException | RegistrazioneUtenteException e) {
             showAlert(AlertType.ERROR, "Errore Registrazione", e.getMessage());
@@ -95,7 +93,7 @@ public class RegistrazioneViewController {
     @FXML
     private void handleLoginLinkAction(ActionEvent event) {
 
-        //ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage);
+        ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);
     }
 
     private void showAlert(AlertType alertType, String title, String content) {
@@ -114,7 +112,4 @@ public class RegistrazioneViewController {
         return instance;
     }
 
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-    }
 }

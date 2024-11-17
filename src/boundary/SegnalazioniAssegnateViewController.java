@@ -15,7 +15,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.stage.Stage;
 import logic.observer.Observer;
 import model.domain.SegnalazioneBean;
 
@@ -39,14 +38,13 @@ public class SegnalazioniAssegnateViewController implements Observer{
 	
 	
     private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
-	private Stage primaryStage;
     private static SegnalazioniAssegnateViewController instance;
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
 	private static final Logger logger = Logger.getLogger(SegnalazioniAssegnateViewController.class.getName());
     private boolean osservatoreRegistrato = false; 
     
     public void initialize() {
-		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage));
+		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW));
 		
 		caricaAssegnazioni();
 
@@ -70,7 +68,7 @@ public class SegnalazioniAssegnateViewController implements Observer{
         });
         
         dettagliButton.setOnAction(event -> 
-            ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW, primaryStage)
+            ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW)
         ); 
         
 
@@ -98,11 +96,10 @@ public class SegnalazioniAssegnateViewController implements Observer{
         
         
         
-        
-        // Verifica se l'osservatore è già stato registrato
+     
         if (!osservatoreRegistrato) {
         	risolviSegnalazioneController.registraOsservatoreSegnalazioniAssegnate(this);
-            osservatoreRegistrato = true;  // Segna l'osservatore come registrato
+            osservatoreRegistrato = true; 
         }
          
     }
@@ -128,10 +125,7 @@ public class SegnalazioniAssegnateViewController implements Observer{
         
         
         
-    public void setPrimaryStage(Stage primaryStage)
-    {
-    	this.primaryStage= primaryStage;
-    }
+
     
     
     public static SegnalazioniAssegnateViewController getInstance() {

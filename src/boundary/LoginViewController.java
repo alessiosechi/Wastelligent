@@ -9,7 +9,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Hyperlink;
-import javafx.stage.Stage;
 import model.domain.CredenzialiBean;
 import controller.LoginController;
 
@@ -35,7 +34,6 @@ public class LoginViewController {
 	
 	private static LoginViewController instance;
 	private LoginController loginController = LoginController.getInstance();
-	private Stage primaryStage;
 
 
     @FXML
@@ -46,7 +44,7 @@ public class LoginViewController {
         interfaceOption1.setToggleGroup(toggleGroup);
         interfaceOption2.setToggleGroup(toggleGroup);
         
-        registerLink.setOnAction(event -> ViewLoader.caricaView(ViewInfo.REGISTRAZIONE_VIEW, primaryStage));
+        //registerLink.setOnAction(event -> ViewLoader.caricaView(ViewInfo.REGISTRAZIONE_VIEW));
 
     }
 
@@ -103,16 +101,17 @@ public class LoginViewController {
 
         // carico la nuova vista dopo il login
         String viewIniziale=loginController.ottieniView(interfacciaSelezionata);
-        ViewLoader.caricaView(ViewInfo.fromFxmlPath(viewIniziale), primaryStage);
+        
+        ViewLoader.caricaView(ViewInfo.fromFxmlPath(viewIniziale));
 
     }
 
-// Effettsegnalazione-->caricaview-->prendicontroller --> controllergrafico inziiale .instance
+
 
     @FXML
     private void handleRegisterLinkAction() {
         
-        //ViewLoader.caricaView(ViewInfo.REGISTRAZIONE_VIEW, primaryStage);
+        ViewLoader.caricaView(ViewInfo.REGISTRAZIONE_VIEW);
     }
 
 
@@ -134,8 +133,4 @@ public class LoginViewController {
         return instance;
     }
 
-    // metodo per impostare lo Stage principale dell'applicazione
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-    }
 }

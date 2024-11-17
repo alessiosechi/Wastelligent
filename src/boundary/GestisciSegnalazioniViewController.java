@@ -16,7 +16,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.stage.Stage;
 import logic.observer.Observer;
 import model.domain.AssegnazioneBean;
 import model.domain.SegnalazioneBean;
@@ -53,13 +52,12 @@ public class GestisciSegnalazioniViewController implements Observer{
     private static GestisciSegnalazioniViewController instance;
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
     private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
-    private Stage primaryStage;
 	private static final Logger logger = Logger.getLogger(GestisciSegnalazioniViewController.class.getName());
     private boolean osservatoreRegistrato = false; 
     private List<OperatoreEcologicoBean> operatoriEcologici;
     
 	private void configureButtons() {
-	    exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage));
+	    exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW));
 	    vediDettagliButton.setDisable(true);
 	    eliminaButton.setDisable(true);
 	}
@@ -89,10 +87,10 @@ public class GestisciSegnalazioniViewController implements Observer{
 	    }
 	}
 	private void configureHandlers() {
-	    vediDettagliButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW, primaryStage));
+	    vediDettagliButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW));
 	    eliminaButton.setOnAction(event -> handleEliminaAction());
 	    assegnaButton.setOnAction(event -> handleAssegnaAction());
-	    assegnaPuntiButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW, primaryStage));
+	    assegnaPuntiButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW));
 	}
 	private void handleEliminaAction() {
 	    Optional<ButtonType> result = showAlert("Conferma Eliminazione", "Sei sicuro di voler eliminare la segnalazione selezionata?");
@@ -182,9 +180,7 @@ public class GestisciSegnalazioniViewController implements Observer{
         return instance;
     }
     
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-    }
+
     
     
     

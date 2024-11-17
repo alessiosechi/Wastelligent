@@ -21,7 +21,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.Label;
 
-import javafx.stage.Stage;
 
 import model.domain.RicompensaBean;
 
@@ -63,7 +62,6 @@ public class RiscattaRicompensaViewController {
 	
 	
 	private static RiscattaRicompensaViewController instance;
-	private Stage primaryStage;
 	private RiscattaRicompensaController riscattaRicompensaController = RiscattaRicompensaController.getInstance();
     private List<RicompensaBean> listaRicompenseAPI;
 	
@@ -102,9 +100,9 @@ public class RiscattaRicompensaViewController {
 	}
 
 	private void setupEventHandlers() {
-		nuovaSegnalazioneButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.EFFETTUA_SEGNALAZIONE_VIEW, primaryStage));
-		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW, primaryStage));
-		visualizzaStoricoButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.STORICO_VIEW, primaryStage));
+		nuovaSegnalazioneButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.EFFETTUA_SEGNALAZIONE_VIEW));
+		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW));
+		visualizzaStoricoButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.STORICO_VIEW));
 		btnRiscatta.setOnAction(event -> riscattaSelezione());
 
 		
@@ -233,9 +231,7 @@ public class RiscattaRicompensaViewController {
 		return instance;
 	}
 
-	public void setPrimaryStage(Stage primaryStage) {
-		this.primaryStage = primaryStage;
-	}
+
 	
 
 
