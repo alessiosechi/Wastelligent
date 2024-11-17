@@ -160,22 +160,22 @@ public class GestisciSegnalazioniViewController implements Observer{
         operatoriEcologiciComboBox.setItems(operatori);
         
 
-        operatoriEcologiciComboBox.setCellFactory(cell -> new ListCell<OperatoreEcologicoBean>() {
-            @Override
-            protected void updateItem(OperatoreEcologicoBean item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty ? "" : item.getUsername());
-            }
-        });
-        
-
-        operatoriEcologiciComboBox.setButtonCell(new ListCell<>() {
-            @Override
-            protected void updateItem(OperatoreEcologicoBean item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty || item == null ? "Seleziona Operatore" : item.getUsername());
-            }
-        });
+//        operatoriEcologiciComboBox.setCellFactory(cell -> new ListCell<OperatoreEcologicoBean>() {
+//            @Override
+//            protected void updateItem(OperatoreEcologicoBean item, boolean empty) {
+//                super.updateItem(item, empty);
+//                setText(empty ? "" : item.getUsername());
+//            }
+//        });
+//        
+//
+//        operatoriEcologiciComboBox.setButtonCell(new ListCell<>() {
+//            @Override
+//            protected void updateItem(OperatoreEcologicoBean item, boolean empty) {
+//                super.updateItem(item, empty);
+//                setText(empty || item == null ? "Seleziona Operatore" : item.getUsername());
+//            }
+//        });
 
     }
 
