@@ -19,7 +19,9 @@ public class ListaSegnalazioniRisolte extends Subject{
         return instance;
     }
     
-       
+	public void aggiungiSegnalazione(Segnalazione segnalazione) {
+		segnalazioniRisolte.add(segnalazione);
+	}
 	
 	public void rimuoviSegnalazione(Segnalazione segnalazione) {
 		segnalazioniRisolte.remove(segnalazione);
@@ -27,10 +29,6 @@ public class ListaSegnalazioniRisolte extends Subject{
 	}
 	
 
-    public void setSegnalazioniRisolte(List<Segnalazione> segnalazioni) {
-        this.segnalazioniRisolte=segnalazioni;
-    }
-	
     public  List<Segnalazione> getSegnalazioniRisolte() {
         return segnalazioniRisolte;
     }

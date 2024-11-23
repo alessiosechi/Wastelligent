@@ -19,22 +19,22 @@ import java.util.List;
 import java.util.logging.Logger;
 
 
-public class ListaRicompenseGithubDAOImplementazione implements ListaRicompenseGithubDAO {
+public class ListaRicompenseDaoGithub implements ListaRicompenseDao {
 	private static final String API_URL_REWARDS = "https://raw.githubusercontent.com/alessiosechi/API_Rewards_public/main/rewards.json";
     private static final String API_URL_CODES = "https://raw.githubusercontent.com/alessiosechi/API_Rewards_public/main/codes.json";
 
-	private static volatile ListaRicompenseGithubDAOImplementazione instance;
-	private static final Logger logger = Logger.getLogger(ListaRicompenseGithubDAOImplementazione.class.getName());
+	private static volatile ListaRicompenseDaoGithub instance;
+	private static final Logger logger = Logger.getLogger(ListaRicompenseDaoGithub.class.getName());
 
-	public static ListaRicompenseGithubDAOImplementazione getInstance() {
-		ListaRicompenseGithubDAOImplementazione result = instance;
+	public static ListaRicompenseDaoGithub getInstance() {
+		ListaRicompenseDaoGithub result = instance;
 
 		if (instance == null) {
 			// blocco sincronizzato
-			synchronized (ListaRicompenseGithubDAOImplementazione.class) {
+			synchronized (ListaRicompenseDaoGithub.class) {
 				result = instance;
 				if (result == null) {
-					instance = result = new ListaRicompenseGithubDAOImplementazione();
+					instance = result = new ListaRicompenseDaoGithub();
 				}
 
 			}
@@ -55,7 +55,6 @@ public class ListaRicompenseGithubDAOImplementazione implements ListaRicompenseG
 			String responseBody = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
 
 			// uso Gson per convertire la risposta JSON in oggetti Ricompensa
-			//Gson gson = new Gson();
 			JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 			JsonArray rewardsArray = jsonObject.getAsJsonArray("rewards");
 			
@@ -68,9 +67,6 @@ public class ListaRicompenseGithubDAOImplementazione implements ListaRicompenseG
 				// converto ogni elemento dell'array in un JsonObject che rappresenta una ricompensa
 				JsonObject rewardObj = rewardsArray.get(i).getAsJsonObject();
 
-				// converto l'oggetto JSON in un oggetto Ricompensa
-				// Ricompensa ricompensa = gson.fromJson(rewardObj, Ricompensa.class);
-				// in questo modo, i nomi degli attributi della classe Ricompensa devono corrispondere a quelli nel file json
 
 				int idRicompensa =rewardObj.get("id").getAsInt();
 		        String nome = rewardObj.get("nome").getAsString();

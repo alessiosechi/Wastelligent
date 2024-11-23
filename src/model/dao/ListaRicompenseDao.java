@@ -6,7 +6,7 @@ import java.util.List;
 import exceptions.CodiceRiscattoNonTrovatoException;
 import exceptions.ConnessioneAPIException;
 
-public interface ListaRicompenseGithubDAO {
+public interface ListaRicompenseDao {
 	List<Ricompensa> getRicompense()throws ConnessioneAPIException;
 	String getCodiceRiscatto(int idRicompensa)throws ConnessioneAPIException, CodiceRiscattoNonTrovatoException;
 }

@@ -205,15 +205,9 @@ public class DettagliSegnalazioneViewController {
         return instance;
     }
     
-
-    
-  
-
     // setter per impostare la segnalazione selezionata
     public void setSegnalazioneBean(SegnalazioneBean segnalazioneBean) {
         this.segnalazioneBean = segnalazioneBean;
     }
-    
-
 
 }

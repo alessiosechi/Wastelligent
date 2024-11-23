@@ -4,7 +4,7 @@ import java.util.List;
 
 import model.domain.Ricompensa;
 
-public interface RicompensaDAO {
+public interface RicompensaDao {
 	void registraRicompensaRiscattata(Ricompensa ricompensa);
     List<Ricompensa> getRicompenseByUtente(int idUtente);
 }

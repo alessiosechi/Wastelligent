@@ -10,10 +10,10 @@ import java.util.logging.Logger;
 
 
 
-public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
+public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 
-	private static volatile SegnalazioneDAOImplementazione instance;
-	private static final Logger logger = Logger.getLogger(SegnalazioneDAOImplementazione.class.getName());
+	private static volatile SegnalazioneDaoDatabase instance;
+	private static final Logger logger = Logger.getLogger(SegnalazioneDaoDatabase.class.getName());
     private static final String COL_DESCRIZIONE = "descrizione";
     private static final String COL_LATITUDINE = "latitudine";
     private static final String COL_LONGITUDINE = "longitudine";
@@ -23,20 +23,19 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
     private static final String COL_FOTO = "foto";
     private static final String COL_PUNTI = "punti";
 
-	private SegnalazioneDAOImplementazione() {
+	private SegnalazioneDaoDatabase() {
 	}
 
-	public static SegnalazioneDAOImplementazione getInstance() {
-		SegnalazioneDAOImplementazione result = instance;
+	public static SegnalazioneDaoDatabase getInstance() {
+		SegnalazioneDaoDatabase result = instance;
 
 		if (instance == null) {
 			// blocco sincronizzato
-			synchronized (SegnalazioneDAOImplementazione.class) {
+			synchronized (SegnalazioneDaoDatabase.class) {
 				result = instance;
 				if (result == null) {
-					instance = result = new SegnalazioneDAOImplementazione();
+					instance = result = new SegnalazioneDaoDatabase();
 				}
-
 			}
 		}
 
@@ -160,50 +159,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	    return segnalazioni;
 	}
 
-	
-	@Override
-	public List<Segnalazione> getSegnalazioni()  {
-	    List<Segnalazione> segnalazioni = new ArrayList<>();
-	    Connection connessione = null;
-	    PreparedStatement stmt = null;
-	    ResultSet resultSet = null;
 
-	    try {
-	        connessione = DBConnection.getConnection();
-
-			String sql = "SELECT " + COL_ID_SEGNALAZIONE + ", " + COL_ID_UTENTE + ", " + COL_DESCRIZIONE + ", "
-					+ COL_FOTO + ", " + COL_STATO + ", " + COL_LATITUDINE + ", " + COL_LONGITUDINE
-					+ " FROM segnalazioni";
-
-	        stmt = connessione.prepareStatement(sql);
-
-	        resultSet = stmt.executeQuery();
-
-	        while (resultSet.next()) {
-                Segnalazione segnalazione = new Segnalazione();
-                segnalazione.setIdSegnalazione(resultSet.getInt(COL_ID_SEGNALAZIONE));
-                segnalazione.setIdUtente(resultSet.getInt(COL_ID_UTENTE));
-                segnalazione.setDescrizione(resultSet.getString(COL_DESCRIZIONE));
-                segnalazione.setFoto(resultSet.getString(COL_FOTO));
-                segnalazione.setStato(resultSet.getString(COL_STATO));
-                segnalazione.setLatitudine(resultSet.getDouble(COL_LATITUDINE));
-                segnalazione.setLongitudine(resultSet.getDouble(COL_LONGITUDINE));
-
-	            segnalazioni.add(segnalazione);
-	        }
-	    } catch (SQLException e) {
-	        logger.severe("Errore durante il recupero delle segnalazioni: " + e.getMessage());
-	    } finally {
-	        try {
-	            if (resultSet != null) resultSet.close();
-	            if (stmt != null) stmt.close();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
-
-	    return segnalazioni;
-	}
 	
 	
 	@Override
@@ -259,7 +215,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 
 	
 	@Override
-	public void eliminaSegnalazione(int idSegnalazione) {
+	public void eliminaSegnalazione(Segnalazione segnalazione) {
 	    Connection connessione = null;
 	    PreparedStatement stmt = null;
 
@@ -271,7 +227,7 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	        String sql = "DELETE FROM segnalazioni WHERE " + COL_ID_SEGNALAZIONE + " = ?";
 	        
 	        stmt = connessione.prepareStatement(sql);
-	        stmt.setInt(1, idSegnalazione); // Imposta l'ID come parametro
+	        stmt.setInt(1, segnalazione.getIdSegnalazione()); // Imposta l'ID come parametro
 
 	        int righeEliminate = stmt.executeUpdate();
 	        if (righeEliminate > 0) {
@@ -422,6 +378,11 @@ public class SegnalazioneDAOImplementazione implements SegnalazioneDAO {
 	            segnalazione.setStato(resultSet.getString(COL_STATO));
 	            segnalazione.setLatitudine(resultSet.getDouble(COL_LATITUDINE));
 	            segnalazione.setLongitudine(resultSet.getDouble(COL_LONGITUDINE));
+	            segnalazione.setIdOperatore(idOperatore);
+	            
+	            
+	            
+	            
 	            segnalazioni.add(segnalazione);
 	        }
 	    } catch (SQLException e) {

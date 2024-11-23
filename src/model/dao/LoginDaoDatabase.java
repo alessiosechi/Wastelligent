@@ -9,21 +9,21 @@ import java.util.logging.Logger;
 import model.dao.queries.LoginQueries;
 import model.domain.Ruolo;
 
-public class LoginDAOImplementazione implements LoginDAO{
-	private static volatile LoginDAOImplementazione instance;
-	private static final Logger logger = Logger.getLogger(LoginDAOImplementazione.class.getName());
+public class LoginDaoDatabase implements LoginDao{
+	private static volatile LoginDaoDatabase instance;
+	private static final Logger logger = Logger.getLogger(LoginDaoDatabase.class.getName());
 
-	private LoginDAOImplementazione() {
+	private LoginDaoDatabase() {
 	}
 	
-	public static LoginDAOImplementazione getInstance() {
-		LoginDAOImplementazione result = instance;
+	public static LoginDaoDatabase getInstance() {
+		LoginDaoDatabase result = instance;
 
 		if (instance == null) {
-			synchronized (LoginDAOImplementazione.class) {
+			synchronized (LoginDaoDatabase.class) {
 				result = instance;
 				if (result == null) {
-					instance = result = new LoginDAOImplementazione();
+					instance = result = new LoginDaoDatabase();
 				}
 			}
 		}

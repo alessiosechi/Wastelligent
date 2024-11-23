@@ -162,16 +162,7 @@ public class GestisciSegnalazioniViewController implements Observer{
         ObservableList<String> operatori = FXCollections.observableArrayList();
         operatoriEcologici.forEach(o ->operatori.add(o.getUsername()));
         operatoriEcologiciComboBox.setItems(operatori);
-        
-
-        
-
-
-       
-        
-
     }
-
 
     public static GestisciSegnalazioniViewController getInstance() {
         if (instance == null) {
@@ -181,9 +172,6 @@ public class GestisciSegnalazioniViewController implements Observer{
     }
     
 
-    
-    
-    
     private Optional<ButtonType> showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
@@ -194,14 +182,11 @@ public class GestisciSegnalazioniViewController implements Observer{
     }
     
     
-    
-    
 	@Override
 	public void update() {
         List<SegnalazioneBean> segnalazioniDaRisolvere = risolviSegnalazioneController.getSegnalazioniAttive();   
         ObservableList<SegnalazioneBean> segnalazioniData = FXCollections.observableArrayList(segnalazioniDaRisolvere);
-        segnalazioniTable.setItems(segnalazioniData);
-		
+        segnalazioniTable.setItems(segnalazioniData);	
 	}
 
 }

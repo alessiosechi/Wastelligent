@@ -13,80 +13,75 @@ import exceptions.ConnessioneAPIException;
 import exceptions.DailyRedemptionLimitException;
 import exceptions.GestioneRiscattoException;
 import exceptions.InsufficientPointsException;
-import model.dao.ListaRicompenseGithubDAO;
-import model.dao.ListaRicompenseGithubDAOImplementazione;
-import model.dao.UtenteDAO;
-import model.dao.UtenteDAOImplementazione;
-import model.dao.RicompensaDAO;
-import model.dao.RicompensaDAOImplementazione;
-import model.dao.SegnalazioneDAO;
-import model.dao.SegnalazioneDAOImplementazione;
+import logic.observer.Observer;
+import model.dao.DaoFactory;
+import model.dao.ListaRicompenseDao;
+import model.dao.UtenteDao;
+import model.dao.RicompensaDao;
+import model.dao.SegnalazioneDao;
 import model.domain.Ricompensa;
 import model.domain.RicompensaBean;
+import model.domain.RicompenseRiscattate;
 import model.domain.Segnalazione;
 import model.domain.SegnalazioneBean;
 import model.domain.UtenteCorrente;
 
 public class RiscattaRicompensaController {
 
-	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
-
-	
-	
-	// i DAO sono stateless, li dichiaro statici
-	private static ListaRicompenseGithubDAO listaRicompenseDAO;
-	private static RicompensaDAO ricompensaDAO;
-	private static UtenteDAO utenteDAO;
-	private static SegnalazioneDAO segnalazioneDAO;
-	
 	private static volatile RiscattaRicompensaController instance;
+	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
 	private static final Logger logger = Logger.getLogger(RiscattaRicompensaController.class.getName());
-    private List<Ricompensa> ricompenseUtente = new ArrayList<>();
     private static int idUtente;
+    
+	private static ListaRicompenseDao listaRicompenseDAO;
+	private static RicompensaDao ricompensaDAO;
+	private static UtenteDao utenteDAO;
+	private static SegnalazioneDao segnalazioneDAO;
+
 
 	private RiscattaRicompensaController() {
 	}
-	
-	
 	
 	public static RiscattaRicompensaController getInstance() {
 		RiscattaRicompensaController result = instance;
 
 		if (instance == null) {
-			// blocco sincronizzato
 			synchronized (RiscattaRicompensaController.class) {
 				result = instance;
 				if (result == null) {
 					instance = result = new RiscattaRicompensaController();
-					
-					
-					// inizializzo i DAO solo una volta, quando viene creata l'istanza di RiscattaRicompensaController
+				
 	                try {
-	                    listaRicompenseDAO = ListaRicompenseGithubDAOImplementazione.getInstance();
-	                    ricompensaDAO = RicompensaDAOImplementazione.getInstance();
-	                    utenteDAO = UtenteDAOImplementazione.getInstance();
-	                    segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
+	                    listaRicompenseDAO = DaoFactory.getDao(ListaRicompenseDao.class);      
+	                    ricompensaDAO = DaoFactory.getDao(RicompensaDao.class);
+	                    utenteDAO = DaoFactory.getDao(UtenteDao.class);
+	                    segnalazioneDAO = DaoFactory.getDao(SegnalazioneDao.class);
 	                    
-	                    UtenteCorrente utente=UtenteCorrente.getInstance();
-	                    idUtente=utente.getUtente().getIdUtente();
+
+	                    idUtente=UtenteCorrente.getInstance().getUtente().getIdUtente();
 	                } catch (Exception e) {
-	                    // Gestione dell'errore durante l'inizializzazione
 	                    logger.severe("Errore durante l'inizializzazione: " + e.getMessage());
 	                }
 				}
 
 			}
 		}
-
 		return result;
 	}
+	
+	
+    public void registraOsservatoreRicompenseRiscattate(Observer observer) {
+    	RicompenseRiscattate.getInstance().registraOsservatore(observer);
+    }
+    public List<RicompensaBean> getRicompenseRiscattate() {   
+    	return convertRicompensaListToBeanList(RicompenseRiscattate.getInstance().getRicompenseRiscattate());  
+    }
 
 	public List<RicompensaBean> ottieniRicompenseAPI() throws ConnessioneAPIException {
 		try {
 			List<Ricompensa> ricompenseAPI = listaRicompenseDAO.getRicompense();
 
 			if (!ricompenseAPI.isEmpty()) {
-
 				return convertRicompensaListToBeanList(ricompenseAPI);
 			} else {
 				return new ArrayList<>();
@@ -99,11 +94,21 @@ public class RiscattaRicompensaController {
 			return new ArrayList<>();
 		}
 	}
+	
+
+	public int aggiornaPuntiUtente() { 	// MODIFICARE
+		return ottieniPuntiUtente();
+	}
+	
+	public int ottieniPuntiUtente() {
+		return utenteDAO.estraiPuntiUtente(idUtente);
+	}
+	
+	
 
 	public List<RicompensaBean> ottieniRicompenseUtente() {
 		try {
-
-	        ricompenseUtente = ricompensaDAO.getRicompenseByUtente(idUtente);
+	        List<Ricompensa> ricompenseUtente = ricompensaDAO.getRicompenseByUtente(idUtente);
 
 			if (!ricompenseUtente.isEmpty()) {
 				return convertRicompensaListToBeanList(ricompenseUtente);
@@ -112,51 +117,26 @@ public class RiscattaRicompensaController {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			return new ArrayList<>();
 		}
 	}
 
+
 	public boolean riscatta(RicompensaBean ricompensaBean) throws DailyRedemptionLimitException, InsufficientPointsException, GestioneRiscattoException{
 
+		
 		try {
 			Ricompensa ricompensa = convertRicompensaToEntity(ricompensaBean);
-
-	        // controllo il numero di riscatti effettuati oggi
-	        int numeroRiscattiOggi = 0;
-	        for (Ricompensa r : ricompenseUtente) {
-
-	            if (isOggi(r.getDataRiscatto())) {
-	                numeroRiscattiOggi++;
-	            }
-	        }
-	        
-	        if (numeroRiscattiOggi >= 5) {
-	            throw new DailyRedemptionLimitException("Hai raggiunto il limite giornaliero di riscatti.");
-	        }
 			
-			
+	        verificaLimiteGiornaliero();
+	        verificaPuntiSufficienti(ricompensa);
 
-			int puntiUtente = ottieniPuntiUtente();
-			int puntiNecessari = calcolaPuntiNecessari(ricompensa.getValore());
-			
-	        if (puntiUtente < puntiNecessari) {
-	            throw new InsufficientPointsException("Punti insufficienti per riscattare la ricompensa.");
-	        }
-	        
-			ricompensa.setPunti(puntiNecessari);
 	        String codiceRiscatto = ottieniCodiceRiscatto(ricompensa.getIdRicompensa());
 			ricompensa.setCodiceRiscatto(codiceRiscatto);
-
-	
-			// queste due operazioni dovrebbero essere transazionali
-			// registro il riscatto
 			ricompensa.setIdUtente(idUtente);
+			
+			utenteDAO.sottraiPuntiUtente(idUtente, ricompensa.getPunti());
 			ricompensaDAO.registraRicompensaRiscattata(ricompensa);
-
-			// sottraggo i punti all'utente
-			utenteDAO.sottraiPuntiUtente(idUtente, puntiNecessari);
-
 			return true; // riscatto riuscito
 
 		}catch (DailyRedemptionLimitException | InsufficientPointsException | GestioneRiscattoException e) {
@@ -166,6 +146,29 @@ public class RiscattaRicompensaController {
 			return false;
 		}
 
+	}
+	
+	
+
+	private void verificaLimiteGiornaliero() throws DailyRedemptionLimitException {
+	    int numeroRiscattiOggi = (int) ricompensaDAO.getRicompenseByUtente(idUtente)
+	        .stream()
+	        .filter(r -> isOggi(r.getDataRiscatto()))
+	        .count();
+
+	    if (numeroRiscattiOggi >= 5) {
+	        throw new DailyRedemptionLimitException("Hai raggiunto il limite giornaliero di riscatti.");
+	    }
+	}
+	private void verificaPuntiSufficienti(Ricompensa ricompensa) throws InsufficientPointsException {
+	    int puntiUtente = ottieniPuntiUtente();
+	    int puntiNecessari = calcolaPuntiNecessari(ricompensa.getValore());
+
+	    if (puntiUtente < puntiNecessari) {
+	        throw new InsufficientPointsException("Punti insufficienti per riscattare la ricompensa.");
+	    }
+
+	    ricompensa.setPunti(puntiNecessari);
 	}
 
 	private static String ottieniCodiceRiscatto(int idRicompensa) throws GestioneRiscattoException  {
@@ -179,12 +182,6 @@ public class RiscattaRicompensaController {
         }
 	}
 
-	
-
-	
-	
-	
-	
 	
 	private boolean isOggi(String dataRiscatto) {
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
@@ -202,25 +199,19 @@ public class RiscattaRicompensaController {
 	    }
 	}
 
-	public int ottieniPuntiUtente() {
-
-		return utenteDAO.estraiPuntiUtente(idUtente);
-
-	}
-
 	public List<SegnalazioneBean> ottieniSegnalazioniRiscontrate() {
 		try {
-			List<Segnalazione> segnalazioniRiscontrate = segnalazioneDAO.trovaSegnalazioniRiscontrate(idUtente);
+			List<Segnalazione> segnalazioniUtente = segnalazioneDAO.trovaSegnalazioniRiscontrate(idUtente);
 
-			if (!segnalazioniRiscontrate.isEmpty()) {
+			if (!segnalazioniUtente.isEmpty()) {
 
-				for (Segnalazione s : segnalazioniRiscontrate) {
+				for (Segnalazione s : segnalazioniUtente) {
 					String posizioneTesto = servizioGeocoding.ottieniPosizione(s.getLatitudine(), s.getLongitudine());
 
 					s.setPosizione(posizioneTesto);
 				}
-
-				return convertSegnalazioneRiscontrataListToBeanList(segnalazioniRiscontrate);
+				
+				return convertSegnalazioneRiscontrataListToBeanList(segnalazioniUtente);
 
 			} else {
 				return new ArrayList<>();
@@ -244,8 +235,6 @@ public class RiscattaRicompensaController {
 			return 75; // default se il valore è superiore a 400
 		}
 	}
-
-
 
 	private Ricompensa convertRicompensaToEntity(RicompensaBean ricompensaBean) {
 		Ricompensa ricompensa = new Ricompensa();
@@ -327,7 +316,7 @@ public class RiscattaRicompensaController {
 	
     private SegnalazioneBean convertSegnalazioneToBean(Segnalazione s) {
         SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
-        // verificare se servono tutti
+
 		segnalazioneBean.setDescrizione(s.getDescrizione());
 		segnalazioneBean.setFoto(s.getFoto());
 		segnalazioneBean.setIdUtente(s.getIdUtente());

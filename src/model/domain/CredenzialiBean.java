@@ -2,8 +2,6 @@ package model.domain;
 
 public class CredenzialiBean {
 
-	
-	
     private String username;
     private String password;
 

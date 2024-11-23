@@ -1,8 +1,8 @@
 package model.domain;
 
 public abstract class Utente  { 	
-    private int idUtente;
-    private String username;
+    protected int idUtente;
+    protected String username;
 
     protected Utente(int idUtente, String username) {
         this.idUtente = idUtente;

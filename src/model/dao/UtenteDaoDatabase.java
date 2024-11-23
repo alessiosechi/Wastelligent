@@ -11,19 +11,19 @@ import java.util.logging.Logger;
 import model.domain.OperatoreEcologico;
 import model.domain.Ruolo;
 
-public class UtenteDAOImplementazione implements UtenteDAO {
+public class UtenteDaoDatabase implements UtenteDao {
 
-    private static volatile UtenteDAOImplementazione instance;
-    private static final Logger logger = Logger.getLogger(UtenteDAOImplementazione.class.getName());
+    private static volatile UtenteDaoDatabase instance;
+    private static final Logger logger = Logger.getLogger(UtenteDaoDatabase.class.getName());
 
-    public static UtenteDAOImplementazione getInstance() {
-        UtenteDAOImplementazione result = instance;
+    public static UtenteDaoDatabase getInstance() {
+        UtenteDaoDatabase result = instance;
 
         if (result == null) {
-            synchronized (UtenteDAOImplementazione.class) {
+            synchronized (UtenteDaoDatabase.class) {
                 result = instance;
                 if (result == null) {
-                    instance = result = new UtenteDAOImplementazione();
+                    instance = result = new UtenteDaoDatabase();
                 }
             }
         }
@@ -135,7 +135,7 @@ public class UtenteDAOImplementazione implements UtenteDAO {
     
     
     @Override
-    public List<OperatoreEcologico> estraiOperatoriEcologiciDisponibili(){
+    public List<OperatoreEcologico> estraiOperatoriEcologici(){
         List<OperatoreEcologico> operatoriEcologici = new ArrayList<>();
         Connection connessione = null;
         PreparedStatement stmt = null;

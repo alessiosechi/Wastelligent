@@ -21,7 +21,9 @@ public class ListaSegnalazioniAttive extends Subject{
     }
     
     
-
+	public void aggiungiSegnalazione(Segnalazione segnalazione) {
+		segnalazioniAttive.add(segnalazione);
+	}
 	
 	public void rimuoviSegnalazione(Segnalazione segnalazione) {
 		segnalazioniAttive.remove(segnalazione);
@@ -29,9 +31,6 @@ public class ListaSegnalazioniAttive extends Subject{
 	}
 	
 
-    public void setSegnalazioniAttive(List<Segnalazione> segnalazioni) {
-        this.segnalazioniAttive=segnalazioni;
-    }
 	
     public  List<Segnalazione> getSegnalazioniAttive() {
         return segnalazioniAttive;

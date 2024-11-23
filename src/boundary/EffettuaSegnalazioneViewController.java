@@ -51,11 +51,6 @@ public class EffettuaSegnalazioneViewController {
     private static EffettuaSegnalazioneViewController instance;
     private EffettuaSegnalazioneController effettuaSegnalazioneController = EffettuaSegnalazioneController.getInstance();
     
-    
-    
-    
-    
-    
     @FXML
     public void initialize() { // questo metodo viene chiamato automaticamente per l'inizializzazione dell'interfaccia   	
         initMapView();
@@ -201,8 +196,5 @@ public class EffettuaSegnalazioneViewController {
         }
         return instance;
     }
-    
-
-    
     
 }

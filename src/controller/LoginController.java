@@ -4,17 +4,17 @@ import java.util.logging.Logger;
 
 import exceptions.RegistrazioneUtenteException;
 import exceptions.UsernameAlreadyTakenException;
-import model.dao.LoginDAO;
-import model.dao.LoginDAOImplementazione;
+import model.dao.DaoFactory;
+import model.dao.LoginDao;
 import model.domain.CredenzialiBean;
 import model.domain.Utente;
 import model.domain.UtenteCorrente;
 import model.domain.Ruolo;
 
-public class LoginController {
+public class LoginController { 
 	private static volatile LoginController instance;
 	private static Utente utente = null;
-	private static LoginDAO loginDAO;
+	private static LoginDao loginDAO;
 	private static UtenteFactory utenteFactory = new UtenteFactory();
 	private static UtenteCorrente utenteCorrente=UtenteCorrente.getInstance();
 
@@ -32,11 +32,10 @@ public class LoginController {
 				result = instance;
 				if (result == null) {
 					instance = result = new LoginController();
-					
-					
+						
 					try {
 						// inizializzazione di LoginDAO
-						loginDAO = LoginDAOImplementazione.getInstance();
+						loginDAO = DaoFactory.getDao(LoginDao.class);
 
 					} catch (Exception e) {
 						logger.severe("Errore durante l'inizializzazione del DAO: " + e.getMessage());
@@ -53,17 +52,15 @@ public class LoginController {
 		try {
 			String username = credenzialiBean.getUsername();
 			String password = credenzialiBean.getPassword();
-
+			
 
 			int ruoloId = loginDAO.autenticazione(username, password);
 			int idUtente = loginDAO.getIdByUsername(username);
 
 			setUtente(idUtente, username, Ruolo.fromInt(ruoloId));
-
 			return 1;
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			logger.severe("Errore durante la fase di login.");
 			return -1;
 		}

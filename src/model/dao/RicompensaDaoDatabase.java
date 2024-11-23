@@ -12,19 +12,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RicompensaDAOImplementazione implements RicompensaDAO {
+public class RicompensaDaoDatabase implements RicompensaDao {
+	
+	
+	
+	private RicompensaDaoDatabase(){
+	}
 
-	private static volatile RicompensaDAOImplementazione instance;
+	private static volatile RicompensaDaoDatabase instance;
 
-	public static RicompensaDAOImplementazione getInstance() {
-		RicompensaDAOImplementazione result = instance;
+	public static RicompensaDaoDatabase getInstance() {
+		RicompensaDaoDatabase result = instance;
 
 		if (instance == null) {
 			// blocco sincronizzato
-			synchronized (RicompensaDAOImplementazione.class) {
+			synchronized (RicompensaDaoDatabase.class) {
 				result = instance;
 				if (result == null) {
-					instance = result = new RicompensaDAOImplementazione();
+					instance = result = new RicompensaDaoDatabase();
 				}
 
 			}
@@ -50,7 +55,7 @@ public class RicompensaDAOImplementazione implements RicompensaDAO {
 			stmt.setString(3, ricompensa.getDescrizione());
 			stmt.setString(4, ricompensa.getCodiceRiscatto()); 
 			stmt.setBigDecimal(5, BigDecimal.valueOf(ricompensa.getValore()));
-			stmt.setDate(6, new java.sql.Date(System.currentTimeMillis()));
+			stmt.setDate(6, java.sql.Date.valueOf(ricompensa.getDataRiscatto()));
 
 			stmt.setDate(7, java.sql.Date.valueOf(ricompensa.getDataScadenza()));
 
@@ -63,6 +68,7 @@ public class RicompensaDAOImplementazione implements RicompensaDAO {
 				connessione.rollback();
 			}
 		} catch (SQLException e) {
+
 			e.printStackTrace(); 
 		} finally {
 			try {

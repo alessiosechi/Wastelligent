@@ -30,7 +30,6 @@ public abstract class Subject {
 	public void notificaOsservatori() { // metodo che notifica gli osservatori quando cambia lo stato del Subject
         for (Observer observer : osservatori) {
             observer.update();
-            System.out.println("Observer:"+observer);
         }
 		
 	}

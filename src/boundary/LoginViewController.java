@@ -44,7 +44,6 @@ public class LoginViewController {
         interfaceOption1.setToggleGroup(toggleGroup);
         interfaceOption2.setToggleGroup(toggleGroup);
         
-        //registerLink.setOnAction(event -> ViewLoader.caricaView(ViewInfo.REGISTRAZIONE_VIEW));
 
     }
 
@@ -101,6 +100,8 @@ public class LoginViewController {
 
         // carico la nuova vista dopo il login
         String viewIniziale=loginController.ottieniView(interfacciaSelezionata);
+        
+
         
         ViewLoader.caricaView(ViewInfo.fromFxmlPath(viewIniziale));
 

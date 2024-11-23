@@ -45,8 +45,7 @@ public class StoricoViewController {
     
     
     @FXML
-    public void initialize() {
-    	
+    public void initialize() {	
         configuraColonneTabella();  
         caricaSegnalazioni();
         configuraPulsanti();
@@ -80,10 +79,8 @@ public class StoricoViewController {
 	private void impostaListenerSelezione() {
         tableViewSegnalazioni.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                // abilito il pulsante "DETTAGLI" quando una segnalazione è selezionata
                 vediDettagliButton.setDisable(false);
-                           
-                
+                                      
                 dettagliSegnalazioneViewController.setSegnalazioneBean(newValue);
                 dettagliSegnalazioneViewController.setCallerType(CallerType.CONTROLLER4);
 

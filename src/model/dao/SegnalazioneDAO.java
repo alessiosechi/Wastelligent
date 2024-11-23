@@ -3,13 +3,12 @@ package model.dao;
 import model.domain.Segnalazione;
 import java.util.List;
 
-public interface SegnalazioneDAO {
+public interface SegnalazioneDao {
 	void salvaSegnalazione(Segnalazione segnalazione);
-	void eliminaSegnalazione(int idSegnalazione);
+	void eliminaSegnalazione(Segnalazione segnalazione);
     void aggiornaStato(int idSegnalazione, String stato);
 	
 	List<Segnalazione> trovaSegnalazioniRiscontrate(int idUtente);
-	List<Segnalazione> getSegnalazioni();
 	List<Segnalazione> getSegnalazioniByStato(String stato);
 	List<Segnalazione> getSegnalazioniAssegnate(int idOperatore, String stato);
 	

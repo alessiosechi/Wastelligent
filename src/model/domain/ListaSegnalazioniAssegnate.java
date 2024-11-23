@@ -18,7 +18,9 @@ public class ListaSegnalazioniAssegnate extends Subject{
         return instance;
     }
     
-    
+	public void aggiungiSegnalazione(Segnalazione segnalazione) {
+		segnalazioniAssegnate.add(segnalazione);
+	}
 
 	
 	public void rimuoviSegnalazione(Segnalazione segnalazione) {
@@ -26,12 +28,24 @@ public class ListaSegnalazioniAssegnate extends Subject{
 		notificaOsservatori();
 	}
 	
-
-    public void setSegnalazioniAssegnate(List<Segnalazione> segnalazioni) {
-        this.segnalazioniAssegnate=segnalazioni;
-    }
+	
 	
     public  List<Segnalazione> getSegnalazioniAssegnate() {
         return segnalazioniAssegnate;
     }
+    
+    
+    
+    
+    // Metodo per ottenere segnalazioni assegnate a un operatore specifico
+    public List<Segnalazione> getSegnalazioniPerOperatore(int idOperatore) {
+        List<Segnalazione> segnalazioniFiltrate = new ArrayList<>();
+        for (Segnalazione segnalazione : segnalazioniAssegnate) {
+            if (segnalazione.getIdOperatore() == idOperatore) {
+                segnalazioniFiltrate.add(segnalazione);
+            }
+        }
+        return segnalazioniFiltrate;
+    }
+
 }

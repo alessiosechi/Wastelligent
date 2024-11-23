@@ -56,9 +56,7 @@ public class SegnalazioniAssegnateViewController implements Observer{
 
         segnalazioniTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-
                 dettagliButton.setDisable(false);
-
 
                 dettagliSegnalazioneViewController.setSegnalazioneBean(newValue);
                 dettagliSegnalazioneViewController.setCallerType(CallerType.CONTROLLER3);
@@ -69,8 +67,7 @@ public class SegnalazioniAssegnateViewController implements Observer{
         
         dettagliButton.setOnAction(event -> 
             ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW)
-        ); 
-        
+        );     
 
         completaButton.setOnAction(event -> {
 
@@ -92,18 +89,11 @@ public class SegnalazioniAssegnateViewController implements Observer{
             }
         });
         
-        
-        
-        
-        
-     
         if (!osservatoreRegistrato) {
         	risolviSegnalazioneController.registraOsservatoreSegnalazioniAssegnate(this);
             osservatoreRegistrato = true; 
         }
-         
-    }
-        
+    }     
 
     private Optional<ButtonType> showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -114,7 +104,6 @@ public class SegnalazioniAssegnateViewController implements Observer{
         return alert.showAndWait();
     }
         
-
     private void caricaAssegnazioni() {
     	
         List<SegnalazioneBean> segnalazioniAssegnate = risolviSegnalazioneController.getSegnalazioniDaRisolvere();
@@ -123,11 +112,6 @@ public class SegnalazioniAssegnateViewController implements Observer{
         segnalazioniTable.setItems(segnalazioni);
     }
         
-        
-        
-
-    
-    
     public static SegnalazioniAssegnateViewController getInstance() {
         if (instance == null) {
             instance = new SegnalazioniAssegnateViewController();
@@ -135,14 +119,12 @@ public class SegnalazioniAssegnateViewController implements Observer{
         return instance;
     }
 
-
 	@Override
 	public void update() {
         List<SegnalazioneBean> segnalazioniAssegnate = risolviSegnalazioneController.getSegnalazioniAssegnate();
         
         ObservableList<SegnalazioneBean> segnalazioni = FXCollections.observableArrayList(segnalazioniAssegnate);
-        segnalazioniTable.setItems(segnalazioni);
-		
+        segnalazioniTable.setItems(segnalazioni);	
 	}
 	
 }

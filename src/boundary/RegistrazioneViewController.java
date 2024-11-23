@@ -77,22 +77,16 @@ public class RegistrazioneViewController {
             loginController.registraUtente(credenzialiBean);
 
             showAlert(AlertType.INFORMATION, "Registrazione avvenuta", "La registrazione è avvenuta con successo.");
-            
-            
             ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);
-
         } catch (UsernameAlreadyTakenException | RegistrazioneUtenteException e) {
             showAlert(AlertType.ERROR, "Errore Registrazione", e.getMessage());
-
         }
         
-
     }
 
 
     @FXML
     private void handleLoginLinkAction(ActionEvent event) {
-
         ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);
     }
 

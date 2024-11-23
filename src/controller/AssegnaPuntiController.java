@@ -5,10 +5,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import logic.observer.Observer;
-import model.dao.SegnalazioneDAO;
-import model.dao.SegnalazioneDAOImplementazione;
-import model.dao.UtenteDAO;
-import model.dao.UtenteDAOImplementazione;
+import model.dao.DaoFactory;
+import model.dao.SegnalazioneDao;
+import model.dao.UtenteDao;
 import model.domain.ListaSegnalazioniRisolte;
 import model.domain.Segnalazione;
 import model.domain.SegnalazioneBean;
@@ -19,21 +18,21 @@ public class AssegnaPuntiController {
 	
 	
 	private static volatile AssegnaPuntiController instance;
-	private static SegnalazioneDAO segnalazioneDAO;
-	private static UtenteDAO utenteDAO;
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
 	private static final Logger logger = Logger.getLogger(AssegnaPuntiController.class.getName());
-	private static ListaSegnalazioniRisolte segnalazioniRisolte;
+	private static SegnalazioneDao segnalazioneDAO;
+	private static UtenteDao utenteDAO;
+
 	
 	private AssegnaPuntiController() {
 	}
     public List<SegnalazioneBean> getSegnalazioniRisolte() {   
-    	return convertSegnalazioneListToBeanList(segnalazioniRisolte.getSegnalazioniRisolte());  
+    	return convertSegnalazioneListToBeanList(ListaSegnalazioniRisolte.getInstance().getSegnalazioniRisolte());  
     }
     
-    
+  
     public void registraOsservatoreSegnalazioniRisolte(Observer observer) {
-    	segnalazioniRisolte.registraOsservatore(observer);
+    	ListaSegnalazioniRisolte.getInstance().registraOsservatore(observer);
     }
 
 	
@@ -46,10 +45,10 @@ public class AssegnaPuntiController {
 				result = instance;
 				if (result == null) {
 					instance = result = new AssegnaPuntiController();
-					segnalazioniRisolte=ListaSegnalazioniRisolte.getInstance();
+					
 					try {
-						segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
-						utenteDAO = UtenteDAOImplementazione.getInstance();
+						segnalazioneDAO = DaoFactory.getDao(SegnalazioneDao.class);
+						utenteDAO = DaoFactory.getDao(UtenteDao.class);
 					} catch (Exception e) {
 				        logger.severe("Errore durante l'inizializzazione dei DAO: " + e.getMessage());
 					}
@@ -73,18 +72,12 @@ public class AssegnaPuntiController {
 
 					s.setPosizione(posizioneTesto);
 				}
-				segnalazioniRisolte.setSegnalazioniRisolte(segnalazioniDaRiscontrare);
 				return convertSegnalazioneListToBeanList(segnalazioniDaRiscontrare);
-				
-				
-				
-				
 			} else {
 				return new ArrayList<>();
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			return new ArrayList<>();
 		}
         
@@ -94,18 +87,13 @@ public class AssegnaPuntiController {
 	public boolean assegnaPunti(SegnalazioneBean segnalazioneBean) {
 	    try {
 
-	        int idSegnalazione = segnalazioneBean.getIdSegnalazione();
 	        int puntiAssegnati = segnalazioneBean.getPuntiAssegnati();
-	        int idUtente=segnalazioneBean.getIdUtente();
-	        
-	        
-	        segnalazioniRisolte.rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean));
-	        segnalazioneDAO.assegnaPunti(idSegnalazione, puntiAssegnati);
-	        utenteDAO.aggiungiPuntiUtente(idUtente, puntiAssegnati);
-       
+	              
+	        segnalazioneDAO.assegnaPunti(segnalazioneBean.getIdSegnalazione(), puntiAssegnati);
+	        utenteDAO.aggiungiPuntiUtente(segnalazioneBean.getIdUtente(), puntiAssegnati);
+
 	        return true;
 	    } catch (Exception e) {
-	        e.printStackTrace();
 	        return false;
 	    }
 	}	
@@ -135,7 +123,7 @@ public class AssegnaPuntiController {
 	
     private SegnalazioneBean convertSegnalazioneToBean(Segnalazione s) {
         SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
-        // verificare se servono tutti
+
 		segnalazioneBean.setDescrizione(s.getDescrizione());
 		segnalazioneBean.setFoto(s.getFoto());
 		segnalazioneBean.setIdUtente(s.getIdUtente());
@@ -148,20 +136,6 @@ public class AssegnaPuntiController {
 
         return segnalazioneBean;
     }
-    private Segnalazione convertSegnalazioneBeanToEntity(SegnalazioneBean s) {
-        Segnalazione segnalazione = new Segnalazione();
-        // verificare se servono tutti
-		segnalazione.setDescrizione(s.getDescrizione());
-		segnalazione.setFoto(s.getFoto());
-		segnalazione.setIdUtente(s.getIdUtente());
-		segnalazione.setLatitudine(s.getLatitudine());
-		segnalazione.setLongitudine(s.getLongitudine());
-		segnalazione.setPuntiAssegnati(s.getPuntiAssegnati());
-		segnalazione.setPosizione(s.getPosizione());
-		segnalazione.setStato(s.getStato());
-		segnalazione.setIdSegnalazione(s.getIdSegnalazione());
 
-        return segnalazione;
-    }
 
 }

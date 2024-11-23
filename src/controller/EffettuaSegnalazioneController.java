@@ -4,19 +4,21 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import exceptions.SegnalazioneVicinaException;
-import model.dao.SegnalazioneDAO;
-import model.dao.SegnalazioneDAOImplementazione;
+import model.dao.DaoFactory;
+import model.dao.SegnalazioneDao;
 import model.domain.Posizione;
 import model.domain.PosizioneBean;
 import model.domain.Segnalazione;
 import model.domain.SegnalazioneBean;
+import model.domain.StatoSegnalazione;
 import model.domain.UtenteCorrente;
 
-public class EffettuaSegnalazioneController {
+public class EffettuaSegnalazioneController { 
+	
 	private static volatile EffettuaSegnalazioneController instance;
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
-	private static SegnalazioneDAO segnalazioneDAO;
 	private static final Logger logger = Logger.getLogger(EffettuaSegnalazioneController.class.getName());
+	private static SegnalazioneDao segnalazioneDAO;
 
 	private EffettuaSegnalazioneController() {
 	}
@@ -29,13 +31,10 @@ public class EffettuaSegnalazioneController {
 			synchronized (EffettuaSegnalazioneController.class) {
 				result = instance;
 				if (result == null) {
-					instance = result = new EffettuaSegnalazioneController();		
-
-					
+					instance = result = new EffettuaSegnalazioneController();	
+						
 					try {
-						// inizializzazione di segnalazioneDAO
-						segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
-
+                        segnalazioneDAO = DaoFactory.getDao(SegnalazioneDao.class);
 					} catch (Exception e) {
 						logger.severe("Errore durante l'inizializzazione del DAO: " + e.getMessage());
 					}
@@ -78,8 +77,14 @@ public class EffettuaSegnalazioneController {
 	
 	
 	
+	
+	
+	
+	
+	
+	
 	private boolean verificaSegnalazioniVicine(Segnalazione segnalazione) {
-        List<Segnalazione> segnalazioniEsistenti = segnalazioneDAO.getSegnalazioni();
+        List<Segnalazione> segnalazioniEsistenti = segnalazioneDAO.getSegnalazioniByStato(StatoSegnalazione.RICEVUTA.getStato()); // qui devo cambiare e prendere solo quelle attive
 
         // calcolo la distanza e verifico se è entro 20 metri
         for (Segnalazione esistente : segnalazioniEsistenti) {
@@ -100,6 +105,15 @@ public class EffettuaSegnalazioneController {
 
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -125,33 +139,6 @@ public class EffettuaSegnalazioneController {
 
     }
 	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	public PosizioneBean convertPosizioneToBean(Posizione posizione) {
 		PosizioneBean posizioneBean = new PosizioneBean();
@@ -160,15 +147,13 @@ public class EffettuaSegnalazioneController {
 		return posizioneBean;
 	}
 	
-	
-	
-	
+
 	
 	public Segnalazione convertSegnalazioneToEntity(SegnalazioneBean segnalazioneBean) {
 		Segnalazione segnalazione = new Segnalazione();
 		segnalazione.setDescrizione(segnalazioneBean.getDescrizione());
 		segnalazione.setFoto(segnalazioneBean.getFoto());
-		segnalazione.setStato("Ricevuta"); 
+		segnalazione.setStato(StatoSegnalazione.RICEVUTA.getStato()); 
 		segnalazione.setIdUtente(segnalazioneBean.getIdUtente());
 		segnalazione.setLatitudine(segnalazioneBean.getLatitudine());
 		segnalazione.setLongitudine(segnalazioneBean.getLongitudine());

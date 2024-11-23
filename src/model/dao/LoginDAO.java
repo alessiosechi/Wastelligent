@@ -1,6 +1,6 @@
 package model.dao;
 
-public interface LoginDAO {
+public interface LoginDao {
 	public int autenticazione(String username, String password);
     public int getIdByUsername(String username);
     

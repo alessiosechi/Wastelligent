@@ -17,14 +17,14 @@ import javafx.scene.control.Button;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
-
+import logic.observer.Observer;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.Label;
 
 
 import model.domain.RicompensaBean;
 
-public class RiscattaRicompensaViewController {
+public class RiscattaRicompensaViewController implements Observer{
 
 	@FXML
 	private TableView<RicompensaBean> tableViewRicompense;
@@ -64,7 +64,7 @@ public class RiscattaRicompensaViewController {
 	private static RiscattaRicompensaViewController instance;
 	private RiscattaRicompensaController riscattaRicompensaController = RiscattaRicompensaController.getInstance();
     private List<RicompensaBean> listaRicompenseAPI;
-	
+    private boolean osservatoreRegistrato = false; 
 	
 
 	@FXML
@@ -76,6 +76,11 @@ public class RiscattaRicompensaViewController {
 		configuraColonneTableView();
 
 		tableViewRicompense.setItems(FXCollections.observableArrayList(getRicompenseRiscattate()));
+		
+        if (!osservatoreRegistrato) {
+        	riscattaRicompensaController.registraOsservatoreRicompenseRiscattate(this);
+            osservatoreRegistrato = true;  
+        }
 	}
 	
 	private void caricaPuntiUtente() {
@@ -94,6 +99,7 @@ public class RiscattaRicompensaViewController {
 	            showAlert("Errore di connessione", e.getMessage());
 			}
         }
+        
 		ObservableList<String> ricompense = FXCollections.observableArrayList();
 		listaRicompenseAPI.forEach(r -> ricompense.add(r.getNome()));
 		comboBoxRicompense.setItems(ricompense);
@@ -117,40 +123,23 @@ public class RiscattaRicompensaViewController {
 	}
 
 	private void configuraColonneTableView() {
-//		colNomeRicompensa.setCellValueFactory(new PropertyValueFactory<>("nome"));
-//		colCodiceRiscatto.setCellValueFactory(new PropertyValueFactory<>("codiceRiscatto"));
-//		colDescrizione.setCellValueFactory(new PropertyValueFactory<>("descrizione"));
-//		colValore.setCellValueFactory(new PropertyValueFactory<>("valore"));
-//		colDataRiscatto.setCellValueFactory(new PropertyValueFactory<>("dataRiscatto"));
-//		colDataScadenza.setCellValueFactory(new PropertyValueFactory<>("dataScadenza"));
-//		colPuntiUtilizzati.setCellValueFactory(new PropertyValueFactory<>("punti"));
-		
-		
+	
 		/*
-		 *  la soluzione con sopra presenta un accoppiamento forte con i nomi degli attributi della classe Ricompensabean, 
-		 *  invece, la soluzione sotto fa riferimento direttamente ai metodi getter di RicompensaBean, in tal modo, qualsiasi 
-		 *  modifica del nome delle proprietà all'interno di RicompensaBean non richiederà modifiche alla configurazione delle 
-		 *  colonne della TableView
+		 * la soluzione sotto fa riferimento direttamente ai metodi getter di RicompensaBean, in tal modo, qualsiasi
+		 * modifica del nome delle proprietà all'interno di RicompensaBean non richiederà modifiche alla configurazione delle
+		 * colonne della TableView
 		 */
 		
 		colNomeRicompensa.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNome()));
-
 		colCodiceRiscatto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCodiceRiscatto()));
-
 		colDescrizione.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescrizione()));
-
 		colValore.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getValore()).asObject());
-
 		colDataRiscatto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDataRiscatto()));
-
 		colDataScadenza.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDataScadenza()));
-
 		colPuntiUtilizzati.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getPunti()).asObject());
 		
 		
 	}
-
-
 
 	private List<RicompensaBean> getRicompenseRiscattate() {
 		return riscattaRicompensaController.ottieniRicompenseUtente();
@@ -167,7 +156,6 @@ public class RiscattaRicompensaViewController {
 		        puntiNecessari
 		);
 		dettagliRicompensaLabel.setText(dettagli);
-
 	}
 
 	private void riscattaSelezione() {
@@ -188,10 +176,6 @@ public class RiscattaRicompensaViewController {
                                     : "Impossibile riscattare la ricompensa. Riprova.";
             showAlert(result ? "Successo" : "Errore", message);
 
-//            if (result) {
-//                // se il riscatto ha avuto successo, aggiorno la pagina
-//                ViewLoader.caricaView(ViewInfo.RISCATTA_RICOMPENSA_VIEW, primaryStage);
-//            }
 
         } catch (DailyRedemptionLimitException e) {
 
@@ -231,8 +215,10 @@ public class RiscattaRicompensaViewController {
 		return instance;
 	}
 
-
-	
-
+	@Override
+	public void update() {
+		tableViewRicompense.setItems(FXCollections.observableArrayList(riscattaRicompensaController.getRicompenseRiscattate()));
+		labelSaldoPunti.setText(String.valueOf(riscattaRicompensaController.aggiornaPuntiUtente()));
+	}
 
 }

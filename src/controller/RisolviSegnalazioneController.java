@@ -5,10 +5,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import logic.observer.Observer;
-import model.dao.SegnalazioneDAO;
-import model.dao.SegnalazioneDAOImplementazione;
-import model.dao.UtenteDAO;
-import model.dao.UtenteDAOImplementazione;
+import model.dao.DaoFactory;
+import model.dao.SegnalazioneDao;
+import model.dao.UtenteDao;
 import model.domain.AssegnazioneBean;
 import model.domain.ListaSegnalazioniAssegnate;
 import model.domain.ListaSegnalazioniAttive;
@@ -19,19 +18,16 @@ import model.domain.StatoSegnalazione;
 import model.domain.OperatoreEcologicoBean;
 import model.domain.UtenteCorrente;
 
-public class RisolviSegnalazioneController {
+public class RisolviSegnalazioneController { // QUASI OK
 
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
 	private static volatile RisolviSegnalazioneController instance;
-	private static SegnalazioneDAO segnalazioneDAO;
-	private static UtenteDAO utenteDAO;
 	private static final Logger logger = Logger.getLogger(RisolviSegnalazioneController.class.getName());
-	private static ListaSegnalazioniAttive segnalazioniAttive;
-	private static ListaSegnalazioniAssegnate segnalazioniAssegnate;
+	private static SegnalazioneDao segnalazioneDAO;
+	private static UtenteDao utenteDAO;
 	
 	private RisolviSegnalazioneController() {
 	}
-	
 	
 	
 	public static RisolviSegnalazioneController getInstance() {
@@ -42,13 +38,10 @@ public class RisolviSegnalazioneController {
 				result = instance;
 				if (result == null) {
 					instance = result = new RisolviSegnalazioneController();
-					segnalazioniAttive=ListaSegnalazioniAttive.getInstance();
-					segnalazioniAssegnate=ListaSegnalazioniAssegnate.getInstance();
 
 					try {
-
-						segnalazioneDAO = SegnalazioneDAOImplementazione.getInstance();
-						utenteDAO=UtenteDAOImplementazione.getInstance();
+						segnalazioneDAO = DaoFactory.getDao(SegnalazioneDao.class);
+						utenteDAO=DaoFactory.getDao(UtenteDao.class);
 					} catch (Exception e) {
 				        logger.severe("Errore durante l'inizializzazione dei DAO: " + e.getMessage());
 					}
@@ -62,41 +55,40 @@ public class RisolviSegnalazioneController {
 	}
 	
     public void registraOsservatoreSegnalazioniAttive(Observer observer) {
-    	segnalazioniAttive.registraOsservatore(observer);
+    	ListaSegnalazioniAttive.getInstance().registraOsservatore(observer);
     }
     public void registraOsservatoreSegnalazioniAssegnate(Observer observer) {
-    	segnalazioniAssegnate.registraOsservatore(observer);
+    	ListaSegnalazioniAssegnate.getInstance().registraOsservatore(observer);
     }
     
     public List<SegnalazioneBean> getSegnalazioniAttive() {   
-    	return convertSegnalazioneListToBeanList(segnalazioniAttive.getSegnalazioniAttive());  
+    	return convertSegnalazioneListToBeanList(ListaSegnalazioniAttive.getInstance().getSegnalazioniAttive());  
     }
+    
     public List<SegnalazioneBean> getSegnalazioniAssegnate() {   
-    	return convertSegnalazioneListToBeanList(segnalazioniAssegnate.getSegnalazioniAssegnate());  
+        UtenteCorrente utente = UtenteCorrente.getInstance();
+        int idOperatore = utente.getUtente().getIdUtente();
+
+    	return convertSegnalazioneListToBeanList(ListaSegnalazioniAssegnate.getInstance().getSegnalazioniPerOperatore(idOperatore));  
     }
 	
 
-    public List<SegnalazioneBean> getSegnalazioniRicevute() {
-
-        
+    public List<SegnalazioneBean> getSegnalazioniRicevute() { 
+     
 		try {
-	        List<Segnalazione> segnalazioniDaCompletare=segnalazioneDAO.getSegnalazioniByStato(StatoSegnalazione.RICEVUTA.getStato());
+	        List<Segnalazione> segnalazioniDaCompletare=segnalazioneDAO.getSegnalazioniByStato(StatoSegnalazione.RICEVUTA.getStato()); 
 	        
 	        
-
 			if (!segnalazioniDaCompletare.isEmpty()) {
 				for (Segnalazione s : segnalazioniDaCompletare) {
 			        String posizioneTesto = servizioGeocoding.ottieniPosizione(s.getLatitudine(), s.getLongitudine());
 					s.setPosizione(posizioneTesto);
 				}
 				
-				
-				segnalazioniAttive.setSegnalazioniAttive(segnalazioniDaCompletare);
+			
 				return convertSegnalazioneListToBeanList(segnalazioniDaCompletare);
 				
-				
-				
-				
+	
 			} else {
 				return new ArrayList<>();
 			}
@@ -105,38 +97,25 @@ public class RisolviSegnalazioneController {
 			return new ArrayList<>();
 		}
         
-        
-        
+    
         
     }
 
 
 
-	public void eliminaSegnalazione(SegnalazioneBean segnalazioneBean) {
-		
+	public void eliminaSegnalazione(SegnalazioneBean segnalazioneBean) {	
 		try {
 			
-			segnalazioneDAO.eliminaSegnalazione(segnalazioneBean.getIdSegnalazione());
-			segnalazioniAttive.rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean));
-			
+			segnalazioneDAO.eliminaSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); 		
 		} catch (Exception e) {
 			e.printStackTrace();
-
 		}
 	}
 	
 	public List<OperatoreEcologicoBean> getOperatoriEcologiciDisponibili() {
 	    try {
 
-	        List<OperatoreEcologico> operatoriEcologici = utenteDAO.estraiOperatoriEcologiciDisponibili();
-	        
-	        /*
-	         * Come gestisco questo per la versione DEMO? Potrei fare una cosa del genere:
-	         * 		private List<OperatoreEcologico> operatoriEcologici = new ArrayList<>();
-	         *      operatoriEcologici.add(new OperatoreEcologico("op1", "Mario Rossi", "mario@wastelligent.com"));
-	         *      operatoriEcologici.add(new OperatoreEcologico("op2", "Luca Bianchi", "luca@wastelligent.com"));
-	         */
-
+	        List<OperatoreEcologico> operatoriEcologici = utenteDAO.estraiOperatoriEcologici();
 	        return convertOperatoriEcologiciListToBeanList(operatoriEcologici);
 
 	    } catch (Exception e) {
@@ -147,20 +126,18 @@ public class RisolviSegnalazioneController {
 
 	public boolean assegnaOperatore(AssegnazioneBean assegnazioneBean) {
 	    try {
+	    	
 
 	    	int idSegnalazione = assegnazioneBean.getSegnalazione().getIdSegnalazione();
-	    	int idOperatore=assegnazioneBean.getOperatore().getIdUtente();	
-	    	UtenteCorrente utente=UtenteCorrente.getInstance();
-	    	
-	    	Segnalazione s = convertSegnalazioneBeanToEntity(assegnazioneBean.getSegnalazione());
-	    	segnalazioniAttive.rimuoviSegnalazione(s);
-	    	
-	        segnalazioneDAO.assegnaOperatore(idSegnalazione, idOperatore, utente.getUtente().getIdUtente());
+	    	int idOperatore=assegnazioneBean.getOperatore().getIdUtente();
+	    	int idEsperto=UtenteCorrente.getInstance().getUtente().getIdUtente();
+
+	    		 
+	        segnalazioneDAO.assegnaOperatore(idSegnalazione, idOperatore, idEsperto); // CAMBIARE: idEsperto non serve a nulla qui
 	        
 	        
 	        return true;
 	    } catch (Exception e) {
-	        e.printStackTrace();
 	        return false;
 	    }
 	}
@@ -178,28 +155,15 @@ public class RisolviSegnalazioneController {
 			if (!segnalazioniDaRisolvere.isEmpty()) {
 				for (Segnalazione s : segnalazioniDaRisolvere) {
 			        String posizioneTesto = servizioGeocoding.ottieniPosizione(s.getLatitudine(), s.getLongitudine());
-
 					s.setPosizione(posizioneTesto);
 				}
-
-				segnalazioniAssegnate.setSegnalazioniAssegnate(segnalazioniDaRisolvere);
-				return convertSegnalazioneListToBeanList(segnalazioniDaRisolvere);
-				
-				
-				
-				
+				return convertSegnalazioneListToBeanList(segnalazioniDaRisolvere);	
 			} else {
 				return new ArrayList<>();
 			}
-
 		} catch (Exception e) {
-			e.printStackTrace();
 			return new ArrayList<>();
 		}
-        
-        
-        
-        
     }
 	
 	
@@ -209,17 +173,14 @@ public class RisolviSegnalazioneController {
 
     public boolean completaSegnalazione(SegnalazioneBean segnalazioneBean) {
 	    try {
-	        segnalazioneDAO.aggiornaStato(segnalazioneBean.getIdSegnalazione(), StatoSegnalazione.RISOLTA.getStato());
-	        segnalazioniAssegnate.rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean));
-
+	        segnalazioneDAO.aggiornaStato(segnalazioneBean.getIdSegnalazione(), StatoSegnalazione.RISOLTA.getStato());     
 	        return true;
 	    } catch (Exception e) {
-	        e.printStackTrace();
 	        return false;
 	    }
     }
     
-    
+
     
 	public List<OperatoreEcologicoBean> convertOperatoriEcologiciListToBeanList(List<OperatoreEcologico> operatoriEcologici) {
 		if (operatoriEcologici != null) {
@@ -262,7 +223,7 @@ public class RisolviSegnalazioneController {
 	
     private SegnalazioneBean convertSegnalazioneToBean(Segnalazione s) {
         SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
-        // verificare se servono tutti
+
 		segnalazioneBean.setDescrizione(s.getDescrizione());
 		segnalazioneBean.setFoto(s.getFoto());
 		segnalazioneBean.setIdUtente(s.getIdUtente());
@@ -272,13 +233,15 @@ public class RisolviSegnalazioneController {
 		segnalazioneBean.setPosizione(s.getPosizione());
 		segnalazioneBean.setStato(s.getStato());
 		segnalazioneBean.setIdSegnalazione(s.getIdSegnalazione());
+		
+		segnalazioneBean.setIdOperatore(s.getIdOperatore());
 
         return segnalazioneBean;
     }
     
     private Segnalazione convertSegnalazioneBeanToEntity(SegnalazioneBean s) {
         Segnalazione segnalazione = new Segnalazione();
-        // verificare se servono tutti
+
 		segnalazione.setDescrizione(s.getDescrizione());
 		segnalazione.setFoto(s.getFoto());
 		segnalazione.setIdUtente(s.getIdUtente());

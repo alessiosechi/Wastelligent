@@ -29,7 +29,7 @@ public class ViewLoader {
 		if (controller != null) {
 			caricaView(viewInfo.getFxmlPath(), viewInfo.getTitle(), controller);
 		} else {
-			logger.severe("Controller non trovato per la view: " + viewInfo);
+			logger.severe("Controller non trovato!");
 		}
 	}
 
@@ -75,17 +75,6 @@ public class ViewLoader {
 		}
 	}
 
-//	private static void setPrimaryStageIfExists(Object controller, Stage stage) {
-//		if (controller != null) {
-//			try {
-//				Method setPrimaryStageMethod = controller.getClass().getMethod("setPrimaryStage", Stage.class);
-//				setPrimaryStageMethod.invoke(controller, stage);
-//			} catch (NoSuchMethodException e) {
-//				logger.info("Il controller non ha il metodo setPrimaryStage.");
-//			} catch (Exception e) {
-//				logger.severe("Si è verificato un errore: " + e.getMessage());
-//			}
-//		}
-//	}
+
 
 }

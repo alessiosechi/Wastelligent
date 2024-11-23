@@ -162,6 +162,4 @@ public class AssegnaPuntiViewController implements Observer{
 		segnalazioniTable.setItems(segnalazioni);
 	}
 
-
-
 }
