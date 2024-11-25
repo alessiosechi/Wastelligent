@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="768.0" fitWidth="540.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../pics/logo.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="692.25" layoutY="196.5" text="Crea un account" wrapText="true">
+         <font>
+            <Font name="System Bold" size="37.5" />
+         </font>
+      </Label>
+      <Line endX="143.25" layoutX="762.75" layoutY="256.5" style="-fx-stroke: #216838;" />
+      
+      <!-- Campo Username -->
+      <TextField fx:id="usernameField" layoutX="681.0" layoutY="311.25" promptText="Username*">
+         <font>
+            <Font size="26.25" />
+         </font>
+      </TextField>
+      
+      <!-- Campo Password -->
+      <PasswordField fx:id="passwordField" layoutX="678.75" layoutY="390.0" promptText="Password*">
+         <font>
+            <Font size="26.25" />
+         </font>
+      </PasswordField>
+
+      <Label layoutX="678.75" layoutY="468.75" text="*Campi obbligatori" wrapText="true">
+         <font>
+            <Font size="18.75" />
+         </font>
+      </Label>
+
+      <!-- Pulsante Registrati -->
+      <Button fx:id="registratiButton" layoutX="678.75" layoutY="516.0" minHeight="56.25" mnemonicParsing="false" prefHeight="56.25" prefWidth="326.25" style="-fx-background-color: #216838; -fx-background-radius: 50;" text="REGISTRATI" textAlignment="CENTER" textFill="WHITE" onAction="#handleRegistratiButtonAction">
+         <font>
+            <Font name="System Bold" size="26.25" />
+         </font>
+      </Button>
+
+      <Label layoutX="678.75" layoutY="599.25" text="Hai già un account?" wrapText="true">
+         <font>
+            <Font size="18.75" />
+         </font>
+      </Label>
+
+      <!-- Link Accedi -->
+      <Hyperlink fx:id="loginLink" layoutX="842.25" layoutY="594.75" text="Accedi" textFill="#216838" onAction="#handleLoginLinkAction">
+         <font>
+            <Font name="System Bold" size="18.75" />
+         </font>
+      </Hyperlink>
+   </children>
+</AnchorPane>

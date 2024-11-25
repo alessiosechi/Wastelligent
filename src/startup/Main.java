@@ -1,11 +1,11 @@
 package startup;
 
-import boundary.ViewInfo;
-import boundary.ViewLoader;
-import config.PersistenceConfigurator;
-import config.PersistenceProvider;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import logic.boundary.ViewInfo;
+import logic.boundary.ViewLoader;
+import logic.config.PersistenceConfigurator;
+import logic.config.PersistenceProvider;
 
 public class Main extends Application {
     
