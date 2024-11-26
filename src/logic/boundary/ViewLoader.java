@@ -14,8 +14,7 @@ public class ViewLoader {
 
 	private ViewLoader() {
 	}
-	
-	
+		
     public static void setStage(Stage primaryStage) {
         if (stage == null) {
         	stage = primaryStage;
@@ -32,8 +31,19 @@ public class ViewLoader {
 			logger.severe("Controller non trovato!");
 		}
 	}
+	
+	
 
-	// Metodo per caricare la view con FXML, titolo e controller specifico
+
+    public static void showLoginView() {
+    	caricaView(ViewInfo.LOGIN_VIEW);
+    }
+
+    public static void showRegistrationView() {
+    	caricaView(ViewInfo.REGISTRAZIONE_VIEW);
+    }
+
+	// metodo per caricare la view con FXML, titolo e controller specifico
 	private static void caricaView(String fxmlPath, String title, Object controller) {
 		try {
 			FXMLLoader loader = new FXMLLoader(ViewLoader.class.getResource(fxmlPath));
@@ -49,7 +59,7 @@ public class ViewLoader {
 		}
 	}
 
-	// Metodo per ottenere il controller singleton associato a ogni view
+	// metodo per ottenere il controller singleton associato a ogni view
 	private static Object getControllerInstance(ViewInfo viewInfo) {
 		switch (viewInfo) {
 		case LOGIN_VIEW:
@@ -74,7 +84,4 @@ public class ViewLoader {
 			return null;
 		}
 	}
-
-
-
 }

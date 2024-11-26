@@ -14,14 +14,12 @@ public class Ricompensa {
     private String dataScadenza;
     private int punti;
 
-
+    
     public Ricompensa() {
         // Costruttore vuoto
     }
-    
-    
+
     // overloading dei costruttori
-    
     
     // costruttore per la lista di ricompense dall'API
     public Ricompensa(int idRicompensa, String nome,int valore, String descrizione, String dataScadenza) {

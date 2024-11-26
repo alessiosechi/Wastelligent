@@ -43,11 +43,9 @@ public class LoginViewController {
         // assegno il ToggleGroup ai RadioButton in modo tale da gestire la selezione degli stessi
         interfaceOption1.setToggleGroup(toggleGroup);
         interfaceOption2.setToggleGroup(toggleGroup);
-        
-
     }
 
-    // il metodo seguente viene eseguito al click del button "LOGIN"
+    // il metodo che viene eseguito al click del button "LOGIN"
     @FXML
     private void handleLoginButtonAction(ActionEvent event) {
 
@@ -71,12 +69,7 @@ public class LoginViewController {
 			 password = "password3";
 		}
 
-
-
-
         int interfacciaSelezionata = interfaceOption1.isSelected() ? 1 : 2;
-
-        // chiamo il metodo per l'autenticazione
         authenticate(username, password, interfacciaSelezionata);
     }
 
@@ -97,27 +90,16 @@ public class LoginViewController {
 
         showAlert(Alert.AlertType.INFORMATION, "Login Success", "Login effettuato con successo!");
 
-
         // carico la nuova vista dopo il login
-        String viewIniziale=loginController.ottieniView(interfacciaSelezionata);
-        
-
-        
+        String viewIniziale=loginController.ottieniView(interfacciaSelezionata); 
         ViewLoader.caricaView(ViewInfo.fromFxmlPath(viewIniziale));
-
     }
-
-
 
     @FXML
     private void handleRegisterLinkAction() {
         
         ViewLoader.caricaView(ViewInfo.REGISTRAZIONE_VIEW);
     }
-
-
-
-
 
     private void showAlert(AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
@@ -126,7 +108,6 @@ public class LoginViewController {
         alert.showAndWait();
     }
 
-    // singleton: retituisco l'istanza di LoginViewController
     public static LoginViewController getInstance() {
         if (instance == null) {
             instance = new LoginViewController();

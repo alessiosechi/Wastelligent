@@ -155,7 +155,7 @@ public class DettagliSegnalazioneViewController {
 	    mapView.setPrefHeight(mapPane.getPrefHeight());
 
 	    mapView.initializedProperty().addListener((observable, oldValue, newValue) -> {
-	        if (newValue) {
+	        if (newValue != null) {
 	            logger.info("Mappa pronta");
 				if (segnalazioneBean != null && segnalazioneBean.getLatitudine() != 0
 						&& segnalazioneBean.getLongitudine() != 0) {

@@ -35,8 +35,7 @@ public class RegistrazioneViewController {
     private LoginController loginController = LoginController.getInstance();  
 
     @FXML
-    private void handleRegistratiButtonAction(ActionEvent event) {
-    	
+    private void handleRegistratiButtonAction(ActionEvent event) {  	
         // utilizzo il design pattern decorator
         ValidaInput usernameValidatore = new ValidatoreSpaziVuoti(new ValidatoreLunghezzaMinima(new ValidatoreBase(), 5));
         ValidaInput passwordValidatore = new ValidatoreSpaziVuoti(new ValidatoreLunghezzaMinima(new ValidatoreBase(), 8));
@@ -48,8 +47,7 @@ public class RegistrazioneViewController {
         if (username.isEmpty() || password.isEmpty()) {
             showAlert(AlertType.WARNING, "Errore", "I campi username e password sono obbligatori.");
             return;
-        }
-        
+        }  
         
         
         // se lo username non è valido, mostro un alert
@@ -64,15 +62,11 @@ public class RegistrazioneViewController {
             return;
         }
 
-
         CredenzialiBean credenzialiBean = new CredenzialiBean();
         credenzialiBean.setUsername(username);
         credenzialiBean.setPassword(password);
-        
-        
-        
+           
         try {
-            // chiamo il controller applicativo per eseguire la registrazione
             loginController.registraUtente(credenzialiBean);
 
             showAlert(AlertType.INFORMATION, "Registrazione avvenuta", "La registrazione è avvenuta con successo.");
@@ -83,11 +77,10 @@ public class RegistrazioneViewController {
         
     }
 
-
-    @FXML
-    private void handleLoginLinkAction(ActionEvent event) {
-        ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);
-    }
+//    @FXML
+//    private void handleLoginLinkAction(ActionEvent event) {
+//        ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);
+//    }
 
     private void showAlert(AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
@@ -96,8 +89,6 @@ public class RegistrazioneViewController {
         alert.showAndWait();
     }
     
-    
-    // Singleton: restituisco l'istanza di RegistrazioneViewController
     public static RegistrazioneViewController getInstance() {
         if (instance == null) {
             instance = new RegistrazioneViewController();

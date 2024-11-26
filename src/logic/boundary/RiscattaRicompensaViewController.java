@@ -84,8 +84,7 @@ public class RiscattaRicompensaViewController implements Observer{
 	private void caricaPuntiUtente() {
 		// idUtente è un intero, un tipo primitivo, non utilizzo Bean
 		int puntiUtente = riscattaRicompensaController.ottieniPuntiUtente();
-		labelSaldoPunti.setText(String.valueOf(puntiUtente));
-		
+		labelSaldoPunti.setText(String.valueOf(puntiUtente));	
 	}
 	
 	private void mostraRicompenseDisponibili() {
@@ -135,8 +134,6 @@ public class RiscattaRicompensaViewController implements Observer{
 		colDataRiscatto.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDataRiscatto()));
 		colDataScadenza.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDataScadenza()));
 		colPuntiUtilizzati.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getPunti()).asObject());
-		
-		
 	}
 
 	private List<RicompensaBean> getRicompenseRiscattate() {
@@ -203,9 +200,6 @@ public class RiscattaRicompensaViewController implements Observer{
 		alert.showAndWait();
 	}
 	
-
-	
-	// Singleton: restituisco l'istanza di RiscattaRicompensaViewController
 	public static RiscattaRicompensaViewController getInstance() {
 		if (instance == null) {
 			instance = new RiscattaRicompensaViewController();

@@ -101,12 +101,11 @@ public class RisolviSegnalazioneController {
 
 
 	public void eliminaSegnalazione(SegnalazioneBean segnalazioneBean) {	
-		try {
-			
+		try {	
 			segnalazioneDAO.eliminaSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean));
-			ListaSegnalazioniAttive.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); // qui
+			ListaSegnalazioniAttive.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); 
 		} catch (Exception e) {
-			e.printStackTrace();
+	        logger.severe("Errore nell'eliminazione della segnalazione: " + e.getMessage());
 		}
 	}
 	
@@ -167,8 +166,8 @@ public class RisolviSegnalazioneController {
 	    try {
 	        segnalazioneDAO.aggiornaStato(segnalazioneBean.getIdSegnalazione(), StatoSegnalazione.RISOLTA.getStato());
 	        
-			ListaSegnalazioniOperatore.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); // qui
-			ListaSegnalazioniRisolte.getInstance().aggiungiSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); // qui
+			ListaSegnalazioniOperatore.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); 
+			ListaSegnalazioniRisolte.getInstance().aggiungiSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); 
 
 	        return true;
 	    } catch (Exception e) {
@@ -196,12 +195,7 @@ public class RisolviSegnalazioneController {
 		}
 	}
 	
-	
-	
-	
-	private List<SegnalazioneBean> convertSegnalazioneListToBeanList(List<Segnalazione> segnalazioni) {
-
-		
+	private List<SegnalazioneBean> convertSegnalazioneListToBeanList(List<Segnalazione> segnalazioni) {	
         if (segnalazioni == null) {
             return new ArrayList<>();
         }
@@ -212,7 +206,7 @@ public class RisolviSegnalazioneController {
             SegnalazioneBean segnalazioneBean = convertSegnalazioneToBean(s);
             segnalazioneBeanList.add(segnalazioneBean);
         }
-
+        
         return segnalazioneBeanList;
 	}
 	
