@@ -45,7 +45,7 @@ public class UtenteDaoDatabase implements UtenteDao {
             }
             
         } catch (SQLException e) {
-            e.printStackTrace();
+        	logger.severe("Errore durante il recupero dei punti dell'utente: " + e.getMessage());
         }
         
         return punti;
@@ -70,12 +70,12 @@ public class UtenteDaoDatabase implements UtenteDao {
                 connessione.rollback();
             }
         } catch (SQLException e) {
-            e.printStackTrace(); 
+        	logger.severe("Errore durante l'operazione di aggiunta punti: " + e.getMessage());
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.severe("Errore durante la chiusura del PreparedStatement dopo l'operazione di aggiunta punti. Dettagli: " + e.getMessage());
             }
         }
     }
@@ -99,12 +99,12 @@ public class UtenteDaoDatabase implements UtenteDao {
                 connessione.rollback();
             }
         } catch (SQLException e) {
-            e.printStackTrace(); 
+        	logger.severe("Errore durante l'operazione di sottrazione punti: " + e.getMessage());
         } finally {
             try {
                 if (stmt != null) stmt.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.severe("Errore durante la chiusura del PreparedStatement dopo l'operazione di sottrazione punti. Dettagli: " + e.getMessage());
             }
         }
     }
@@ -129,7 +129,7 @@ public class UtenteDaoDatabase implements UtenteDao {
                 }
             }
         } catch (SQLException e) {
-            logger.severe("Errore durante l'esecuzione della query: " + e.getMessage());
+            logger.severe("Errore durante il recupero delle informazioni degli operatori ecologici. Dettagli: " + e.getMessage());
         }
 
         return operatoriEcologici;

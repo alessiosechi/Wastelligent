@@ -34,7 +34,7 @@ public class SegnalazioneDaoInMemory implements SegnalazioneDao {
     }
 
     @Override
-    public List<Segnalazione> trovaSegnalazioniRiscontrate(int idUtente) {
+    public List<Segnalazione> getSegnalazioniRiscontrate(int idUtente) {
         List<Segnalazione> segnalazioniFiltrate = new ArrayList<>();
         for (Segnalazione segnalazione : segnalazioni) {
             if (segnalazione.getIdUtente() == idUtente && StatoSegnalazione.RISCONTRATA.getStato().equals(segnalazione.getStato())) {
@@ -56,12 +56,11 @@ public class SegnalazioneDaoInMemory implements SegnalazioneDao {
     }
 
     @Override
-    public List<Segnalazione> getSegnalazioniAssegnate(int idOperatore, String stato) {
-        List<Segnalazione> segnalazioniFiltrate = getSegnalazioniByStato(stato);
+    public List<Segnalazione> getSegnalazioniAssegnate(int idOperatore) {        
         List<Segnalazione> segnalazioniOperatore = new ArrayList<>();
-        for (Segnalazione segnalazione : segnalazioniFiltrate) {
-            if (segnalazione.getIdOperatore() == idOperatore) {
-                segnalazioniOperatore.add(segnalazione);
+        for (Segnalazione segnalazione : segnalazioni) {
+            if (segnalazione.getIdOperatore() == idOperatore && StatoSegnalazione.IN_CORSO.getStato().equals(segnalazione.getStato())) {
+            	segnalazioniOperatore.add(segnalazione);
             }
         }
         return segnalazioniOperatore;

@@ -8,13 +8,12 @@ public interface SegnalazioneDao {
 	void salvaSegnalazione(Segnalazione segnalazione);
 	void eliminaSegnalazione(Segnalazione segnalazione);
     void aggiornaStato(int idSegnalazione, String stato);
-	
-	List<Segnalazione> trovaSegnalazioniRiscontrate(int idUtente);
+    
 	List<Segnalazione> getSegnalazioniByStato(String stato);
-	List<Segnalazione> getSegnalazioniAssegnate(int idOperatore, String stato);
+	List<Segnalazione> getSegnalazioniRiscontrate(int idUtente);
+	List<Segnalazione> getSegnalazioniAssegnate(int idOperatore);
 	
 
-	
     void assegnaOperatore(int idSegnalazione, int idOperatore);
     void assegnaPunti(int idSegnalazione, int punti);
     

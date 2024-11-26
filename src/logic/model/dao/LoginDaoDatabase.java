@@ -53,13 +53,15 @@ public class LoginDaoDatabase implements LoginDao{
 	                        throw new IllegalArgumentException("Ruolo sconosciuto: " + ruolo);
 	                }
 	            } else {
-	                return -1; // username e/o password non validi
+                    logger.warning("Username e/o password non validi!");
+	                return -1; 
 	            }
 	        }
 	    } catch (SQLException e) {
+	    	logger.severe("Errore durante l'autenticazione dell'utente: " + e.getMessage());
 	        return -1;
 	    } catch (Exception e) {
-	        e.printStackTrace();
+            logger.severe("Errore durante il processo di autenticazione: " + e.getMessage());
 	        return -1;
 	    }
 	}
@@ -76,11 +78,12 @@ public class LoginDaoDatabase implements LoginDao{
 	            if (rs.next()) {
 	                return rs.getInt("id_utente");  
 	            } else {
+                    logger.warning("Username non trovato!");
 	                return -1; 
 	            }
 	        }
 	    } catch (SQLException e) {
-	        e.printStackTrace();  
+            logger.severe("Errore durante il recupero dell'identificativo: " + e.getMessage());
 	        return -1; 
 	    }
 	}
@@ -129,7 +132,7 @@ public class LoginDaoDatabase implements LoginDao{
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace(); 
+            logger.severe("Errore durante la verifica della disponibilità dello username: "+ e.getMessage());
             return false;  
         }
     }

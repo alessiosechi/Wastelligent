@@ -208,7 +208,7 @@ public class RiscattaRicompensaController {
 
 	public List<SegnalazioneBean> ottieniSegnalazioniRiscontrate() {
 		try {
-			List<Segnalazione> segnalazioniUtente = segnalazioneDAO.trovaSegnalazioniRiscontrate(idUtente);
+			List<Segnalazione> segnalazioniUtente = segnalazioneDAO.getSegnalazioniRiscontrate(idUtente);
 
 			if (!segnalazioniUtente.isEmpty()) {
 

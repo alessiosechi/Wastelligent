@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import logic.model.domain.Ricompensa;
 
@@ -18,6 +19,7 @@ public class RicompensaDaoDatabase implements RicompensaDao {
 	}
 
 	private static volatile RicompensaDaoDatabase instance;
+	private static final Logger logger = Logger.getLogger(RicompensaDaoDatabase.class.getName());
 
 	public static RicompensaDaoDatabase getInstance() {
 		RicompensaDaoDatabase result = instance;
@@ -61,13 +63,13 @@ public class RicompensaDaoDatabase implements RicompensaDao {
 				connessione.rollback();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace(); 
+		    logger.severe("Errore durante l'inserimento della ricompensa riscattata: " + e.getMessage());
 		} finally {
 			try {
 				if (stmt != null)
 					stmt.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+		        logger.severe("Errore durante la chiusura del PreparedStatement dopo l'inserimento della ricompensa riscattata. Dettagli: " + e.getMessage());
 			}
 		}
 
@@ -103,7 +105,7 @@ public class RicompensaDaoDatabase implements RicompensaDao {
 	            }
 	        }
 	    } catch (SQLException e) {
-	        e.printStackTrace(); 
+	        logger.severe("Errore durante il recupero delle ricompense dell'utente: "+e.getMessage());
 	    }
 
 	    return ricompense;

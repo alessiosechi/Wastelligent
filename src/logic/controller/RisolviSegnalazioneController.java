@@ -140,7 +140,7 @@ public class RisolviSegnalazioneController {
     	UtenteCorrente utente=UtenteCorrente.getInstance();
     	   
 		try {
-	        List<Segnalazione> segnalazioniDaRisolvere=segnalazioneDAO.getSegnalazioniAssegnate(utente.getUtente().getIdUtente(), StatoSegnalazione.IN_CORSO.getStato());
+	        List<Segnalazione> segnalazioniDaRisolvere=segnalazioneDAO.getSegnalazioniAssegnate(utente.getUtente().getIdUtente());
 
 			if (!segnalazioniDaRisolvere.isEmpty()) {
 				for (Segnalazione s : segnalazioniDaRisolvere) {

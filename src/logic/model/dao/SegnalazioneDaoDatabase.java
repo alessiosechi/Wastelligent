@@ -14,13 +14,15 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 
 	private static volatile SegnalazioneDaoDatabase instance;
 	private static final Logger logger = Logger.getLogger(SegnalazioneDaoDatabase.class.getName());
-    private static final String COL_DESCRIZIONE = "descrizione";
-    private static final String COL_LATITUDINE = "latitudine";
-    private static final String COL_LONGITUDINE = "longitudine";
-    private static final String COL_STATO = "stato";
+    private static final String ERRORE_CHIUSURA_STATEMENT = "Errore durante la chiusura dello statement: ";
+
     private static final String COL_ID_SEGNALAZIONE = "id_segnalazione";
     private static final String COL_ID_UTENTE = "id_utente";
+    private static final String COL_DESCRIZIONE = "descrizione";
     private static final String COL_FOTO = "foto";
+    private static final String COL_STATO = "stato";
+    private static final String COL_LATITUDINE = "latitudine";
+    private static final String COL_LONGITUDINE = "longitudine";
     private static final String COL_PUNTI = "punti";
 
 	private SegnalazioneDaoDatabase() {
@@ -42,7 +44,7 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	}
 
 	@Override
-	public void salvaSegnalazione(Segnalazione segnalazione) {
+	public void salvaSegnalazione(Segnalazione segnalazione) { 
 	    Connection connessione = null;
 	    PreparedStatement stmt = null;
 
@@ -68,10 +70,8 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	        int righeInserite = stmt.executeUpdate();
 	        if (righeInserite > 0) {
 	            connessione.commit();
-	            logger.info("Segnalazione registrata con successo");
 	        } else {
 	            connessione.rollback();
-	            logger.info("Errore nella registrazione della segnalazione");
 	        }
 	        
 	        /*
@@ -83,21 +83,23 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	         */
 	        
 		} catch (SQLException e) {
-			logger.severe("Errore durante la registrazione della segnalazione: " + e.getMessage());
+			logger.severe("Errore durante il salvataggio della segnalazione: " + e.getMessage());
 		} catch (Exception e) {
-			logger.severe( e.getMessage());
+			logger.severe("Errore inaspettato durante il salvataggio della segnalazione: " + e.getMessage());
 	    } finally {
 	        try {
 	            if (stmt != null) stmt.close();
 	        } catch (SQLException e) {
-	        	logger.warning("Errore durante la chiusura dello statement: " + e.getMessage());
+	            logger.severe(ERRORE_CHIUSURA_STATEMENT + e.getMessage()); 
 	        }
 	    }
 	}
 	
 	
+	
+	
 	@Override
-	public List<Segnalazione> trovaSegnalazioniRiscontrate(int idUtente) {
+	public List<Segnalazione> getSegnalazioniRiscontrate(int idUtente) {
 	    List<Segnalazione> segnalazioni = new ArrayList<>();
 	    String sql = "SELECT s." + COL_ID_SEGNALAZIONE + ", s." + COL_DESCRIZIONE + ", s.foto, s." + COL_STATO + ", s." + COL_LATITUDINE + ", s." + COL_LONGITUDINE + ", ps.punti " +
 	                 "FROM segnalazioni s " +
@@ -123,12 +125,44 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	            }
 	        }
 	    } catch (SQLException e) {
-	        e.printStackTrace();
+	        logger.severe("Errore durante il recupero delle segnalazioni riscontrate: " +e.getMessage());
 	    } catch (Exception e) {
-	        logger.severe(e.getMessage());
+	        logger.severe("Errore inaspetatto durante il recupero delle segnalazioni riscontrate: " +e.getMessage());
 	    }
 
 	    return segnalazioni;
+	}
+	
+	@Override
+	public void eliminaSegnalazione(Segnalazione segnalazione) {
+	    Connection connessione = null;
+	    PreparedStatement stmt = null;
+
+	    try {
+	        connessione = DBConnection.getConnection();
+	        
+	        String sql = "DELETE FROM segnalazioni WHERE " + COL_ID_SEGNALAZIONE + " = ?";
+	        
+	        stmt = connessione.prepareStatement(sql);
+	        stmt.setInt(1, segnalazione.getIdSegnalazione()); 
+
+	        int righeEliminate = stmt.executeUpdate();
+	        if (righeEliminate > 0) {
+	            connessione.commit();
+	            logger.info("Segnalazione eliminata con successo");
+	        } else {
+	            connessione.rollback();
+	            logger.info("Errore: nessuna segnalazione trovata con l'ID specificato");
+	        }
+	    } catch (SQLException e) {
+	        logger.severe("Errore durante l'eliminazione della segnalazione: " + e.getMessage());
+	    } finally {
+	        try {
+	            if (stmt != null) stmt.close();
+	        } catch (SQLException e) {
+	            logger.severe(ERRORE_CHIUSURA_STATEMENT + e.getMessage()); 
+	        }
+	    }
 	}
 
 
@@ -160,47 +194,15 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	            }
 	        }
 	    } catch (SQLException e) {
-	        e.printStackTrace();
+	        logger.severe("Errore durante il recupero delle segnalazioni con stato " + stato + ": " + e.getMessage());
 	    } catch (Exception e) {
-	        logger.severe(e.getMessage());
+	        logger.severe("Errore inaspettato durante il recupero delle segnalazioni con stato " + stato + ": " + e.getMessage());
 	    }
 
 	    return segnalazioni;
 	}
 
 
-
-	@Override
-	public void eliminaSegnalazione(Segnalazione segnalazione) {
-	    Connection connessione = null;
-	    PreparedStatement stmt = null;
-
-	    try {
-	        connessione = DBConnection.getConnection();
-	        
-	        String sql = "DELETE FROM segnalazioni WHERE " + COL_ID_SEGNALAZIONE + " = ?";
-	        
-	        stmt = connessione.prepareStatement(sql);
-	        stmt.setInt(1, segnalazione.getIdSegnalazione()); 
-
-	        int righeEliminate = stmt.executeUpdate();
-	        if (righeEliminate > 0) {
-	            connessione.commit();
-	            logger.info("Segnalazione eliminata con successo");
-	        } else {
-	            connessione.rollback();
-	            logger.info("Errore: nessuna segnalazione trovata con l'ID specificato");
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    } finally {
-	        try {
-	            if (stmt != null) stmt.close();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
-	}
 	
 	@Override
 	public void assegnaOperatore(int idSegnalazione, int idOperatore) {
@@ -226,18 +228,17 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	        } else {
 	            connessione.rollback();
 	        }
-
 	    } catch (SQLException e) {
             try {
-                connessione.rollback(); 
+            	connessione.rollback(); 
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                logger.severe("Errore durante il rollback: " + ex.getMessage());
             }
 	    } finally {
 	        try {
 	            if (stmtAssegnazione != null) stmtAssegnazione.close();
 	        } catch (SQLException e) {
-	            e.printStackTrace(); 
+	            logger.warning(ERRORE_CHIUSURA_STATEMENT + e.getMessage());
 	        }
 	    }
 	}
@@ -274,24 +275,24 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	            connessione.rollback(); 
 	        }
 	    } catch (SQLException e) {
+	        logger.severe("Errore durante l'assegnazione dei punti: " + e.getMessage());
             try {
                 connessione.rollback(); 
             } catch (SQLException rollbackEx) {
-                rollbackEx.printStackTrace(); 
+                logger.severe("Errore durante il rollback dopo l'assegnazione dei punti: " + rollbackEx.getMessage());
             }
 	    } finally {
 	        try {
 	            if (stmtPunti != null) stmtPunti.close(); 
-
 	        } catch (SQLException e) {
-	            e.printStackTrace(); 
+	            logger.severe(ERRORE_CHIUSURA_STATEMENT + e.getMessage());
 	        }
 	    }
 	}
 
 
 	@Override
-	public List<Segnalazione> getSegnalazioniAssegnate(int idOperatore, String stato) {
+	public List<Segnalazione> getSegnalazioniAssegnate(int idOperatore) {
 	    List<Segnalazione> segnalazioni = new ArrayList<>();
 	    String sql = "SELECT s." + COL_ID_SEGNALAZIONE + ", s." + COL_ID_UTENTE + ", s." + COL_DESCRIZIONE + 
 	                 ", s." + COL_FOTO + ", s." + COL_STATO + ", s." + COL_LATITUDINE + ", s." + COL_LONGITUDINE +
@@ -301,7 +302,7 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	    try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)) {
 
 	        stmt.setInt(1, idOperatore); 
-	        stmt.setString(2, stato);  
+	        stmt.setString(2, StatoSegnalazione.IN_CORSO.getStato());  
 
 	        try (ResultSet resultSet = stmt.executeQuery()) {
 
@@ -320,9 +321,9 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	            }
 	        }
 	    } catch (SQLException e) {
-	        e.printStackTrace();
+	        logger.severe("Errore durante il recupero delle segnalazioni assegnate: " + e.getMessage());
 	    } catch (Exception e) {
-	        logger.severe("Errore inaspettato: " + e.getMessage());
+	        logger.severe("Errore inaspettato durante il recupero delle segnalazioni assegnate: " + e.getMessage());
 	    }
 
 	    return segnalazioni;
@@ -352,17 +353,17 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	        }
 
 	    } catch (SQLException e) {
-	        e.printStackTrace(); 
+	        logger.severe("Errore durante l'aggiornamento dello stato della segnalazione: " + e.getMessage()); 
             try {
                 connessione.rollback(); 
             } catch (SQLException rollbackEx) {
-                rollbackEx.printStackTrace(); 
+                logger.severe("Errore durante il rollback dopo l'aggiornamento dello stato: " + rollbackEx.getMessage());
             }
 	    } finally {
 	        try {
 	            if (stmt != null) stmt.close(); 
 	        } catch (SQLException e) {
-	            e.printStackTrace(); 
+	            logger.severe(ERRORE_CHIUSURA_STATEMENT + e.getMessage()); 
 	        }
 	    }
 	}
