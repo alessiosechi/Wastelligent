@@ -103,7 +103,6 @@ public class DettagliSegnalazioneViewController {
 
 	@FXML
 	public void initialize() {
-
         configureView();
 	    loadImage();
 	    setupMapView();
