@@ -14,8 +14,6 @@ import logic.model.domain.Ricompensa;
 
 public class RicompensaDaoDatabase implements RicompensaDao {
 	
-	
-	
 	private RicompensaDaoDatabase(){
 	}
 
@@ -76,60 +74,40 @@ public class RicompensaDaoDatabase implements RicompensaDao {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
 	@Override
 	public List<Ricompensa> getRicompenseByUtente(int idUtente) {
 	    List<Ricompensa> ricompense = new ArrayList<>();
-	    Connection connessione = null;
-	    PreparedStatement stmt = null;
-	    ResultSet resultSet = null;
 	    
-	    
+	    String sql = "SELECT id_ricompensa, nome, descrizione, codice_riscatto, valore, data_riscatto, data_scadenza, punti_utilizzati " +
+	                 "FROM ricompense WHERE id_utente = ?";
 
-
-	    try {
-	        connessione = DBConnection.getConnection();
-
-	        String sql = "SELECT id_ricompensa, nome, descrizione, codice_riscatto, valore, data_riscatto, data_scadenza, punti_utilizzati " +
-	                     "FROM ricompense WHERE id_utente = ?";
-
-	        stmt = connessione.prepareStatement(sql);
+	    try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)) {
+	        
 	        stmt.setInt(1, idUtente);
+	        
+	        try (ResultSet resultSet = stmt.executeQuery()) {
+	            while (resultSet.next()) {
+	                String nome = resultSet.getString("nome");
+	                String descrizione = resultSet.getString("descrizione");
+	                String codiceRiscatto = resultSet.getString("codice_riscatto");
+	                int valore = resultSet.getInt("valore");
+	                Date dataRiscatto = resultSet.getDate("data_riscatto");
+	                Date dataScadenza = resultSet.getDate("data_scadenza");
+	                int puntiUtilizzati = resultSet.getInt("punti_utilizzati");
 
-	        resultSet = stmt.executeQuery();
-
-	        while (resultSet.next()) {
-	        		
-	            String nome = resultSet.getString("nome");
-	            String descrizione = resultSet.getString("descrizione");
-	            String codiceRiscatto = resultSet.getString("codice_riscatto");
-	            int valore = resultSet.getInt("valore");
-	            Date dataRiscatto = resultSet.getDate("data_riscatto");
-	            Date dataScadenza = resultSet.getDate("data_scadenza");
-	            int puntiUtilizzati = resultSet.getInt("punti_utilizzati");
-
-	            Ricompensa ricompensa = new Ricompensa(nome,descrizione, valore,codiceRiscatto, dataRiscatto.toString(), dataScadenza.toString(), puntiUtilizzati);
-	            ricompense.add(ricompensa);
-	            
+	                Ricompensa ricompensa = new Ricompensa(nome, descrizione, valore, codiceRiscatto, 
+	                        dataRiscatto != null ? dataRiscatto.toString() : null, 
+	                        dataScadenza != null ? dataScadenza.toString() : null, 
+	                        puntiUtilizzati);
+	                ricompense.add(ricompensa);
+	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace(); 
-	    } finally {
-	        try {
-	            if (resultSet != null) resultSet.close();
-	            if (stmt != null) stmt.close();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
 	    }
 
 	    return ricompense;
 	}
+	
 
 }

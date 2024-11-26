@@ -29,35 +29,25 @@ public class UtenteDaoDatabase implements UtenteDao {
         }
         return result;
     }
-
-    @Override
+    
     public int estraiPuntiUtente(int idUtente) {
         int punti = 0;
-        Connection connessione = null;
-        PreparedStatement stmt = null;
-        ResultSet resultSet = null;
-
-        try {
-            connessione = DBConnection.getConnection();
-            String sql = "SELECT punti FROM punti_utenti WHERE id_utente = ?";
-            stmt = connessione.prepareStatement(sql);
+        String sql = "SELECT punti FROM punti_utenti WHERE id_utente = ?";
+        
+        try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)) {
+            
             stmt.setInt(1, idUtente);
-
-            resultSet = stmt.executeQuery();
-
-            if (resultSet.next()) {
-                punti = resultSet.getInt("punti");
+            
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                if (resultSet.next()) {
+                    punti = resultSet.getInt("punti");
+                }
             }
+            
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (resultSet != null) resultSet.close();
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
+        
         return punti;
     }
 
@@ -119,43 +109,32 @@ public class UtenteDaoDatabase implements UtenteDao {
         }
     }
     
-    
     @Override
-    public List<OperatoreEcologico> estraiOperatoriEcologici(){
+    public List<OperatoreEcologico> estraiOperatoriEcologici() {
         List<OperatoreEcologico> operatoriEcologici = new ArrayList<>();
-        Connection connessione = null;
-        PreparedStatement stmt = null;
-        ResultSet resultSet = null;
+        
+        String sql = "SELECT id_utente, username FROM utenti WHERE tipo_utente = ?";
 
-        try {
-            connessione = DBConnection.getConnection();
+        try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)) {
 
-			String sql = "SELECT id_utente, username " + "FROM utenti " + "WHERE tipo_utente = ?";
-
-            stmt = connessione.prepareStatement(sql);
             stmt.setInt(1, Ruolo.OPERATORE_ECOLOGICO.getId());
 
-            resultSet = stmt.executeQuery();
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                while (resultSet.next()) {
+                    int idUtente = resultSet.getInt("id_utente");
+                    String username = resultSet.getString("username");
 
-            while (resultSet.next()) {
-                int idUtente = resultSet.getInt("id_utente");
-                String username = resultSet.getString("username");
-
-                OperatoreEcologico operatore = new OperatoreEcologico(idUtente, username);
-                operatoriEcologici.add(operatore);
+                    OperatoreEcologico operatore = new OperatoreEcologico(idUtente, username);
+                    operatoriEcologici.add(operatore);
+                }
             }
         } catch (SQLException e) {
-			logger.severe("Errore durante l'esecuzione della query: " + e.getMessage());
-        } finally {
-            try {
-                if (resultSet != null) resultSet.close();
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-    			logger.severe("Errore durante la chiusura dello statement: " + e.getMessage());
-            }
+            logger.severe("Errore durante l'esecuzione della query: " + e.getMessage());
         }
 
         return operatoriEcologici;
     }
+
+    
 
 }

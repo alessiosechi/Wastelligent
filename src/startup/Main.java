@@ -12,7 +12,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setResizable(false); // non si può ridimensionare la finestra
-        PersistenceConfigurator.configurePersistence(PersistenceProvider.IN_MEMORY); 
+        PersistenceConfigurator.configurePersistence(PersistenceProvider.DATABASE); 
         
         ViewLoader.setStage(primaryStage);   
         ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);   

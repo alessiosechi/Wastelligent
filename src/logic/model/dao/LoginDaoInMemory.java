@@ -6,6 +6,7 @@ import java.util.Map;
 import logic.model.domain.EspertoEcologico;
 import logic.model.domain.ListaOperatoriEcologici;
 import logic.model.domain.OperatoreEcologico;
+import logic.model.domain.Ruolo;
 import logic.model.domain.Utente;
 import logic.model.domain.UtenteBase;
 
@@ -53,11 +54,11 @@ public class LoginDaoInMemory implements LoginDao {
         if (usernamePasswordMap.containsKey(username) && usernamePasswordMap.get(username).equals(password)) {
             Utente utente = utentiInMemory.get(username);
             if (utente instanceof UtenteBase) {
-                return 1; 
+                return Ruolo.UTENTE_BASE.getId(); 
             } else if (utente instanceof EspertoEcologico) {
-                return 2;
+                return Ruolo.ESPERTO_ECOLOGICO.getId();
             } else if (utente instanceof OperatoreEcologico) {
-                return 3; 
+                return Ruolo.OPERATORE_ECOLOGICO.getId(); 
             }
         }
         return -1; 

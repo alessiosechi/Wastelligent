@@ -54,7 +54,7 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	        stmt.setInt(1, segnalazione.getIdUtente());
 	        stmt.setString(2, segnalazione.getDescrizione());
 	        
-	        // Imposta il valore per il campo foto
+	        // imposto il valore per il campo foto
 	        if (segnalazione.getFoto() != null) {
 	            stmt.setBytes(3, segnalazione.getFoto().getBytes());
 	        } else {
@@ -82,11 +82,10 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	         * Io non chiudo la connessione, ma utilizzo la stessa, pertanto devo gestire questo aspetto.
 	         */
 	        
-
 		} catch (SQLException e) {
 			logger.severe("Errore durante la registrazione della segnalazione: " + e.getMessage());
 		} catch (Exception e) {
-			logger.severe("Errore inaspettato: " + e.getMessage());
+			logger.severe( e.getMessage());
 	    } finally {
 	        try {
 	            if (stmt != null) stmt.close();
@@ -97,105 +96,78 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	}
 	
 	
-	
-	
-	
 	@Override
 	public List<Segnalazione> trovaSegnalazioniRiscontrate(int idUtente) {
 	    List<Segnalazione> segnalazioni = new ArrayList<>();
-	    Connection connessione = null;
-	    PreparedStatement stmt = null;
-	    ResultSet resultSet = null;
+	    String sql = "SELECT s." + COL_ID_SEGNALAZIONE + ", s." + COL_DESCRIZIONE + ", s.foto, s." + COL_STATO + ", s." + COL_LATITUDINE + ", s." + COL_LONGITUDINE + ", ps.punti " +
+	                 "FROM segnalazioni s " +
+	                 "LEFT JOIN punti_segnalazioni ps ON s." + COL_ID_SEGNALAZIONE + " = ps." + COL_ID_SEGNALAZIONE +
+	                 " WHERE s." + COL_ID_UTENTE + " = ? AND s." + COL_STATO + " = ?";
 
-	    try {
-	        connessione = DBConnection.getConnection();
+	    try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)) {
 
-	        String sql = "SELECT s." + COL_ID_SEGNALAZIONE + ", s." + COL_DESCRIZIONE + ", s.foto, s." + COL_STATO + ", s." + COL_LATITUDINE + ", s." + COL_LONGITUDINE + ", ps.punti " +
-                    "FROM segnalazioni s " +
-                    "LEFT JOIN punti_segnalazioni ps ON s." + COL_ID_SEGNALAZIONE + " = ps." + COL_ID_SEGNALAZIONE +
-                    " WHERE s." + COL_ID_UTENTE + " = ? AND s." + COL_STATO + " = 'Riscontrata'";
-
-	        stmt = connessione.prepareStatement(sql);
 	        stmt.setInt(1, idUtente);
+	        stmt.setString(2, StatoSegnalazione.RISCONTRATA.getStato()); 
 
-	        resultSet = stmt.executeQuery();
+	        try (ResultSet resultSet = stmt.executeQuery()) {
+	            while (resultSet.next()) {
+	                Segnalazione segnalazione = new Segnalazione();
+	                segnalazione.setDescrizione(resultSet.getString(COL_DESCRIZIONE));
+	                segnalazione.setFoto(resultSet.getString(COL_FOTO));
+	                segnalazione.setStato(resultSet.getString(COL_STATO));
+	                segnalazione.setLatitudine(resultSet.getDouble(COL_LATITUDINE));
+	                segnalazione.setLongitudine(resultSet.getDouble(COL_LONGITUDINE));
+	                segnalazione.setPuntiAssegnati(resultSet.getInt(COL_PUNTI));
 
-	        while (resultSet.next()) {
-
-	            
-                Segnalazione segnalazione = new Segnalazione();
-                segnalazione.setDescrizione(resultSet.getString(COL_DESCRIZIONE));
-                segnalazione.setFoto(resultSet.getString(COL_FOTO));
-                segnalazione.setStato(resultSet.getString(COL_STATO));
-                segnalazione.setLatitudine(resultSet.getDouble(COL_LATITUDINE));
-                segnalazione.setLongitudine(resultSet.getDouble(COL_LONGITUDINE));
-
-                int puntiAssegnati = resultSet.getInt(COL_PUNTI);
-                segnalazione.setPuntiAssegnati(puntiAssegnati);
-                segnalazioni.add(segnalazione);
+	                segnalazioni.add(segnalazione);
+	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    } catch (Exception e) {
-			logger.severe("Errore inaspettato: " + e.getMessage());
-	    } finally {
-	        try {
-	            if (resultSet != null) resultSet.close();
-	            if (stmt != null) stmt.close();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
+	        logger.severe(e.getMessage());
 	    }
+
 	    return segnalazioni;
 	}
 
 
-	
-	
 	@Override
 	public List<Segnalazione> getSegnalazioniByStato(String stato)  {
 	    List<Segnalazione> segnalazioni = new ArrayList<>();
-	    Connection connessione = null;
-	    PreparedStatement stmt = null;
-	    ResultSet resultSet = null;
+	    String sql = "SELECT " + COL_ID_SEGNALAZIONE + ", " + COL_ID_UTENTE + ", " + COL_DESCRIZIONE + ", " + COL_FOTO +
+	                 ", " + COL_STATO + ", " + COL_LATITUDINE + ", " + COL_LONGITUDINE + " FROM segnalazioni " +
+	                 "WHERE " + COL_STATO + " = ?";
 
-	    try {
-	        connessione = DBConnection.getConnection();
+	    try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)) {
 
-	        String sql = "SELECT " + COL_ID_SEGNALAZIONE + ", " + COL_ID_UTENTE + ", " + COL_DESCRIZIONE + ", " + COL_FOTO +
-                    ", " + COL_STATO + ", " + COL_LATITUDINE + ", " + COL_LONGITUDINE + " FROM segnalazioni " +
-                    "WHERE " + COL_STATO + " = ?";
-
-	        stmt = connessione.prepareStatement(sql);
 	        stmt.setString(1, stato); 
 
-	        resultSet = stmt.executeQuery();
+	        try (ResultSet resultSet = stmt.executeQuery()) {
 
-	        while (resultSet.next()) {
-	            Segnalazione segnalazione = new Segnalazione();
+	            while (resultSet.next()) {
+	                Segnalazione segnalazione = new Segnalazione();
 
-	            segnalazione.setIdSegnalazione(resultSet.getInt(COL_ID_SEGNALAZIONE));
-	            segnalazione.setIdUtente(resultSet.getInt(COL_ID_UTENTE));
-	            segnalazione.setDescrizione(resultSet.getString(COL_DESCRIZIONE));
-	            segnalazione.setFoto(resultSet.getString(COL_FOTO));
-	            segnalazione.setStato(resultSet.getString(COL_STATO));
-	            segnalazione.setLatitudine(resultSet.getDouble(COL_LATITUDINE));
-	            segnalazione.setLongitudine(resultSet.getDouble(COL_LONGITUDINE));
-	            segnalazioni.add(segnalazione);
+	                segnalazione.setIdSegnalazione(resultSet.getInt(COL_ID_SEGNALAZIONE));
+	                segnalazione.setIdUtente(resultSet.getInt(COL_ID_UTENTE));
+	                segnalazione.setDescrizione(resultSet.getString(COL_DESCRIZIONE));
+	                segnalazione.setFoto(resultSet.getString(COL_FOTO));
+	                segnalazione.setStato(resultSet.getString(COL_STATO));
+	                segnalazione.setLatitudine(resultSet.getDouble(COL_LATITUDINE));
+	                segnalazione.setLongitudine(resultSet.getDouble(COL_LONGITUDINE));
+
+	                segnalazioni.add(segnalazione);
+	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	    } finally {
-	        try {
-	            if (resultSet != null) resultSet.close();
-	            if (stmt != null) stmt.close();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
+	    } catch (Exception e) {
+	        logger.severe(e.getMessage());
 	    }
 
 	    return segnalazioni;
 	}
+
 
 
 	@Override
@@ -229,6 +201,7 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	        }
 	    }
 	}
+	
 	@Override
 	public void assegnaOperatore(int idSegnalazione, int idOperatore) {
 	    Connection connessione = null;
@@ -282,11 +255,15 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	        String sqlPunti = "INSERT INTO punti_segnalazioni (" + COL_ID_SEGNALAZIONE + ", " + COL_PUNTI + ") " +
                     "VALUES (?, ?) " +
                     "ON DUPLICATE KEY UPDATE " + COL_PUNTI + " = ?";
+	        /*
+	         * se esiste già un record con lo stesso id_segnalazione, la query non inserisce 
+	         * un nuovo record ma aggiorna quello esistente
+	         */
 
 	        stmtPunti = connessione.prepareStatement(sqlPunti);
 	        stmtPunti.setInt(1, idSegnalazione);  
 	        stmtPunti.setInt(2, punti);            
-	        stmtPunti.setInt(3, punti);            // Aggiorna i punti in caso di conflitto
+	        stmtPunti.setInt(3, punti);            
 
 	        int righeInserite = stmtPunti.executeUpdate();
 
@@ -313,56 +290,45 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 	}
 
 
-	
-	
 	@Override
-	public List<Segnalazione> getSegnalazioniAssegnate(int idOperatore, String stato)  {
+	public List<Segnalazione> getSegnalazioniAssegnate(int idOperatore, String stato) {
 	    List<Segnalazione> segnalazioni = new ArrayList<>();
-	    Connection connessione = null;
-	    PreparedStatement stmt = null;
-	    ResultSet resultSet = null;
+	    String sql = "SELECT s." + COL_ID_SEGNALAZIONE + ", s." + COL_ID_UTENTE + ", s." + COL_DESCRIZIONE + 
+	                 ", s." + COL_FOTO + ", s." + COL_STATO + ", s." + COL_LATITUDINE + ", s." + COL_LONGITUDINE +
+	                 " FROM segnalazioni s JOIN assegnazioni a ON s." + COL_ID_SEGNALAZIONE + " = a.id_segnalazione " +
+	                 "WHERE a.id_operatore = ? AND s." + COL_STATO + " = ?";
 
-	    try {
-	        connessione = DBConnection.getConnection();
+	    try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)) {
 
-	        String sql = "SELECT s." + COL_ID_SEGNALAZIONE + ", s." + COL_ID_UTENTE + ", s." + COL_DESCRIZIONE + 
-                    ", s." + COL_FOTO + ", s." + COL_STATO + ", s." + COL_LATITUDINE + ", s." + COL_LONGITUDINE +
-                    " FROM segnalazioni s JOIN assegnazioni a ON s." + COL_ID_SEGNALAZIONE + " = a.id_segnalazione " +
-                    "WHERE a.id_operatore = ? AND s." + COL_STATO + " = ?";
-
-	        stmt = connessione.prepareStatement(sql);
 	        stmt.setInt(1, idOperatore); 
 	        stmt.setString(2, stato);  
 
-	        resultSet = stmt.executeQuery();
+	        try (ResultSet resultSet = stmt.executeQuery()) {
 
-	        while (resultSet.next()) {
-	            Segnalazione segnalazione = new Segnalazione();
-	            segnalazione.setIdSegnalazione(resultSet.getInt(COL_ID_SEGNALAZIONE));
-	            segnalazione.setIdUtente(resultSet.getInt(COL_ID_UTENTE));
-	            segnalazione.setDescrizione(resultSet.getString(COL_DESCRIZIONE));
-	            segnalazione.setFoto(resultSet.getString(COL_FOTO));
-	            segnalazione.setStato(resultSet.getString(COL_STATO));
-	            segnalazione.setLatitudine(resultSet.getDouble(COL_LATITUDINE));
-	            segnalazione.setLongitudine(resultSet.getDouble(COL_LONGITUDINE));
-	            segnalazione.setIdOperatore(idOperatore);
-	            
-	            segnalazioni.add(segnalazione);
+	            while (resultSet.next()) {
+	                Segnalazione segnalazione = new Segnalazione();
+	                segnalazione.setIdSegnalazione(resultSet.getInt(COL_ID_SEGNALAZIONE));
+	                segnalazione.setIdUtente(resultSet.getInt(COL_ID_UTENTE));
+	                segnalazione.setDescrizione(resultSet.getString(COL_DESCRIZIONE));
+	                segnalazione.setFoto(resultSet.getString(COL_FOTO));
+	                segnalazione.setStato(resultSet.getString(COL_STATO));
+	                segnalazione.setLatitudine(resultSet.getDouble(COL_LATITUDINE));
+	                segnalazione.setLongitudine(resultSet.getDouble(COL_LONGITUDINE));
+	                segnalazione.setIdOperatore(idOperatore);
+
+	                segnalazioni.add(segnalazione);
+	            }
 	        }
 	    } catch (SQLException e) {
-	        e.printStackTrace(); 
-	    } finally {
-	        try {
-	            if (resultSet != null) resultSet.close();
-	            if (stmt != null) stmt.close();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
+	        e.printStackTrace();
+	    } catch (Exception e) {
+	        logger.severe("Errore inaspettato: " + e.getMessage());
 	    }
+
 	    return segnalazioni;
 	}
 
-	
+
 	
 	@Override
 	public void aggiornaStato(int idSegnalazione, String stato) {

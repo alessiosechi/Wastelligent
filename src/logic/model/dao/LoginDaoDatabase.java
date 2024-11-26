@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-import logic.model.dao.queries.LoginQueries;
 import logic.model.domain.Ruolo;
 
 public class LoginDaoDatabase implements LoginDao{
@@ -30,71 +29,62 @@ public class LoginDaoDatabase implements LoginDao{
 		return result;
 	}
 	
-	
+	@Override
 	public int autenticazione(String username, String password) {
 
-	    ResultSet rs = null;
+	    String sql = "SELECT r.nome FROM utenti u JOIN ruoli r ON u.tipo_utente = r.id_ruolo WHERE u.username = ? AND u.password_hash = ?";
 
-	    try {
-	        rs = LoginQueries.login(username, password);
-	        
-	        if (rs.next()) {
-	            String ruolo = rs.getString("nome");
-	            switch (ruolo) {
-	                case "UTENTE_BASE":
-	                    return 1;
-	                case "ESPERTO_ECOLOGICO":
-	                    return 2;
-	                case "OPERATORE_ECOLOGICO":
-	                    return 3;
-	                default:
-	                    throw new IllegalArgumentException("Ruolo sconosciuto: " + ruolo);
+	    try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)) {
+
+	        stmt.setString(1, username);
+	        stmt.setString(2, password);
+
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            if (rs.next()) {
+	                String ruolo = rs.getString("nome");
+	                switch (ruolo) {
+	                    case "UTENTE_BASE":
+	                        return Ruolo.UTENTE_BASE.getId();
+	                    case "ESPERTO_ECOLOGICO":
+	                        return Ruolo.ESPERTO_ECOLOGICO.getId();
+	                    case "OPERATORE_ECOLOGICO":
+	                        return Ruolo.OPERATORE_ECOLOGICO.getId();
+	                    default:
+	                        throw new IllegalArgumentException("Ruolo sconosciuto: " + ruolo);
+	                }
+	            } else {
+	                return -1; // username e/o password non validi
 	            }
-	        } else {
-	            return -1; // username o password non validi
 	        }
 	    } catch (SQLException e) {
 	        return -1;
-	    } finally {
-	        try {
-	            if (rs != null) rs.close();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return -1;
+	    }
+	}
+	
+	@Override
+	public int getIdByUsername(String username) {
+	    String sql = "SELECT id_utente FROM utenti WHERE username = ?";
+
+	    try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)) {
+
+	        stmt.setString(1, username);
+
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            if (rs.next()) {
+	                return rs.getInt("id_utente");  
+	            } else {
+	                return -1; 
+	            }
 	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();  
+	        return -1; 
 	    }
 	}
 
-	
-    @Override
-    public int getIdByUsername(String username) {
-        Connection connessione = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            connessione = DBConnection.getConnection();
-            String sql = "SELECT id_utente FROM utenti WHERE username = ?";
-            stmt = connessione.prepareStatement(sql);
-            stmt.setString(1, username);
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("id_utente");
-            } else {
-                return -1; // Username non trovato
-            }
-        } catch (SQLException e) {
-            return -1;
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
     @Override
     public boolean registraUtente(String username, String password) {
         Connection connessione = null;
@@ -123,41 +113,26 @@ public class LoginDaoDatabase implements LoginDao{
         }
     }
 
-    
-    
-    
-    
     @Override
     public boolean isUsernameTaken(String username) {
-        Connection connessione = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+        String sql = "SELECT COUNT(*) AS username_count FROM utenti WHERE username = ?";
 
-        try {
-            connessione = DBConnection.getConnection();
-            String sql = "SELECT COUNT(*) AS username_count FROM utenti WHERE username = ?";
-            stmt = connessione.prepareStatement(sql);
+        try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)) {
+
             stmt.setString(1, username);
-            rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                return rs.getInt("username_count") > 0;
-            } else {
-                return false; 
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("username_count") > 0;  
+                } else {
+                    return false;  
+                }
             }
         } catch (SQLException e) {
-            return false; 
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            e.printStackTrace(); 
+            return false;  
         }
     }
-
+ 
     
-    
-
 }

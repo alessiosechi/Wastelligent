@@ -45,11 +45,6 @@ public class Ricompensa {
     }
     
 
-    
-    
-    
-    
-
     public int getIdUtente() {
         return idUtente;
     }
