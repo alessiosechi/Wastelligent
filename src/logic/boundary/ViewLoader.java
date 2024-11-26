@@ -24,8 +24,7 @@ public class ViewLoader {
     }
 
 	public static void caricaView(ViewInfo viewInfo) {
-        Object controller = ControllerFactory.getController(viewInfo);
-//		Object controller = getControllerInstance(viewInfo);
+		Object controller = getControllerInstance(viewInfo);
 		if (controller != null) {
 			caricaView(viewInfo.getFxmlPath(), viewInfo.getTitle(), controller);
 		} else {
@@ -60,29 +59,29 @@ public class ViewLoader {
 		}
 	}
 
-//	// metodo per ottenere il controller singleton associato a ogni view
-//	private static Object getControllerInstance(ViewInfo viewInfo) {
-//		switch (viewInfo) {
-//		case LOGIN_VIEW:
-//			return LoginViewController.getInstance();
-//		case REGISTRAZIONE_VIEW:
-//			return RegistrazioneViewController.getInstance();
-//		case EFFETTUA_SEGNALAZIONE_VIEW:
-//			return EffettuaSegnalazioneViewController.getInstance();
-//		case RISCATTA_RICOMPENSA_VIEW:
-//			return RiscattaRicompensaViewController.getInstance();
-//		case STORICO_VIEW:
-//			return StoricoViewController.getInstance();
-//		case GESTISCI_SEGNALAZIONI_VIEW:
-//			return GestisciSegnalazioniViewController.getInstance();
-//		case ASSEGNA_PUNTI_VIEW:
-//			return AssegnaPuntiViewController.getInstance();
-//		case SEGNALAZIONI_ASSEGNATE_VIEW:
-//			return SegnalazioniAssegnateViewController.getInstance();
-//		case DETTAGLI_VIEW:
-//			return DettagliSegnalazioneViewController.getInstance();
-//		default:
-//			return null;
-//		}
-//	}
+	// metodo per ottenere il controller singleton associato a ogni view
+	private static Object getControllerInstance(ViewInfo viewInfo) {
+		switch (viewInfo) {
+		case LOGIN_VIEW:
+			return LoginViewController.getInstance();
+		case REGISTRAZIONE_VIEW:
+			return RegistrazioneViewController.getInstance();
+		case EFFETTUA_SEGNALAZIONE_VIEW:
+			return EffettuaSegnalazioneViewController.getInstance();
+		case RISCATTA_RICOMPENSA_VIEW:
+			return RiscattaRicompensaViewController.getInstance();
+		case STORICO_VIEW:
+			return StoricoViewController.getInstance();
+		case GESTISCI_SEGNALAZIONI_VIEW:
+			return GestisciSegnalazioniViewController.getInstance();
+		case ASSEGNA_PUNTI_VIEW:
+			return AssegnaPuntiViewController.getInstance();
+		case SEGNALAZIONI_ASSEGNATE_VIEW:
+			return SegnalazioniAssegnateViewController.getInstance();
+		case DETTAGLI_VIEW:
+			return DettagliSegnalazioneViewController.getInstance();
+		default:
+			return null;
+		}
+	}
 }
