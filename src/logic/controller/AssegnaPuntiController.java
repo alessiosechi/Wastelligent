@@ -83,13 +83,11 @@ public class AssegnaPuntiController {
 	public boolean assegnaPunti(SegnalazioneBean segnalazioneBean) {
 	    try {
 	        int puntiAssegnati = segnalazioneBean.getPuntiAssegnati();
-	        
-
 	              
 	        segnalazioneDAO.assegnaPunti(segnalazioneBean.getIdSegnalazione(), puntiAssegnati);
 	        utenteDAO.aggiungiPuntiUtente(segnalazioneBean.getIdUtente(), puntiAssegnati);
 	        
-	        ListaSegnalazioniRisolte.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); // qui
+	        ListaSegnalazioniRisolte.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); 
 
 	        return true;
 	    } catch (Exception e) {

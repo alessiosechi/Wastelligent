@@ -46,7 +46,6 @@ public class GestisciSegnalazioniViewController implements Observer{
     
     @FXML
     private ComboBox<String> operatoriEcologiciComboBox;
-
 	
     private static GestisciSegnalazioniViewController instance;
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
