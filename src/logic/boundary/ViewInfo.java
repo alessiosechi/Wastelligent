@@ -29,7 +29,6 @@ public enum ViewInfo {
         return title;
     }
     
-    
     // metodo per ottenere il ViewInfo in base al percorso FXML
     public static ViewInfo fromFxmlPath(String fxmlPath) {
         for (ViewInfo viewInfo : values()) {
@@ -39,6 +38,5 @@ public enum ViewInfo {
         }
         throw new IllegalArgumentException("No ViewInfo found for FXML path: " + fxmlPath);
     }
-
 }
 

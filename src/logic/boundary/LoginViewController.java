@@ -32,7 +32,7 @@ public class LoginViewController {
 	
 
 	
-	private static LoginViewController instance;
+//	private static LoginViewController instance;
 	private LoginController loginController = LoginController.getInstance();
 
 
@@ -96,8 +96,7 @@ public class LoginViewController {
     }
 
     @FXML
-    private void handleRegisterLinkAction() {
-        
+    private void handleRegisterLinkAction() {   
         ViewLoader.caricaView(ViewInfo.REGISTRAZIONE_VIEW);
     }
 
@@ -108,11 +107,11 @@ public class LoginViewController {
         alert.showAndWait();
     }
 
-    public static LoginViewController getInstance() {
-        if (instance == null) {
-            instance = new LoginViewController();
-        }
-        return instance;
-    }
+//    public static LoginViewController getInstance() {
+//        if (instance == null) {
+//            instance = new LoginViewController();
+//        }
+//        return instance;
+//    }
 
 }

@@ -39,7 +39,8 @@ public class SegnalazioniAssegnateViewController implements Observer{
 	
     private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
     private static SegnalazioniAssegnateViewController instance;
-	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
+//	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
+	DettagliSegnalazioneViewController dettagliSegnalazioneViewController= new DettagliSegnalazioneViewController();
 	private static final Logger logger = Logger.getLogger(SegnalazioniAssegnateViewController.class.getName());
     private boolean osservatoreRegistrato = false; 
     

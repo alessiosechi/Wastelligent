@@ -17,7 +17,7 @@ import logic.model.dao.DaoFactory;
 import logic.model.dao.ListaRicompenseDao;
 import logic.model.dao.RicompensaDao;
 import logic.model.dao.SegnalazioneDao;
-import logic.model.dao.UtenteDao;
+import logic.model.dao.UtenteBaseDao;
 import logic.model.domain.Ricompensa;
 import logic.model.domain.RicompensaBean;
 import logic.model.domain.RicompenseRiscattate;
@@ -26,7 +26,7 @@ import logic.model.domain.SegnalazioneBean;
 import logic.model.domain.UtenteCorrente;
 import logic.observer.Observer;
 
-public class RiscattaRicompensaController {
+public class RiscattaRicompensaController { // OK
 
 	private static volatile RiscattaRicompensaController instance;
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
@@ -35,7 +35,7 @@ public class RiscattaRicompensaController {
     
 	private static ListaRicompenseDao listaRicompenseDAO;
 	private static RicompensaDao ricompensaDAO;
-	private static UtenteDao utenteDAO;
+	private static UtenteBaseDao utenteBaseDAO;
 	private static SegnalazioneDao segnalazioneDAO;
 
 
@@ -54,7 +54,7 @@ public class RiscattaRicompensaController {
 	                try {
 	                    listaRicompenseDAO = DaoFactory.getDao(ListaRicompenseDao.class);      
 	                    ricompensaDAO = DaoFactory.getDao(RicompensaDao.class);
-	                    utenteDAO = DaoFactory.getDao(UtenteDao.class);
+	                    utenteBaseDAO = DaoFactory.getDao(UtenteBaseDao.class);
 	                    segnalazioneDAO = DaoFactory.getDao(SegnalazioneDao.class);
 	                    
 
@@ -97,9 +97,8 @@ public class RiscattaRicompensaController {
 	
 	
 	public int ottieniPuntiUtente() {
-		return utenteDAO.estraiPuntiUtente(idUtente);
+		return utenteBaseDAO.estraiPunti(idUtente);
 	}
-	
 	
 
 	public List<RicompensaBean> ottieniRicompenseUtente() {
@@ -140,7 +139,7 @@ public class RiscattaRicompensaController {
 			String formattedDate = sdf.format(today);
 			ricompensa.setDataRiscatto(formattedDate);
 			
-			utenteDAO.sottraiPuntiUtente(idUtente, ricompensa.getPunti());
+			utenteBaseDAO.sottraiPunti(idUtente, ricompensa.getPunti());
 			ricompensaDAO.registraRicompensaRiscattata(ricompensa);
 			
 			RicompenseRiscattate.getInstance().aggiungiRicompensa(ricompensa);
@@ -281,7 +280,7 @@ public class RiscattaRicompensaController {
         ricompensaBean.setDescrizione(r.getDescrizione());
         ricompensaBean.setDataScadenza(r.getDataScadenza());
 
-        // impostazione campi opzionali solo se inizializzati
+
         if (r.getIdUtente() > 0) {
             ricompensaBean.setIdUtente(r.getIdUtente());
         }
@@ -303,8 +302,7 @@ public class RiscattaRicompensaController {
     
     
 	private List<SegnalazioneBean> convertSegnalazioneRiscontrataListToBeanList(List<Segnalazione> segnalazioniRiscontrate) {
-
-		
+	
         if (segnalazioniRiscontrate == null) {
             return new ArrayList<>();
         }

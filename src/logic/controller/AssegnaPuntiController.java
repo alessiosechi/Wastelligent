@@ -6,20 +6,20 @@ import java.util.logging.Logger;
 
 import logic.model.dao.DaoFactory;
 import logic.model.dao.SegnalazioneDao;
-import logic.model.dao.UtenteDao;
+import logic.model.dao.UtenteBaseDao;
 import logic.model.domain.ListaSegnalazioniRisolte;
 import logic.model.domain.Segnalazione;
 import logic.model.domain.SegnalazioneBean;
 import logic.model.domain.StatoSegnalazione;
 import logic.observer.Observer;
 
-public class AssegnaPuntiController { 
+public class AssegnaPuntiController { // QUASI OK
 
 	private static volatile AssegnaPuntiController instance;
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
 	private static final Logger logger = Logger.getLogger(AssegnaPuntiController.class.getName());
 	private static SegnalazioneDao segnalazioneDAO;
-	private static UtenteDao utenteDAO;
+	private static UtenteBaseDao utenteBaseDAO;
 
 	
 	private AssegnaPuntiController() {
@@ -44,7 +44,7 @@ public class AssegnaPuntiController {
 					
 					try {
 						segnalazioneDAO = DaoFactory.getDao(SegnalazioneDao.class);
-						utenteDAO = DaoFactory.getDao(UtenteDao.class);
+						utenteBaseDAO = DaoFactory.getDao(UtenteBaseDao.class);
 					} catch (Exception e) {
 				        logger.severe("Errore durante l'inizializzazione dei DAO: " + e.getMessage());
 					}
@@ -56,7 +56,7 @@ public class AssegnaPuntiController {
 		return result;
 	}
 	
-    public List<SegnalazioneBean> getSegnalazioniDaRiscontrare() {       
+    public List<SegnalazioneBean> getSegnalazioniDaRiscontrate() {       
 		try {
 	        List<Segnalazione> segnalazioniDaRiscontrare=segnalazioneDAO.getSegnalazioniByStato(StatoSegnalazione.RISOLTA.getStato());
 
@@ -80,12 +80,13 @@ public class AssegnaPuntiController {
 
     }
 	
+	// DEVO PASSARE I PUNTI E SETTARLI QUI?
 	public boolean assegnaPunti(SegnalazioneBean segnalazioneBean) {
 	    try {
 	        int puntiAssegnati = segnalazioneBean.getPuntiAssegnati();
 	              
 	        segnalazioneDAO.assegnaPunti(segnalazioneBean.getIdSegnalazione(), puntiAssegnati);
-	        utenteDAO.aggiungiPuntiUtente(segnalazioneBean.getIdUtente(), puntiAssegnati);
+	        utenteBaseDAO.aggiungiPunti(segnalazioneBean.getIdUtente(), puntiAssegnati);
 	        
 	        ListaSegnalazioniRisolte.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); 
 

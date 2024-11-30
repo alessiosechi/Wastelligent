@@ -11,26 +11,26 @@ import java.util.logging.Logger;
 import logic.model.domain.OperatoreEcologico;
 import logic.model.domain.Ruolo;
 
-public class UtenteDaoDatabase implements UtenteDao {
+public class UtenteBaseDaoDatabase implements UtenteBaseDao {
 
-    private static volatile UtenteDaoDatabase instance;
-    private static final Logger logger = Logger.getLogger(UtenteDaoDatabase.class.getName());
+    private static volatile UtenteBaseDaoDatabase instance;
+    private static final Logger logger = Logger.getLogger(UtenteBaseDaoDatabase.class.getName());
 
-    public static UtenteDaoDatabase getInstance() {
-        UtenteDaoDatabase result = instance;
+    public static UtenteBaseDaoDatabase getInstance() {
+        UtenteBaseDaoDatabase result = instance;
 
         if (result == null) {
-            synchronized (UtenteDaoDatabase.class) {
+            synchronized (UtenteBaseDaoDatabase.class) {
                 result = instance;
                 if (result == null) {
-                    instance = result = new UtenteDaoDatabase();
+                    instance = result = new UtenteBaseDaoDatabase();
                 }
             }
         }
         return result;
     }
     
-    public int estraiPuntiUtente(int idUtente) {
+    public int estraiPunti(int idUtente) {
         int punti = 0;
         String sql = "SELECT punti FROM punti_utenti WHERE id_utente = ?";
         
@@ -52,7 +52,7 @@ public class UtenteDaoDatabase implements UtenteDao {
     }
 
     @Override
-    public void aggiungiPuntiUtente(int idUtente, int puntiDaAggiungere) {
+    public void aggiungiPunti(int idUtente, int puntiDaAggiungere) {
         Connection connessione = null;
         PreparedStatement stmt = null;
 
@@ -81,7 +81,7 @@ public class UtenteDaoDatabase implements UtenteDao {
     }
 
     @Override
-    public void sottraiPuntiUtente(int idUtente, int puntiDaSottrarre) {
+    public void sottraiPunti(int idUtente, int puntiDaSottrarre) {
         Connection connessione = null;
         PreparedStatement stmt = null;
 
@@ -109,31 +109,7 @@ public class UtenteDaoDatabase implements UtenteDao {
         }
     }
     
-    @Override
-    public List<OperatoreEcologico> estraiOperatoriEcologici() {
-        List<OperatoreEcologico> operatoriEcologici = new ArrayList<>();
-        
-        String sql = "SELECT id_utente, username FROM utenti WHERE tipo_utente = ?";
 
-        try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)) {
-
-            stmt.setInt(1, Ruolo.OPERATORE_ECOLOGICO.getId());
-
-            try (ResultSet resultSet = stmt.executeQuery()) {
-                while (resultSet.next()) {
-                    int idUtente = resultSet.getInt("id_utente");
-                    String username = resultSet.getString("username");
-
-                    OperatoreEcologico operatore = new OperatoreEcologico(idUtente, username);
-                    operatoriEcologici.add(operatore);
-                }
-            }
-        } catch (SQLException e) {
-            logger.severe("Errore durante il recupero delle informazioni degli operatori ecologici. Dettagli: " + e.getMessage());
-        }
-
-        return operatoriEcologici;
-    }
 
     
 

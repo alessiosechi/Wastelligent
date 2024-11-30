@@ -14,7 +14,7 @@ import logic.model.domain.SegnalazioneBean;
 import logic.model.domain.StatoSegnalazione;
 import logic.model.domain.UtenteCorrente;
 
-public class EffettuaSegnalazioneController { // OK
+public class EffettuaSegnalazioneController { // NON OK
 	
 	private static volatile EffettuaSegnalazioneController instance;
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
@@ -52,6 +52,8 @@ public class EffettuaSegnalazioneController { // OK
 
 
 	// metodo che restituisce le coordinate in base alla posizione fornita
+	
+	// DEVO USARE UNA BEAN
 	public PosizioneBean getCoordinates(String location) {
 		Posizione posizione = servizioGeocoding.ottieniCoordinate(location);
 

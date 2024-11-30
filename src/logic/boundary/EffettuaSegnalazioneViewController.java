@@ -44,8 +44,9 @@ public class EffettuaSegnalazioneViewController {
     private Pane mapPane; 
 
     private MapView mapView; 
-    private Marker currentMarker; 
-    private static EffettuaSegnalazioneViewController instance;
+    private Marker currentMarker;
+    
+//    private static EffettuaSegnalazioneViewController instance;
     private EffettuaSegnalazioneController effettuaSegnalazioneController = EffettuaSegnalazioneController.getInstance();
     
     @FXML
@@ -186,12 +187,11 @@ public class EffettuaSegnalazioneViewController {
         alert.showAndWait();
     }
     
-    // singleton: retituisco l'istanza di EffettuaSegnalazioneViewController
-    public static EffettuaSegnalazioneViewController getInstance() {
-        if (instance == null) {
-            instance = new EffettuaSegnalazioneViewController();
-        }
-        return instance;
-    }
+//    public static EffettuaSegnalazioneViewController getInstance() {
+//        if (instance == null) {
+//            instance = new EffettuaSegnalazioneViewController();
+//        }
+//        return instance;
+//    }
     
 }

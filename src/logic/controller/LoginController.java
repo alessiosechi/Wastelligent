@@ -34,7 +34,6 @@ public class LoginController {
 					instance = result = new LoginController();
 						
 					try {
-						// inizializzazione di LoginDAO
 						loginDAO = DaoFactory.getDao(LoginDao.class);
 
 					} catch (Exception e) {
@@ -77,6 +76,7 @@ public class LoginController {
 		utenteCorrente.setUtente(utente);
 	}
 
+	// DEVO USARE UNA BEAN
 	public String ottieniView(int interfacciaSelezionata) { // restituisce la view iniziale da caricare
 		return utente.getViewIniziale(interfacciaSelezionata);
 	}

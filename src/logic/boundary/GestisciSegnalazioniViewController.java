@@ -74,8 +74,7 @@ public class GestisciSegnalazioniViewController implements Observer{
 	    if (newValue != null) {
 	        vediDettagliButton.setDisable(false);
 	        eliminaButton.setDisable(false);
-	        
-
+	       
             dettagliSegnalazioneViewController.setSegnalazioneBean(newValue);
             dettagliSegnalazioneViewController.setCallerType(CallerType.CONTROLLER2);
 	    } else {

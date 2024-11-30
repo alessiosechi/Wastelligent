@@ -72,15 +72,12 @@ public class AssegnaPuntiViewController implements Observer{
         posizioneColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPosizione()));
     }
 
-	private void configuraPulsanti() {
-		
+	private void configuraPulsanti() {	
 		dettagliButton.setDisable(true);
 		dettagliButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW));
         assegnaButton.setOnAction(event -> assegnaPuntiSegnalazione());
-
 		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW));
-		gestisciSegnalazioniButton
-				.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW));
+		gestisciSegnalazioniButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW));
 	}
 	private void assegnaPuntiSegnalazione() {
 		SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
@@ -128,7 +125,7 @@ public class AssegnaPuntiViewController implements Observer{
 
 
 	private void caricaSegnalazioniRisolte() {
-		List<SegnalazioneBean> segnalazioniRisolte = assegnaPuntiController.getSegnalazioniDaRiscontrare();
+		List<SegnalazioneBean> segnalazioniRisolte = assegnaPuntiController.getSegnalazioniDaRiscontrate();
 
 		ObservableList<SegnalazioneBean> segnalazioni = FXCollections.observableArrayList(segnalazioniRisolte);
 		segnalazioniTable.setItems(segnalazioni);

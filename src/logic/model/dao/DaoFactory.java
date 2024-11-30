@@ -34,8 +34,10 @@ public class DaoFactory {
             return (T) createLoginDAO();
         } else if (daoClass == SegnalazioneDao.class) {
             return (T) createSegnalazioneDAO();
-        } else if (daoClass == UtenteDao.class) {
+        } else if (daoClass == UtenteBaseDao.class) {
             return (T) createUtenteDAO();
+        } else if (daoClass == OperatoreEcologicoDao.class) {
+            return (T) createOperatoreEcologicoDAO();
         } else if (daoClass == RicompensaDao.class) {
             return (T) createRicompensaDAO();
         } else if (daoClass == ListaRicompenseDao.class) {
@@ -53,8 +55,11 @@ public class DaoFactory {
         return isInMemory() ? (SegnalazioneDao) new SegnalazioneDaoInMemory() : (SegnalazioneDao) SegnalazioneDaoDatabase.getInstance();
     }
 
-    private static UtenteDao createUtenteDAO() {
-        return isInMemory() ? (UtenteDao) new UtenteDaoInMemory() : (UtenteDao) UtenteDaoDatabase.getInstance();
+    private static UtenteBaseDao createUtenteDAO() {
+        return isInMemory() ? (UtenteBaseDao) new UtenteBaseDaoInMemory() : (UtenteBaseDao) UtenteBaseDaoDatabase.getInstance();
+    }
+    private static OperatoreEcologicoDao createOperatoreEcologicoDAO() {
+        return isInMemory() ? (OperatoreEcologicoDao) new OperatoreEcologicoDaoInMemory() : (OperatoreEcologicoDao) OperatoreEcologicoDaoDatabase.getInstance();
     }
 
     private static RicompensaDao createRicompensaDAO() {

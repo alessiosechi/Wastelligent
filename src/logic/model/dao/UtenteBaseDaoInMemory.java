@@ -1,41 +1,36 @@
 package logic.model.dao;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import logic.model.domain.ListaOperatoriEcologici;
-import logic.model.domain.OperatoreEcologico;
 
-public class UtenteDaoInMemory implements UtenteDao {
+
+public class UtenteBaseDaoInMemory implements UtenteBaseDao {
 
     // mappa per tenere traccia dei punti degli utenti
     private Map<Integer, Integer> puntiUtenti;
 
-    public UtenteDaoInMemory() {
+    public UtenteBaseDaoInMemory() {
         this.puntiUtenti = new HashMap<>();
     }
 
     @Override
-    public int estraiPuntiUtente(int idUtente) {
+    public int estraiPunti(int idUtente) {
         return puntiUtenti.getOrDefault(idUtente, 0); // restituisco i punti dell'utente, se non esistono restituisco 0
     }
 
     @Override
-    public void aggiungiPuntiUtente(int idUtente, int puntiDaAggiungere) {
+    public void aggiungiPunti(int idUtente, int puntiDaAggiungere) {
         int puntiAttuali = puntiUtenti.getOrDefault(idUtente, 0);
         puntiUtenti.put(idUtente, puntiAttuali + puntiDaAggiungere);
     }
 
     @Override
-    public void sottraiPuntiUtente(int idUtente, int puntiDaSottrarre) {
+    public void sottraiPunti(int idUtente, int puntiDaSottrarre) {
         int puntiAttuali = puntiUtenti.getOrDefault(idUtente, 0);
         puntiUtenti.put(idUtente, puntiAttuali - puntiDaSottrarre);
 
     }
 
-    @Override
-    public List<OperatoreEcologico> estraiOperatoriEcologici() {
-        return ListaOperatoriEcologici.getInstance().getOperatoriEcologici();
-    }
+
 }

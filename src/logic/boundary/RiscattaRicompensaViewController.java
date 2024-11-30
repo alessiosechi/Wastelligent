@@ -59,7 +59,7 @@ public class RiscattaRicompensaViewController implements Observer{
 	private Button visualizzaStoricoButton;
 	
 	
-	private static RiscattaRicompensaViewController instance;
+//	private static RiscattaRicompensaViewController instance;
 	private RiscattaRicompensaController riscattaRicompensaController = RiscattaRicompensaController.getInstance();
     private List<RicompensaBean> listaRicompenseAPI;
     private boolean osservatoreRegistrato = false; 
@@ -190,8 +190,6 @@ public class RiscattaRicompensaViewController implements Observer{
 	}
 
 
-
-
 	private void showAlert(String titolo, String messaggio) {
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.setTitle(titolo);
@@ -200,12 +198,12 @@ public class RiscattaRicompensaViewController implements Observer{
 		alert.showAndWait();
 	}
 	
-	public static RiscattaRicompensaViewController getInstance() {
-		if (instance == null) {
-			instance = new RiscattaRicompensaViewController();
-		}
-		return instance;
-	}
+//	public static RiscattaRicompensaViewController getInstance() {
+//		if (instance == null) {
+//			instance = new RiscattaRicompensaViewController();
+//		}
+//		return instance;
+//	}
 
 	@Override
 	public void update() {

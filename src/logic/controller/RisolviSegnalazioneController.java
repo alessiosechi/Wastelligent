@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import logic.model.dao.DaoFactory;
+import logic.model.dao.OperatoreEcologicoDao;
 import logic.model.dao.SegnalazioneDao;
-import logic.model.dao.UtenteDao;
 import logic.model.domain.ListaSegnalazioniOperatore;
 import logic.model.domain.ListaSegnalazioniAttive;
 import logic.model.domain.ListaSegnalazioniRisolte;
@@ -24,7 +24,7 @@ public class RisolviSegnalazioneController {
 	private static volatile RisolviSegnalazioneController instance;
 	private static final Logger logger = Logger.getLogger(RisolviSegnalazioneController.class.getName());
 	private static SegnalazioneDao segnalazioneDAO;
-	private static UtenteDao utenteDAO;
+	private static OperatoreEcologicoDao operatoreEcologicoDao;
 	
 	private RisolviSegnalazioneController() {
 	}
@@ -41,7 +41,7 @@ public class RisolviSegnalazioneController {
 
 					try {
 						segnalazioneDAO = DaoFactory.getDao(SegnalazioneDao.class);
-						utenteDAO=DaoFactory.getDao(UtenteDao.class);
+						operatoreEcologicoDao=DaoFactory.getDao(OperatoreEcologicoDao.class);
 					} catch (Exception e) {
 				        logger.severe("Errore durante l'inizializzazione dei DAO: " + e.getMessage());
 					}
@@ -112,7 +112,7 @@ public class RisolviSegnalazioneController {
 	public List<OperatoreEcologicoBean> getOperatoriEcologiciDisponibili() {
 	    try {
 
-	        List<OperatoreEcologico> operatoriEcologici = utenteDAO.estraiOperatoriEcologici();
+	        List<OperatoreEcologico> operatoriEcologici = operatoreEcologicoDao.estraiOperatoriEcologici();
 	        return convertOperatoriEcologiciListToBeanList(operatoriEcologici);
 
 	    } catch (Exception e) {
@@ -121,6 +121,7 @@ public class RisolviSegnalazioneController {
 	    }
 	}
 
+	// QUI POTREI FARE UNA BEAN CON idSegnalazione e idOperatore
 	public boolean assegnaOperatore(SegnalazioneBean segnalazioneBean, OperatoreEcologicoBean operatoreEcologicoBean) {
 	    try {	
 	        segnalazioneDAO.assegnaOperatore(segnalazioneBean.getIdSegnalazione(), operatoreEcologicoBean.getIdUtente()); 

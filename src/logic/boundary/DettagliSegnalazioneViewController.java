@@ -29,7 +29,7 @@ import logic.model.domain.SegnalazioneBean;
 
 
 public class DettagliSegnalazioneViewController {
-
+	
     @FXML 
     private Button indietroButton;
     @FXML 
@@ -50,7 +50,7 @@ public class DettagliSegnalazioneViewController {
     private Pane mapPane;
 
 
-    private Marker marker;
+//    private Marker marker;
 
     private static DettagliSegnalazioneViewController instance;
 	private static final Logger logger = Logger.getLogger(DettagliSegnalazioneViewController.class.getName());
@@ -163,6 +163,7 @@ public class DettagliSegnalazioneViewController {
 					mapView.setCenter(coordinate);
 					mapView.setZoom(15);
 
+					Marker marker;
 					marker = Marker.createProvided(Marker.Provided.RED).setPosition(coordinate).setVisible(true);
 					mapView.addMarker(marker);
 
@@ -204,7 +205,6 @@ public class DettagliSegnalazioneViewController {
         return instance;
     }
     
-    // setter per impostare la segnalazione selezionata
     public void setSegnalazioneBean(SegnalazioneBean segnalazioneBean) {
         this.segnalazioneBean = segnalazioneBean;
     }

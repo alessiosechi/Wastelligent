@@ -38,9 +38,10 @@ public class StoricoViewController {
     
    
     
-	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
+//	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
+	DettagliSegnalazioneViewController dettagliSegnalazioneViewController= new DettagliSegnalazioneViewController();
 	private RiscattaRicompensaController riscattaRicompensaController = RiscattaRicompensaController.getInstance();
-    private static StoricoViewController instance;
+//    private static StoricoViewController instance;
     
     
     
@@ -91,12 +92,12 @@ public class StoricoViewController {
 	}
 
 
-    public static StoricoViewController getInstance() {
-        if (instance == null) {
-            instance = new StoricoViewController();
-        }
-        return instance;
-    }
+//    public static StoricoViewController getInstance() {
+//        if (instance == null) {
+//            instance = new StoricoViewController();
+//        }
+//        return instance;
+//    }
     
 
 
