@@ -30,7 +30,7 @@ public class DaoFactory {
     // metodo per creare il DAO specifico in base al tipo
     @SuppressWarnings("unchecked")
 	private static <T> T createDao(Class<T> daoClass) {
-    	if (daoClass == LoginDao.class) {
+    	if (daoClass == AccountDao.class) {
             return (T) createLoginDAO();
         } else if (daoClass == SegnalazioneDao.class) {
             return (T) createSegnalazioneDAO();
@@ -47,8 +47,8 @@ public class DaoFactory {
     }
 
     // metodi specifici per creare i DAO
-    private static LoginDao createLoginDAO() {
-        return isInMemory() ? (LoginDao) new LoginDaoInMemory() : (LoginDao) LoginDaoDatabase.getInstance();
+    private static AccountDao createLoginDAO() {
+        return isInMemory() ? (AccountDao) new AccountDaoInMemory() : (AccountDao) AccountDaoDatabase.getInstance();
     }
     
     private static SegnalazioneDao createSegnalazioneDAO() {

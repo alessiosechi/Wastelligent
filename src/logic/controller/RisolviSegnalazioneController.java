@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import logic.beans.OperatoreEcologicoBean;
+import logic.beans.SegnalazioneBean;
 import logic.model.dao.DaoFactory;
 import logic.model.dao.OperatoreEcologicoDao;
 import logic.model.dao.SegnalazioneDao;
-import logic.model.domain.ListaSegnalazioniOperatore;
-import logic.model.domain.ListaSegnalazioniAttive;
-import logic.model.domain.ListaSegnalazioniRisolte;
+import logic.model.domain.SegnalazioniOperatore;
+import logic.model.domain.SegnalazioniAttive;
+import logic.model.domain.SegnalazioniRisolte;
 import logic.model.domain.OperatoreEcologico;
-import logic.model.domain.OperatoreEcologicoBean;
 import logic.model.domain.Segnalazione;
-import logic.model.domain.SegnalazioneBean;
 import logic.model.domain.StatoSegnalazione;
 import logic.model.domain.UtenteCorrente;
 import logic.observer.Observer;
 
-public class RisolviSegnalazioneController {
+public class RisolviSegnalazioneController { // OK
 
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
 	private static volatile RisolviSegnalazioneController instance;
@@ -55,18 +55,18 @@ public class RisolviSegnalazioneController {
 	}
 	
     public void registraOsservatoreSegnalazioniAttive(Observer observer) {
-    	ListaSegnalazioniAttive.getInstance().registraOsservatore(observer);
+    	SegnalazioniAttive.getInstance().registraOsservatore(observer);
     }
     public void registraOsservatoreSegnalazioniAssegnate(Observer observer) {
-    	ListaSegnalazioniOperatore.getInstance().registraOsservatore(observer);
+    	SegnalazioniOperatore.getInstance().registraOsservatore(observer);
     }
     
     public List<SegnalazioneBean> getSegnalazioniAttive() {   
-    	return convertSegnalazioneListToBeanList(ListaSegnalazioniAttive.getInstance().getSegnalazioniAttive());  
+    	return convertSegnalazioneListToBeanList(SegnalazioniAttive.getInstance().getSegnalazioniAttive());  
     }
     
     public List<SegnalazioneBean> getSegnalazioniAssegnate() {   
-    	return convertSegnalazioneListToBeanList(ListaSegnalazioniOperatore.getInstance().getSegnalazioni());
+    	return convertSegnalazioneListToBeanList(SegnalazioniOperatore.getInstance().getSegnalazioni());
     }
 	
 
@@ -82,7 +82,7 @@ public class RisolviSegnalazioneController {
 					s.setPosizione(posizioneTesto);
 				}
 				
-				ListaSegnalazioniAttive.getInstance().setSegnalazioni(segnalazioniDaCompletare);
+				SegnalazioniAttive.getInstance().setSegnalazioni(segnalazioniDaCompletare);
 				return convertSegnalazioneListToBeanList(segnalazioniDaCompletare);
 				
 	
@@ -103,7 +103,7 @@ public class RisolviSegnalazioneController {
 	public void eliminaSegnalazione(SegnalazioneBean segnalazioneBean) {	
 		try {	
 			segnalazioneDAO.eliminaSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean));
-			ListaSegnalazioniAttive.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); 
+			SegnalazioniAttive.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); 
 		} catch (Exception e) {
 	        logger.severe("Errore nell'eliminazione della segnalazione: " + e.getMessage());
 		}
@@ -121,11 +121,16 @@ public class RisolviSegnalazioneController {
 	    }
 	}
 
-	// QUI POTREI FARE UNA BEAN CON idSegnalazione e idOperatore
+	/**
+	 * Potrei anche passare un unico oggetto BEAN contenente i due BEAN, ma aumenterei la complessità; inoltre, ritengo non corretto passare 
+	 * un oggetto BEAN in cui sono impostati solamente l'ID della segnalazione e l'ID dell'operatore perchè se in futuro dovessi cambiare la 
+	 * logica di assegnazione dovrei modificare anche il controller grafico.
+	 */
+	
 	public boolean assegnaOperatore(SegnalazioneBean segnalazioneBean, OperatoreEcologicoBean operatoreEcologicoBean) {
 	    try {	
 	        segnalazioneDAO.assegnaOperatore(segnalazioneBean.getIdSegnalazione(), operatoreEcologicoBean.getIdUtente()); 
-	        ListaSegnalazioniAttive.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean));
+	        SegnalazioniAttive.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean));
 	        return true;
 	    } catch (Exception e) {
 	        return false;
@@ -148,7 +153,7 @@ public class RisolviSegnalazioneController {
 					s.setPosizione(posizioneTesto);
 				}
 				
-				ListaSegnalazioniOperatore.getInstance().setSegnalazioni(segnalazioniDaRisolvere);
+				SegnalazioniOperatore.getInstance().setSegnalazioni(segnalazioniDaRisolvere);
 				return convertSegnalazioneListToBeanList(segnalazioniDaRisolvere);	
 			} else {
 				return new ArrayList<>();
@@ -158,17 +163,13 @@ public class RisolviSegnalazioneController {
 		}
     }
 	
-	
-	
-	
-	
 
     public boolean completaSegnalazione(SegnalazioneBean segnalazioneBean) {
 	    try {
 	        segnalazioneDAO.aggiornaStato(segnalazioneBean.getIdSegnalazione(), StatoSegnalazione.RISOLTA.getStato());
 	        
-			ListaSegnalazioniOperatore.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); 
-			ListaSegnalazioniRisolte.getInstance().aggiungiSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); 
+			SegnalazioniOperatore.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); 
+			SegnalazioniRisolte.getInstance().aggiungiSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); 
 
 	        return true;
 	    } catch (Exception e) {

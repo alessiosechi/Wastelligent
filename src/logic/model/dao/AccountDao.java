@@ -1,6 +1,6 @@
 package logic.model.dao;
 
-public interface LoginDao {
+public interface AccountDao { // forse è meglio "AccountDao"?
 	public int autenticazione(String username, String password);
     public int getIdByUsername(String username);
     

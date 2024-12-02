@@ -1,6 +1,7 @@
 package logic.boundary;
 
 public enum ViewInfo {
+	CONFIGURATION_VIEW("ConfigurationView.fxml", "Configurazione"),
     LOGIN_VIEW("LoginView.fxml", "Login"),
     REGISTRAZIONE_VIEW("RegistrazioneView.fxml", "Registrazione"),
     EFFETTUA_SEGNALAZIONE_VIEW("EffettuaSegnalazioneView.fxml", "Effettua Segnalazione"),

@@ -10,7 +10,7 @@ import logic.model.domain.Ruolo;
 import logic.model.domain.Utente;
 import logic.model.domain.UtenteBase;
 
-public class LoginDaoInMemory implements LoginDao {
+public class AccountDaoInMemory implements AccountDao {
 
     private static final Map<String, Utente> utentiInMemory = new HashMap<>();
     private static final Map<String, String> usernamePasswordMap = new HashMap<>();

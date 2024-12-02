@@ -5,14 +5,14 @@ import java.util.List;
 
 import logic.observer.Subject;
 
-public class ListaSegnalazioniOperatore extends Subject {
+public class SegnalazioniRisolte extends Subject {
 
 	private List<Segnalazione> segnalazioni = new ArrayList<>();
-	private static ListaSegnalazioniOperatore instance;
+	private static SegnalazioniRisolte instance;
 
-	public static ListaSegnalazioniOperatore getInstance() {
+	public static SegnalazioniRisolte getInstance() {
 		if (instance == null) {
-			instance = new ListaSegnalazioniOperatore();
+			instance = new SegnalazioniRisolte();
 		}
 		return instance;
 	}
@@ -33,5 +33,4 @@ public class ListaSegnalazioniOperatore extends Subject {
 	public List<Segnalazione> getSegnalazioni() {
 		return segnalazioni;
 	}
-
 }

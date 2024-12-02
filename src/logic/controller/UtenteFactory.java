@@ -18,7 +18,5 @@ public class UtenteFactory {
             default:
                 throw new IllegalArgumentException("Ruolo non valido: " + ruolo);
         }
-    }
-    
-   
+    } 
 }

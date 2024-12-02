@@ -24,76 +24,29 @@ public class ViewLoader {
         }
     }
 	public static void caricaView(ViewInfo viewInfo) {
-		caricaView(viewInfo.getFxmlPath(), viewInfo.getTitle());
-	}	
 
-//	public static void caricaView2(ViewInfo viewInfo) {
-//		Object controller = getControllerInstance(viewInfo);
-//		if (controller == null) {
-//			caricaView2(viewInfo.getFxmlPath(), viewInfo.getTitle(), controller);
-//		} else {
-//			logger.severe("Controller non trovato!");
-//		}
-//	}	
-
-	private static void caricaView(String fxmlPath, String title) {
 		try {
-			FXMLLoader loader = new FXMLLoader(ViewLoader.class.getResource(fxmlPath));
+			FXMLLoader loader = new FXMLLoader(ViewLoader.class.getResource(viewInfo.getFxmlPath()));
 			
-	        if (Objects.equals(fxmlPath, ViewInfo.DETTAGLI_VIEW.getFxmlPath())) {
+	        if (Objects.equals(viewInfo, ViewInfo.DETTAGLI_VIEW)) {
 	            loader.setController(DettagliSegnalazioneViewController.getInstance());
 	        }
-			
-			
+	        
+//	        if (Objects.equals(viewInfo, ViewInfo.LOGIN_VIEW)) {
+//		        stage.hide();
+//	        }
+//			
+
 			Parent root = loader.load();
 
+
 			stage.setScene(new Scene(root));
-			stage.setTitle(title);
+			stage.centerOnScreen();
+			stage.setTitle(viewInfo.getTitle());
 			stage.show();
 		} catch (IOException e) {
 			logger.severe("Errore durante il caricamento della view: " + e.getMessage());
 		}
-	}
-
-
-//	private static void caricaView2(String fxmlPath, String title, Object controller) {
-//		try {
-//			FXMLLoader loader = new FXMLLoader(ViewLoader.class.getResource(fxmlPath));
-//			loader.setController(controller);
-//			Parent root = loader.load();
-//
-//
-//			stage.setScene(new Scene(root));
-//			stage.setTitle(title);
-//			stage.show();
-//		} catch (IOException e) {
-//			logger.severe("Errore durante il caricamento della view: " + e.getMessage());
-//		}
-//	}
-
-
-//	private static Object getControllerInstance(ViewInfo viewInfo) {
-//		switch (viewInfo) {
-//		case LOGIN_VIEW:
-//			return LoginViewController.getInstance();
-//		case REGISTRAZIONE_VIEW:
-//			return RegistrazioneViewController.getInstance();
-//		case EFFETTUA_SEGNALAZIONE_VIEW:
-//			return EffettuaSegnalazioneViewController.getInstance();
-//		case RISCATTA_RICOMPENSA_VIEW:
-//			return RiscattaRicompensaViewController.getInstance();
-//		case STORICO_VIEW:
-//			return StoricoViewController.getInstance();
-//		case GESTISCI_SEGNALAZIONI_VIEW:
-//			return GestisciSegnalazioniViewController.getInstance();
-//		case ASSEGNA_PUNTI_VIEW:
-//			return AssegnaPuntiViewController.getInstance();
-//		case SEGNALAZIONI_ASSEGNATE_VIEW:
-//			return SegnalazioniAssegnateViewController.getInstance();
-//		case DETTAGLI_VIEW:
-//			return DettagliSegnalazioneViewController.getInstance();
-//		default:
-//			return null;
-//		}
-//	}
+	}	
+	
 }

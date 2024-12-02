@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import logic.beans.RicompensaBean;
+import logic.beans.SegnalazioneBean;
 import logic.exceptions.CodiceRiscattoNonTrovatoException;
 import logic.exceptions.ConnessioneAPIException;
 import logic.exceptions.DailyRedemptionLimitException;
@@ -19,10 +21,8 @@ import logic.model.dao.RicompensaDao;
 import logic.model.dao.SegnalazioneDao;
 import logic.model.dao.UtenteBaseDao;
 import logic.model.domain.Ricompensa;
-import logic.model.domain.RicompensaBean;
 import logic.model.domain.RicompenseRiscattate;
 import logic.model.domain.Segnalazione;
-import logic.model.domain.SegnalazioneBean;
 import logic.model.domain.UtenteCorrente;
 import logic.observer.Observer;
 
@@ -324,11 +324,14 @@ public class RiscattaRicompensaController { // OK
 
 		segnalazioneBean.setDescrizione(s.getDescrizione());
 		segnalazioneBean.setFoto(s.getFoto());
-		segnalazioneBean.setIdUtente(s.getIdUtente());
 		segnalazioneBean.setLatitudine(s.getLatitudine());
 		segnalazioneBean.setLongitudine(s.getLongitudine());
 		segnalazioneBean.setPuntiAssegnati(s.getPuntiAssegnati());
 		segnalazioneBean.setPosizione(s.getPosizione());
+		
+		
+		// i seguenti si possono levare
+		segnalazioneBean.setIdUtente(s.getIdUtente());
 		segnalazioneBean.setStato(s.getStato());
 		segnalazioneBean.setIdSegnalazione(s.getIdSegnalazione());
 

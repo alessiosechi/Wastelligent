@@ -14,8 +14,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import logic.beans.SegnalazioneBean;
 import logic.controller.AssegnaPuntiController;
-import logic.model.domain.SegnalazioneBean;
 import logic.observer.Observer;
 
 public class AssegnaPuntiViewController implements Observer{

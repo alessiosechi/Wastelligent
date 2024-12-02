@@ -25,7 +25,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import logic.model.domain.SegnalazioneBean;
+import logic.beans.SegnalazioneBean;
 
 
 public class DettagliSegnalazioneViewController {
@@ -49,8 +49,6 @@ public class DettagliSegnalazioneViewController {
     @FXML 
     private Pane mapPane;
 
-
-//    private Marker marker;
 
     private static DettagliSegnalazioneViewController instance;
 	private static final Logger logger = Logger.getLogger(DettagliSegnalazioneViewController.class.getName());
@@ -158,8 +156,7 @@ public class DettagliSegnalazioneViewController {
 	            logger.info("Mappa pronta");
 				if (segnalazioneBean != null && segnalazioneBean.getLatitudine() != 0
 						&& segnalazioneBean.getLongitudine() != 0) {
-					Coordinate coordinate = new Coordinate(segnalazioneBean.getLatitudine(),
-							segnalazioneBean.getLongitudine());
+					Coordinate coordinate = new Coordinate(segnalazioneBean.getLatitudine(),segnalazioneBean.getLongitudine());
 					mapView.setCenter(coordinate);
 					mapView.setZoom(15);
 

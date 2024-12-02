@@ -3,14 +3,14 @@ package logic.controller;
 import java.util.List;
 import java.util.logging.Logger;
 
+import logic.beans.PosizioneBean;
+import logic.beans.SegnalazioneBean;
 import logic.exceptions.SegnalazioneVicinaException;
 import logic.model.dao.DaoFactory;
 import logic.model.dao.SegnalazioneDao;
-import logic.model.domain.ListaSegnalazioniAttive;
+import logic.model.domain.SegnalazioniAttive;
 import logic.model.domain.Posizione;
-import logic.model.domain.PosizioneBean;
 import logic.model.domain.Segnalazione;
-import logic.model.domain.SegnalazioneBean;
 import logic.model.domain.StatoSegnalazione;
 import logic.model.domain.UtenteCorrente;
 
@@ -75,7 +75,7 @@ public class EffettuaSegnalazioneController { // NON OK
 
 
         segnalazioneDAO.salvaSegnalazione(segnalazione);
-        ListaSegnalazioniAttive.getInstance().aggiungiSegnalazione(segnalazione); // qui
+        SegnalazioniAttive.getInstance().aggiungiSegnalazione(segnalazione); // qui
 	}
 
 	

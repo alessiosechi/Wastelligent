@@ -1,4 +1,4 @@
-package logic.model.domain;
+package logic.beans;
 
 public class SegnalazioneBean {
 	private int idUtente;

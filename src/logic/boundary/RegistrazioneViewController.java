@@ -8,12 +8,12 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import logic.controller.LoginController;
+import logic.beans.CredenzialiBean;
+import logic.controller.RegistrazioneController;
 import logic.decorator.ValidaInput;
 import logic.decorator.ValidatoreSpaziVuoti;
 import logic.exceptions.RegistrazioneUtenteException;
 import logic.exceptions.UsernameAlreadyTakenException;
-import logic.model.domain.CredenzialiBean;
 import logic.decorator.ValidatoreLunghezzaMinima;
 import logic.decorator.ValidatoreBase;
 
@@ -32,7 +32,7 @@ public class RegistrazioneViewController {
 	private Hyperlink loginLink;
 
 //	private static RegistrazioneViewController instance;
-	private LoginController loginController = LoginController.getInstance();
+	private RegistrazioneController registrazioneController = RegistrazioneController.getInstance();
 
 	@FXML
 	private void handleRegistratiButtonAction(ActionEvent event) {
@@ -67,7 +67,7 @@ public class RegistrazioneViewController {
 		credenzialiBean.setPassword(password);
 
 		try {
-			loginController.registraUtente(credenzialiBean);
+			registrazioneController.registraUtente(credenzialiBean);
 
 			showAlert(AlertType.INFORMATION, "Registrazione avvenuta", "La registrazione è avvenuta con successo.");
 			ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);

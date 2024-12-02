@@ -13,10 +13,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import logic.beans.PosizioneBean;
+import logic.beans.SegnalazioneBean;
 import logic.controller.EffettuaSegnalazioneController;
 import logic.exceptions.SegnalazioneVicinaException;
-import logic.model.domain.PosizioneBean;
-import logic.model.domain.SegnalazioneBean;
 
 import java.io.File;
 

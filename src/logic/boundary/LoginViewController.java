@@ -4,8 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.CheckBox;
+import logic.beans.CredenzialiBean;
 import logic.controller.LoginController;
-import logic.model.domain.CredenzialiBean;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -30,21 +31,30 @@ public class LoginViewController {
 	@FXML
 	private Hyperlink registerLink;
 	
+	@FXML
+	private CheckBox checkBoxFlag;
+	
 
 	
 //	private static LoginViewController instance;
-	private LoginController loginController = LoginController.getInstance();
+	LoginController loginController = LoginController.getInstance();
+
 
 
     @FXML
     private void initialize() {
+    	
+    	
         ToggleGroup toggleGroup = new ToggleGroup();
 
         // assegno il ToggleGroup ai RadioButton in modo tale da gestire la selezione degli stessi
         interfaceOption1.setToggleGroup(toggleGroup);
         interfaceOption2.setToggleGroup(toggleGroup);
-    }
+        
 
+    }
+    
+    
     // il metodo che viene eseguito al click del button "LOGIN"
     @FXML
     private void handleLoginButtonAction(ActionEvent event) {
@@ -69,6 +79,7 @@ public class LoginViewController {
 			 password = "password3";
 		}
 
+		
         int interfacciaSelezionata = interfaceOption1.isSelected() ? 1 : 2;
         authenticate(username, password, interfacciaSelezionata);
     }
@@ -81,6 +92,8 @@ public class LoginViewController {
     	credenzialiBean.setUsername(username);
     	credenzialiBean.setPassword(password);
     	
+    		
+
         int success = loginController.effettuaLogin(credenzialiBean);
 
         if (success == -1) {

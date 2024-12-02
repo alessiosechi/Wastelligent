@@ -8,21 +8,21 @@ import java.util.logging.Logger;
 
 import logic.model.domain.Ruolo;
 
-public class LoginDaoDatabase implements LoginDao{
-	private static volatile LoginDaoDatabase instance;
-	private static final Logger logger = Logger.getLogger(LoginDaoDatabase.class.getName());
+public class AccountDaoDatabase implements AccountDao{
+	private static volatile AccountDaoDatabase instance;
+	private static final Logger logger = Logger.getLogger(AccountDaoDatabase.class.getName());
 
-	private LoginDaoDatabase() {
+	private AccountDaoDatabase() {
 	}
 	
-	public static LoginDaoDatabase getInstance() {
-		LoginDaoDatabase result = instance;
+	public static AccountDaoDatabase getInstance() {
+		AccountDaoDatabase result = instance;
 
 		if (instance == null) {
-			synchronized (LoginDaoDatabase.class) {
+			synchronized (AccountDaoDatabase.class) {
 				result = instance;
 				if (result == null) {
-					instance = result = new LoginDaoDatabase();
+					instance = result = new AccountDaoDatabase();
 				}
 			}
 		}

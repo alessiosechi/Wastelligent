@@ -12,12 +12,12 @@ import javafx.scene.control.Button;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
+import logic.beans.RicompensaBean;
 import logic.controller.RiscattaRicompensaController;
 import logic.exceptions.ConnessioneAPIException;
 import logic.exceptions.DailyRedemptionLimitException;
 import logic.exceptions.GestioneRiscattoException;
 import logic.exceptions.InsufficientPointsException;
-import logic.model.domain.RicompensaBean;
 import logic.observer.Observer;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.Label;

@@ -10,7 +10,7 @@ public class EspertoEcologico extends Utente {
         if (interfaccia == 1) {
             return "GestisciSegnalazioniView.fxml";
         } else {
-            return "";
+            return "GestisciSegnalazioniView2.fxml";
         }
     }
 }

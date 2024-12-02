@@ -14,8 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import logic.beans.SegnalazioneBean;
 import logic.controller.RisolviSegnalazioneController;
-import logic.model.domain.SegnalazioneBean;
 import logic.observer.Observer;
 
 public class SegnalazioniAssegnateViewController implements Observer{
@@ -39,8 +39,7 @@ public class SegnalazioniAssegnateViewController implements Observer{
 	
     private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
     private static SegnalazioniAssegnateViewController instance;
-//	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
-	DettagliSegnalazioneViewController dettagliSegnalazioneViewController= new DettagliSegnalazioneViewController();
+	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
 	private static final Logger logger = Logger.getLogger(SegnalazioniAssegnateViewController.class.getName());
     private boolean osservatoreRegistrato = false; 
     

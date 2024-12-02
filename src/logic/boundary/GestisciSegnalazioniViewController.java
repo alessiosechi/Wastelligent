@@ -15,9 +15,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import logic.beans.OperatoreEcologicoBean;
+import logic.beans.SegnalazioneBean;
 import logic.controller.RisolviSegnalazioneController;
-import logic.model.domain.OperatoreEcologicoBean;
-import logic.model.domain.SegnalazioneBean;
 import logic.observer.Observer;
 
 public class GestisciSegnalazioniViewController implements Observer{

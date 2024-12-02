@@ -2,16 +2,17 @@ package logic.model.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import logic.observer.Subject;
 
-public class ListaSegnalazioniAttive extends Subject {
+public class SegnalazioniOperatore extends Subject {
 
 	private List<Segnalazione> segnalazioni = new ArrayList<>();
-	private static ListaSegnalazioniAttive instance;
+	private static SegnalazioniOperatore instance;
 
-	public static ListaSegnalazioniAttive getInstance() {
+	public static SegnalazioniOperatore getInstance() {
 		if (instance == null) {
-			instance = new ListaSegnalazioniAttive();
+			instance = new SegnalazioniOperatore();
 		}
 		return instance;
 	}
@@ -29,7 +30,7 @@ public class ListaSegnalazioniAttive extends Subject {
 		this.segnalazioni = segnalazioni;
 	}
 
-	public List<Segnalazione> getSegnalazioniAttive() {
+	public List<Segnalazione> getSegnalazioni() {
 		return segnalazioni;
 	}
 

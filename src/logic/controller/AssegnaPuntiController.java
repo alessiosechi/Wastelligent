@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import logic.beans.SegnalazioneBean;
 import logic.model.dao.DaoFactory;
 import logic.model.dao.SegnalazioneDao;
 import logic.model.dao.UtenteBaseDao;
-import logic.model.domain.ListaSegnalazioniRisolte;
+import logic.model.domain.SegnalazioniRisolte;
 import logic.model.domain.Segnalazione;
-import logic.model.domain.SegnalazioneBean;
 import logic.model.domain.StatoSegnalazione;
 import logic.observer.Observer;
 
-public class AssegnaPuntiController { // QUASI OK
+public class AssegnaPuntiController { // OK
 
 	private static volatile AssegnaPuntiController instance;
 	private ServizioGeocoding servizioGeocoding = new ServizioGeocodingAdapter();
@@ -25,12 +25,7 @@ public class AssegnaPuntiController { // QUASI OK
 	private AssegnaPuntiController() {
 	}
 	
-    public void registraOsservatoreSegnalazioniRisolte(Observer observer) {
-    	ListaSegnalazioniRisolte.getInstance().registraOsservatore(observer);
-    }
-    public List<SegnalazioneBean> getSegnalazioniRisolte() {   
-    	return convertSegnalazioneListToBeanList(ListaSegnalazioniRisolte.getInstance().getSegnalazioni());  
-    }
+
     
 	
 	public static AssegnaPuntiController getInstance() {
@@ -56,6 +51,13 @@ public class AssegnaPuntiController { // QUASI OK
 		return result;
 	}
 	
+    public void registraOsservatoreSegnalazioniRisolte(Observer observer) {
+    	SegnalazioniRisolte.getInstance().registraOsservatore(observer);
+    }
+    public List<SegnalazioneBean> getSegnalazioniRisolte() {   
+    	return convertSegnalazioneListToBeanList(SegnalazioniRisolte.getInstance().getSegnalazioni());  
+    }
+	
     public List<SegnalazioneBean> getSegnalazioniDaRiscontrate() {       
 		try {
 	        List<Segnalazione> segnalazioniDaRiscontrare=segnalazioneDAO.getSegnalazioniByStato(StatoSegnalazione.RISOLTA.getStato());
@@ -67,7 +69,7 @@ public class AssegnaPuntiController { // QUASI OK
 					s.setPosizione(posizioneTesto);
 				}
 				
-		        ListaSegnalazioniRisolte.getInstance().setSegnalazioni(segnalazioniDaRiscontrare);
+		        SegnalazioniRisolte.getInstance().setSegnalazioni(segnalazioniDaRiscontrare);
 				return convertSegnalazioneListToBeanList(segnalazioniDaRiscontrare);
 			} else {
 				return new ArrayList<>();
@@ -80,7 +82,6 @@ public class AssegnaPuntiController { // QUASI OK
 
     }
 	
-	// DEVO PASSARE I PUNTI E SETTARLI QUI?
 	public boolean assegnaPunti(SegnalazioneBean segnalazioneBean) {
 	    try {
 	        int puntiAssegnati = segnalazioneBean.getPuntiAssegnati();
@@ -88,7 +89,7 @@ public class AssegnaPuntiController { // QUASI OK
 	        segnalazioneDAO.assegnaPunti(segnalazioneBean.getIdSegnalazione(), puntiAssegnati);
 	        utenteBaseDAO.aggiungiPunti(segnalazioneBean.getIdUtente(), puntiAssegnati);
 	        
-	        ListaSegnalazioniRisolte.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); 
+	        SegnalazioniRisolte.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean)); 
 
 	        return true;
 	    } catch (Exception e) {
@@ -101,13 +102,13 @@ public class AssegnaPuntiController { // QUASI OK
 
 		segnalazione.setDescrizione(s.getDescrizione());
 		segnalazione.setFoto(s.getFoto());
-		segnalazione.setIdUtente(s.getIdUtente());
 		segnalazione.setLatitudine(s.getLatitudine());
 		segnalazione.setLongitudine(s.getLongitudine());
 		segnalazione.setPuntiAssegnati(s.getPuntiAssegnati());
 		segnalazione.setPosizione(s.getPosizione());
 		segnalazione.setStato(s.getStato());
 		segnalazione.setIdSegnalazione(s.getIdSegnalazione());
+		segnalazione.setIdUtente(s.getIdUtente());
 
         return segnalazione;
     }
