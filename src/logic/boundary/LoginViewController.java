@@ -4,7 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.CheckBox;
 import logic.beans.CredenzialiBean;
 import logic.controller.LoginController;
 import javafx.scene.control.PasswordField;
@@ -14,7 +13,6 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Hyperlink;
 
 public class LoginViewController {
-
 
 	@FXML
 	private TextField usernameField;
@@ -30,101 +28,77 @@ public class LoginViewController {
 
 	@FXML
 	private Hyperlink registerLink;
-	
-	@FXML
-	private CheckBox checkBoxFlag;
-	
 
-	
-//	private static LoginViewController instance;
+
+
 	LoginController loginController = LoginController.getInstance();
 
+	@FXML
+	private void initialize() {
 
+		ToggleGroup toggleGroup = new ToggleGroup();
 
-    @FXML
-    private void initialize() {
-    	
-    	
-        ToggleGroup toggleGroup = new ToggleGroup();
+		// assegno il ToggleGroup ai RadioButton in modo tale da gestire la selezione degli stessi
+		interfaceOption1.setToggleGroup(toggleGroup);
+		interfaceOption2.setToggleGroup(toggleGroup);
 
-        // assegno il ToggleGroup ai RadioButton in modo tale da gestire la selezione degli stessi
-        interfaceOption1.setToggleGroup(toggleGroup);
-        interfaceOption2.setToggleGroup(toggleGroup);
-        
+	}
 
-    }
-    
-    
-    // il metodo che viene eseguito al click del button "LOGIN"
-    @FXML
-    private void handleLoginButtonAction(ActionEvent event) {
+	// il metodo che viene eseguito al click del button "LOGIN"
+	@FXML
+	private void handleLoginButtonAction(ActionEvent event) {
 
+		String username = usernameField.getText();
+		String password = passwordField.getText();
 
-        String username=usernameField.getText();
-        String password= passwordField.getText();
-        
-
-		
-		if(username.equals("1"))
-		{
+		if (username.equals("1")) {
 			username = "utente_base1";
 			password = "password1";
-		}
-		else if(username.equals("2")){
-			 username = "esperto_eco1";
-			 password = "password2";
-		}
-		else if(username.equals("3")){
-			 username = "operatore_eco1";
-			 password = "password3";
+		} else if (username.equals("2")) {
+			username = "esperto_eco1";
+			password = "password2";
+		} else if (username.equals("3")) {
+			username = "operatore_eco1";
+			password = "password3";
 		}
 
-		
-        int interfacciaSelezionata = interfaceOption1.isSelected() ? 1 : 2;
-        authenticate(username, password, interfacciaSelezionata);
-    }
+		int interfacciaSelezionata = interfaceOption1.isSelected() ? 1 : 2;
+		authenticate(username, password, interfacciaSelezionata);
+	}
+
+	private void authenticate(String username, String password, int interfacciaSelezionata) {
+
+		// chiedo al LoginController di effettuare il login
+		CredenzialiBean credenzialiBean = new CredenzialiBean();
+		credenzialiBean.setUsername(username);
+		credenzialiBean.setPassword(password);
+
+		int success = loginController.effettuaLogin(credenzialiBean);
+
+		if (success == -1) {
+			showAlert(Alert.AlertType.ERROR, "Login Fallito", "Nome utente e/o password non validi.");
+			return;
+		}
+
+		showAlert(Alert.AlertType.INFORMATION, "Login Success", "Login effettuato con successo!");
+
+		// carico la nuova vista dopo il login
+		String viewIniziale = loginController.ottieniView(interfacciaSelezionata);
+		ViewLoader.caricaView(ViewInfo.fromFxmlPath(viewIniziale));
+	}
+
+	@FXML
+	private void handleRegisterLinkAction() {
+		ViewLoader.caricaView(ViewInfo.REGISTRAZIONE_VIEW);
+	}
+
+	private void showAlert(AlertType alertType, String title, String content) {
+		Alert alert = new Alert(alertType);
+		alert.setTitle(title);
+		alert.setContentText(content);
+		alert.showAndWait();
+	}
 
 
-    private void authenticate(String username, String password, int interfacciaSelezionata) {
-    	
-        // chiedo al LoginController di effettuare il login
-    	CredenzialiBean credenzialiBean = new CredenzialiBean();
-    	credenzialiBean.setUsername(username);
-    	credenzialiBean.setPassword(password);
-    	
-    		
-
-        int success = loginController.effettuaLogin(credenzialiBean);
-
-        if (success == -1) {
-            showAlert(Alert.AlertType.ERROR, "Login Fallito", "Nome utente e/o password non validi.");
-            return;
-        }
-
-        showAlert(Alert.AlertType.INFORMATION, "Login Success", "Login effettuato con successo!");
-
-        // carico la nuova vista dopo il login
-        String viewIniziale=loginController.ottieniView(interfacciaSelezionata); 
-        ViewLoader.caricaView(ViewInfo.fromFxmlPath(viewIniziale));
-    }
-
-    @FXML
-    private void handleRegisterLinkAction() {   
-        ViewLoader.caricaView(ViewInfo.REGISTRAZIONE_VIEW);
-    }
-
-    private void showAlert(AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-//    public static LoginViewController getInstance() {
-//        if (instance == null) {
-//            instance = new LoginViewController();
-//        }
-//        return instance;
-//    }
 
 }

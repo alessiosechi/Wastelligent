@@ -88,7 +88,7 @@
             <Font name="System Bold" size="26.25" />
          </font>
       </Label>
-      <TableView fx:id="tableViewRicompense" layoutX="600.0" layoutY="236.25" prefHeight="150.0" prefWidth="450.0" style="-fx-background-color: #E9F0EB; -fx-border-color: #216838;">
+      <TableView fx:id="tableViewRiscatti" layoutX="600.0" layoutY="236.25" prefHeight="150.0" prefWidth="450.0" style="-fx-background-color: #E9F0EB; -fx-border-color: #216838;">
         <columns>
           <TableColumn fx:id="colNomeRicompensa" prefWidth="218.25" text="Ricompensa" />
           <TableColumn fx:id="colCodiceRiscatto" prefWidth="231.0" text="Codice" />

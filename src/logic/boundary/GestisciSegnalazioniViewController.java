@@ -18,6 +18,7 @@ import javafx.scene.control.TableView;
 import logic.beans.OperatoreEcologicoBean;
 import logic.beans.SegnalazioneBean;
 import logic.controller.RisolviSegnalazioneController;
+import logic.exceptions.OperatoreNonDisponibileException;
 import logic.observer.Observer;
 
 public class GestisciSegnalazioniViewController implements Observer{
@@ -102,26 +103,27 @@ public class GestisciSegnalazioniViewController implements Observer{
 	        logger.info("Eliminazione annullata.");
 	    }
 	}
-
 	private void handleAssegnaAction() {
-		
-
-        int selectedIndex = operatoriEcologiciComboBox.getSelectionModel().getSelectedIndex();
-        OperatoreEcologicoBean operatoreSelezionato =  operatoriEcologici.get(selectedIndex);
+	    int selectedIndex = operatoriEcologiciComboBox.getSelectionModel().getSelectedIndex();
+	    OperatoreEcologicoBean operatoreSelezionato = operatoriEcologici.get(selectedIndex);
 
 	    SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
+	    
 	    if (operatoreSelezionato != null && segnalazioneSelezionata != null) {
-	        
-	        if (risolviSegnalazioneController.assegnaOperatore(segnalazioneSelezionata,operatoreSelezionato)) {
-	            logger.info("Segnalazione assegnata con successo a " + operatoreSelezionato.getUsername());
-
-	        } else {
-	            showAlert("Errore Assegnazione", "Si è verificato un errore durante l'assegnazione della segnalazione.");
-	        }
+	        try {
+	            if (risolviSegnalazioneController.assegnaOperatore(segnalazioneSelezionata, operatoreSelezionato)) {
+	                logger.info("Segnalazione assegnata con successo a " + operatoreSelezionato.getUsername());
+	            } else {
+	                showAlert("Errore Assegnazione", "Si è verificato un errore durante l'assegnazione della segnalazione.");
+	            }
+	        } catch (OperatoreNonDisponibileException e) {
+	            showAlert("Operatore Non Disponibile", e.getMessage());
+	        } 
 	    } else {
 	        showAlert("Selezione Mancante", "Seleziona sia un operatore che una segnalazione per procedere con l'assegnazione.");
 	    }
 	}
+
     
     public void initialize() {
         configureButtons();

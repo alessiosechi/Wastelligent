@@ -31,7 +31,6 @@ public class RegistrazioneViewController {
 	@FXML
 	private Hyperlink loginLink;
 
-//	private static RegistrazioneViewController instance;
 	private RegistrazioneController registrazioneController = RegistrazioneController.getInstance();
 
 	@FXML
@@ -70,16 +69,19 @@ public class RegistrazioneViewController {
 			registrazioneController.registraUtente(credenzialiBean);
 
 			showAlert(AlertType.INFORMATION, "Registrazione avvenuta", "La registrazione è avvenuta con successo.");
-			ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);
+			caricaLoginView();
 		} catch (UsernameAlreadyTakenException | RegistrazioneUtenteException e) {
 			showAlert(AlertType.ERROR, "Errore Registrazione", e.getMessage());
 		}
 
 	}
+	private void caricaLoginView() {
+	    ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);
+	}
 
 	@FXML
 	private void handleLoginLinkAction(ActionEvent event) {
-		ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);
+		caricaLoginView();
 	}
 
 	private void showAlert(AlertType alertType, String title, String content) {
@@ -88,12 +90,5 @@ public class RegistrazioneViewController {
 		alert.setContentText(content);
 		alert.showAndWait();
 	}
-
-//	public static RegistrazioneViewController getInstance() {
-//		if (instance == null) {
-//			instance = new RegistrazioneViewController();
-//		}
-//		return instance;
-//	}
 
 }

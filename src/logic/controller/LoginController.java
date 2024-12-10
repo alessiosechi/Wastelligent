@@ -3,24 +3,27 @@ package logic.controller;
 import java.util.logging.Logger;
 
 import logic.model.dao.DaoFactory;
+import logic.model.dao.UtenteDao;
 import logic.beans.CredenzialiBean;
-import logic.config.PersistenceConfigurator;
-import logic.config.PersistenceProvider;
-import logic.model.dao.AccountDao;
 import logic.model.domain.Ruolo;
 import logic.model.domain.Utente;
-import logic.model.domain.UtenteCorrente;
+import logic.model.domain.LoggedUser;
 
 public class LoginController { 
 	private static volatile LoginController instance;
 	private static Utente utente = null;
-	private static AccountDao accountDao;
+	private UtenteDao utenteDao;
 	private static UtenteFactory utenteFactory = new UtenteFactory();
-	private static UtenteCorrente utenteCorrente=UtenteCorrente.getInstance();
+	private static LoggedUser utenteCorrente=LoggedUser.getInstance();
 
 	private static final Logger logger = Logger.getLogger(LoginController.class.getName());
 
 	private LoginController() {
+		try {
+			utenteDao = DaoFactory.getDao(UtenteDao.class);
+		} catch (Exception e) {
+			logger.severe("Errore durante l'inizializzazione del DAO: " + e.getMessage());
+		}
 	}
 
 	public static LoginController getInstance() {
@@ -32,13 +35,6 @@ public class LoginController {
 				result = instance;
 				if (result == null) {
 					instance = result = new LoginController();
-						
-					try {
-						accountDao = DaoFactory.getDao(AccountDao.class);
-
-					} catch (Exception e) {
-						logger.severe("Errore durante l'inizializzazione del DAO: " + e.getMessage());
-					}
 				}
 			}
 		}
@@ -52,8 +48,8 @@ public class LoginController {
 			String password = credenzialiBean.getPassword();
 			
 
-			int ruoloId = accountDao.autenticazione(username, password);
-			int idUtente = accountDao.getIdByUsername(username);
+			int ruoloId = utenteDao.autenticazione(username, password);
+			int idUtente = utenteDao.getIdByUsername(username);
 
 			setUtente(idUtente, username, Ruolo.fromInt(ruoloId));
 			return 1;
@@ -65,29 +61,19 @@ public class LoginController {
 
 	}
 
-
-
 	private static void setUtente(int idUtente, String username, Ruolo ruolo) {
 		if (ruolo == null) {
-			throw new IllegalArgumentException("Ruolo non può essere null");
+			throw new IllegalArgumentException("ruolo non può essere null");
 		}
 		utente = utenteFactory.createUtente(idUtente, username, ruolo);	
 		utenteCorrente.setUtente(utente);
+		
 	}
 	
-	
-	public void configurePersistence(boolean useDemoVersion) {
-		PersistenceProvider provider = useDemoVersion ? PersistenceProvider.IN_MEMORY : PersistenceProvider.DATABASE;
-		PersistenceConfigurator.configurePersistence(provider);
-	}
+
 
 	public String ottieniView(int interfacciaSelezionata) { // restituisce la view iniziale da caricare
 		return utente.getViewIniziale(interfacciaSelezionata);
 	}
 
-
-	public static void logout() { // il logout potrebbe non servire, tanto ad ogni login sovrascrivo l'utente
-		utente = null;
-		logger.info("Logout effettuato correttamente.");
-	}
 }

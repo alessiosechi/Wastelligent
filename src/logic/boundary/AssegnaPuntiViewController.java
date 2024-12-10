@@ -44,7 +44,6 @@ public class AssegnaPuntiViewController implements Observer{
 	private TableColumn<SegnalazioneBean, String> operatoreColumn;
 	
 
-	private static AssegnaPuntiViewController instance;
 	private AssegnaPuntiController assegnaPuntiController = AssegnaPuntiController.getInstance();
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
     private boolean osservatoreRegistrato = false; 
@@ -141,13 +140,6 @@ public class AssegnaPuntiViewController implements Observer{
 	}
 
 
-
-	public static AssegnaPuntiViewController getInstance() {
-		if (instance == null) {
-			instance = new AssegnaPuntiViewController();
-		}
-		return instance;
-	}
 
 
 	@Override

@@ -30,43 +30,46 @@ public class DaoFactory {
     // metodo per creare il DAO specifico in base al tipo
     @SuppressWarnings("unchecked")
 	private static <T> T createDao(Class<T> daoClass) {
-    	if (daoClass == AccountDao.class) {
-            return (T) createLoginDAO();
+    	if (daoClass == UtenteDao.class) {
+            return (T) createUtenteDao();
         } else if (daoClass == SegnalazioneDao.class) {
-            return (T) createSegnalazioneDAO();
+            return (T) createSegnalazioneDao();
         } else if (daoClass == UtenteBaseDao.class) {
-            return (T) createUtenteDAO();
-        } else if (daoClass == OperatoreEcologicoDao.class) {
-            return (T) createOperatoreEcologicoDAO();
+            return (T) createUtenteBaseDao();
+        } else if (daoClass == RiscattoDao.class) {
+            return (T) createRiscattoDao();
         } else if (daoClass == RicompensaDao.class) {
-            return (T) createRicompensaDAO();
-        } else if (daoClass == ListaRicompenseDao.class) {
-        	return (T) createListaRicompenseDAO();
+        	return (T) createListaRicompenseDao();
+        } else if (daoClass == CoordinateDao.class) {
+        	return (T) createCoordinateDao();
         }
+  
         return null;
     }
 
     // metodi specifici per creare i DAO
-    private static AccountDao createLoginDAO() {
-        return isInMemory() ? (AccountDao) new AccountDaoInMemory() : (AccountDao) AccountDaoDatabase.getInstance();
+    private static UtenteDao createUtenteDao() {
+        return isInMemory() ? (UtenteDao) new UtenteDaoInMemory() : (UtenteDao) UtenteDaoDatabase.getInstance();
     }
     
-    private static SegnalazioneDao createSegnalazioneDAO() {
+    private static SegnalazioneDao createSegnalazioneDao() {
         return isInMemory() ? (SegnalazioneDao) new SegnalazioneDaoInMemory() : (SegnalazioneDao) SegnalazioneDaoDatabase.getInstance();
     }
 
-    private static UtenteBaseDao createUtenteDAO() {
+    private static UtenteBaseDao createUtenteBaseDao() {
         return isInMemory() ? (UtenteBaseDao) new UtenteBaseDaoInMemory() : (UtenteBaseDao) UtenteBaseDaoDatabase.getInstance();
     }
-    private static OperatoreEcologicoDao createOperatoreEcologicoDAO() {
-        return isInMemory() ? (OperatoreEcologicoDao) new OperatoreEcologicoDaoInMemory() : (OperatoreEcologicoDao) OperatoreEcologicoDaoDatabase.getInstance();
-    }
 
-    private static RicompensaDao createRicompensaDAO() {
-        return isInMemory() ? (RicompensaDao) new RicompensaDaoInMemory() : (RicompensaDao) RicompensaDaoDatabase.getInstance();
+
+    private static RiscattoDao createRiscattoDao() {
+        return isInMemory() ? (RiscattoDao) new RiscattoDaoInMemory() : (RiscattoDao) new RiscattoDaoSerializable();
     }
-    private static ListaRicompenseDao createListaRicompenseDAO() {
-    	return ListaRicompenseDaoGithub.getInstance();
+    private static RicompensaDao createListaRicompenseDao() {
+    	return RicompensaDaoAPI.getInstance();
+    }
+    
+    private static CoordinateDao createCoordinateDao() {
+    	return new CoordinateDaoAPI();
     }
 
 

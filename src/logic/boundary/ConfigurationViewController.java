@@ -10,33 +10,30 @@ import logic.config.PersistenceConfigurator;
 import logic.config.PersistenceProvider;
 
 public class ConfigurationViewController {
-    @FXML
-    private RadioButton demoModeRadioButton; 
+	@FXML
+	private RadioButton demoModeRadioButton;
 
-    @FXML
-    private RadioButton memoryModeRadioButton; 
+	@FXML
+	private RadioButton memoryModeRadioButton;
 
+	@FXML
+	private void initialize() {
+		ToggleGroup modeToggleGroup = new ToggleGroup();
+		demoModeRadioButton.setToggleGroup(modeToggleGroup);
+		memoryModeRadioButton.setToggleGroup(modeToggleGroup);
 
-    @FXML
-    private void initialize() {
-    	ToggleGroup modeToggleGroup = new ToggleGroup();
-        demoModeRadioButton.setToggleGroup(modeToggleGroup);
-        memoryModeRadioButton.setToggleGroup(modeToggleGroup);
+		demoModeRadioButton.setSelected(true);
+	}
 
-        demoModeRadioButton.setSelected(true);
-    }
+	@FXML
+	private void handleConfirmButtonAction(ActionEvent event) {
 
-
-    @FXML
-    private void handleConfirmButtonAction(ActionEvent event) {
-
-		PersistenceProvider provider = demoModeRadioButton.isSelected() ? PersistenceProvider.IN_MEMORY : PersistenceProvider.DATABASE;
+		PersistenceProvider provider = demoModeRadioButton.isSelected() ? PersistenceProvider.IN_MEMORY
+				: PersistenceProvider.DATABASE;
 		PersistenceConfigurator.configurePersistence(provider);
-		
-	    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-	    stage.hide();
-		ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);
-		
 
-    }
+		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		stage.hide();
+		ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);
+	}
 }

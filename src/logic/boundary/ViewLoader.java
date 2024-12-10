@@ -31,17 +31,10 @@ public class ViewLoader {
 	        if (Objects.equals(viewInfo, ViewInfo.DETTAGLI_VIEW)) {
 	            loader.setController(DettagliSegnalazioneViewController.getInstance());
 	        }
-	        
-//	        if (Objects.equals(viewInfo, ViewInfo.LOGIN_VIEW)) {
-//		        stage.hide();
-//	        }
-//			
-
+	      	
 			Parent root = loader.load();
 
-
 			stage.setScene(new Scene(root));
-			stage.centerOnScreen();
 			stage.setTitle(viewInfo.getTitle());
 			stage.show();
 		} catch (IOException e) {

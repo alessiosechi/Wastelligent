@@ -1,112 +1,93 @@
+
 package logic.model.dao;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import logic.model.dao.queries.UtenteBaseQueries;
 
 public class UtenteBaseDaoDatabase implements UtenteBaseDao {
 
-    private static volatile UtenteBaseDaoDatabase instance;
-    private static final Logger logger = Logger.getLogger(UtenteBaseDaoDatabase.class.getName());
+	private static volatile UtenteBaseDaoDatabase instance;
+	private static final Logger logger = Logger.getLogger(UtenteBaseDaoDatabase.class.getName());
 
-    public static UtenteBaseDaoDatabase getInstance() {
-        UtenteBaseDaoDatabase result = instance;
+	public static UtenteBaseDaoDatabase getInstance() {
+		UtenteBaseDaoDatabase result = instance;
 
-        if (result == null) {
-            synchronized (UtenteBaseDaoDatabase.class) {
-                result = instance;
-                if (result == null) {
-                    instance = result = new UtenteBaseDaoDatabase();
-                }
-            }
-        }
-        return result;
-    }
-    
-    public int estraiPunti(int idUtente) {
-        int punti = 0;
-        String sql = "SELECT punti FROM punti_utenti WHERE id_utente = ?";
-        
-        try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)) {
-            
-            stmt.setInt(1, idUtente);
-            
-            try (ResultSet resultSet = stmt.executeQuery()) {
-                if (resultSet.next()) {
-                    punti = resultSet.getInt("punti");
-                }
-            }
-            
-        } catch (SQLException e) {
-        	logger.severe("Errore durante il recupero dei punti dell'utente: " + e.getMessage());
-        }
-        
-        return punti;
-    }
+		if (result == null) {
+			synchronized (UtenteBaseDaoDatabase.class) {
+				result = instance;
+				if (result == null) {
+					instance = result = new UtenteBaseDaoDatabase();
+				}
+			}
+		}
+		return result;
+	}
 
-    @Override
-    public void aggiungiPunti(int idUtente, int puntiDaAggiungere) {
-        Connection connessione = null;
-        PreparedStatement stmt = null;
+	public int estraiPunti(int idUtente) {
+	    int punti = 0;
+	    Connection connessione = null;
 
-        try {
-            connessione = DBConnection.getConnection();
-            String sql = "UPDATE punti_utenti SET punti = punti + ? WHERE id_utente = ?";
-            stmt = connessione.prepareStatement(sql);
-            stmt.setInt(1, puntiDaAggiungere);
-            stmt.setInt(2, idUtente);
+	    try {
+	        connessione = DBConnection.getConnection();
+            ResultSet resultSet = UtenteBaseQueries.estraiPunti(connessione, idUtente);
 
-            int righeAggiornate = stmt.executeUpdate();
-            if (righeAggiornate > 0) {
-                connessione.commit();
-            } else {
-                connessione.rollback();
-            }
-        } catch (SQLException e) {
-        	logger.severe("Errore durante l'operazione di aggiunta punti: " + e.getMessage());
-        } finally {
-            try {
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                logger.severe("Errore durante la chiusura del PreparedStatement dopo l'operazione di aggiunta punti. Dettagli: " + e.getMessage());
-            }
-        }
-    }
+	        if (resultSet.next()) {
+	            punti = resultSet.getInt("punti");
+	        }
 
-    @Override
-    public void sottraiPunti(int idUtente, int puntiDaSottrarre) {
-        Connection connessione = null;
-        PreparedStatement stmt = null;
+	    } catch (SQLException e) {
+	        logger.severe("Errore durante il recupero dei punti dell'utente: " + e.getMessage());
+	    } 
 
-        try {
-            connessione = DBConnection.getConnection();
-            String sql = "UPDATE punti_utenti SET punti = punti - ? WHERE id_utente = ?";
-            stmt = connessione.prepareStatement(sql);
-            stmt.setInt(1, puntiDaSottrarre);
-            stmt.setInt(2, idUtente);
-
-            int righeAggiornate = stmt.executeUpdate();
-            if (righeAggiornate > 0) {
-                connessione.commit();
-            } else {
-                connessione.rollback();
-            }
-        } catch (SQLException e) {
-        	logger.severe("Errore durante l'operazione di sottrazione punti: " + e.getMessage());
-        } finally {
-            try {
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                logger.severe("Errore durante la chiusura del PreparedStatement dopo l'operazione di sottrazione punti. Dettagli: " + e.getMessage());
-            }
-        }
-    }
-    
+	    return punti;
+	}
 
 
-    
+	@Override
+	public void aggiungiPunti(int idUtente, int puntiDaAggiungere) {
+	    Connection connessione = null;
+
+	    try {
+	        connessione = DBConnection.getConnection();
+	        connessione.setAutoCommit(false); 
+
+	        int righeAggiornate = UtenteBaseQueries.aggiungiPunti(connessione, idUtente, puntiDaAggiungere);
+
+	        if (righeAggiornate > 0) {
+	            connessione.commit(); 
+	        } else {
+	            connessione.rollback(); 
+	        }
+
+	    } catch (SQLException e) {
+	        logger.severe("Errore durante l'operazione di aggiunta punti: " + e.getMessage());
+	    } 
+	}
+
+
+	@Override
+	public void sottraiPunti(int idUtente, int puntiDaSottrarre) {
+	    Connection connessione = null;
+
+	    try {
+	        connessione = DBConnection.getConnection();
+	        connessione.setAutoCommit(false); 
+
+	        int righeAggiornate = UtenteBaseQueries.sottraiPunti(connessione, idUtente, puntiDaSottrarre);
+
+	        if (righeAggiornate > 0) {
+	            connessione.commit(); 
+	        } else {
+	            connessione.rollback(); 
+	        }
+
+	    } catch (SQLException e) {
+	        logger.severe("Errore durante l'operazione di sottrazione punti: " + e.getMessage());
+	    }
+	}
 
 }

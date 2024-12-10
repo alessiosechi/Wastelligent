@@ -38,7 +38,6 @@ public class SegnalazioniAssegnateViewController implements Observer{
 	
 	
     private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
-    private static SegnalazioniAssegnateViewController instance;
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
 	private static final Logger logger = Logger.getLogger(SegnalazioniAssegnateViewController.class.getName());
     private boolean osservatoreRegistrato = false; 
@@ -110,13 +109,6 @@ public class SegnalazioniAssegnateViewController implements Observer{
           
         ObservableList<SegnalazioneBean> segnalazioni = FXCollections.observableArrayList(segnalazioniAssegnate);
         segnalazioniTable.setItems(segnalazioni);
-    }
-        
-    public static SegnalazioniAssegnateViewController getInstance() {
-        if (instance == null) {
-            instance = new SegnalazioniAssegnateViewController();
-        }
-        return instance;
     }
 
 	@Override

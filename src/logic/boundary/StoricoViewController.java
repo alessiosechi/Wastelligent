@@ -38,10 +38,8 @@ public class StoricoViewController {
     
    
     
-//	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
-	DettagliSegnalazioneViewController dettagliSegnalazioneViewController= new DettagliSegnalazioneViewController();
+	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
 	private RiscattaRicompensaController riscattaRicompensaController = RiscattaRicompensaController.getInstance();
-//    private static StoricoViewController instance;
     
     
     
@@ -53,9 +51,8 @@ public class StoricoViewController {
         impostaListenerSelezione();
     }
     
-    private void caricaSegnalazioni() {
-		
-        List<SegnalazioneBean> segnalazioni = riscattaRicompensaController.ottieniSegnalazioniRiscontrate();
+    private void caricaSegnalazioni() {	
+        List<SegnalazioneBean> segnalazioni = riscattaRicompensaController.ottieniSegnalazioniUtente();
 
         ObservableList<SegnalazioneBean> segnalazioniRiscontrate = FXCollections.observableArrayList(segnalazioni);
         tableViewSegnalazioni.setItems(segnalazioniRiscontrate);
@@ -90,16 +87,6 @@ public class StoricoViewController {
             }
         });
 	}
-
-
-//    public static StoricoViewController getInstance() {
-//        if (instance == null) {
-//            instance = new StoricoViewController();
-//        }
-//        return instance;
-//    }
-    
-
 
 }
 
