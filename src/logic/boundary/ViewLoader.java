@@ -16,13 +16,14 @@ public class ViewLoader {
 	private ViewLoader() {
 	}
 		
-    public static void setStage(Stage primaryStage) {
-        if (stage == null) {
-        	stage = primaryStage;
-        } else {
-            logger.warning("Stage già impostato");
-        }
-    }
+	public static void setStage(Stage primaryStage) {
+		if (stage == null) {
+			stage = primaryStage;
+		} else {
+			logger.warning("Stage già impostato");
+		}
+	}
+	
 	public static void caricaView(ViewInfo viewInfo) {
 
 		try {
@@ -31,13 +32,13 @@ public class ViewLoader {
 	        if (Objects.equals(viewInfo, ViewInfo.DETTAGLI_VIEW)) {
 	            loader.setController(DettagliSegnalazioneViewController.getInstance());
 	        }
-	      	
-			Parent root = loader.load();
 
+			Parent root = loader.load();
 			stage.setScene(new Scene(root));
 			stage.setTitle(viewInfo.getTitle());
 			stage.show();
 		} catch (IOException e) {
+			e.printStackTrace();
 			logger.severe("Errore durante il caricamento della view: " + e.getMessage());
 		}
 	}	

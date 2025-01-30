@@ -23,25 +23,25 @@ public class RicompensaDaoAPI implements RicompensaDao {
 	private static final String API_URL_REWARDS = "https://raw.githubusercontent.com/alessiosechi/API_Rewards_public/main/rewards.json";
     private static final String API_URL_CODES = "https://raw.githubusercontent.com/alessiosechi/API_Rewards_public/main/codes.json";
 
-	private static volatile RicompensaDaoAPI instance;
+//	private static volatile RicompensaDaoAPI instance;
 	private static final Logger logger = Logger.getLogger(RicompensaDaoAPI.class.getName());
 
-	public static RicompensaDaoAPI getInstance() {
-		RicompensaDaoAPI result = instance;
-
-		if (instance == null) {
-			// blocco sincronizzato
-			synchronized (RicompensaDaoAPI.class) {
-				result = instance;
-				if (result == null) {
-					instance = result = new RicompensaDaoAPI();
-				}
-
-			}
-		}
-
-		return result;
-	}
+//	public static RicompensaDaoAPI getInstance() {
+//		RicompensaDaoAPI result = instance;
+//
+//		if (instance == null) {
+//			// blocco sincronizzato
+//			synchronized (RicompensaDaoAPI.class) {
+//				result = instance;
+//				if (result == null) {
+//					instance = result = new RicompensaDaoAPI();
+//				}
+//
+//			}
+//		}
+//
+//		return result;
+//	}
 
 	@Override
 	public List<Ricompensa> getRicompense() throws ConnessioneAPIException {

@@ -31,7 +31,7 @@ public class LoginViewController {
 
 
 
-	LoginController loginController = LoginController.getInstance();
+	private LoginController loginController = LoginController.getInstance();
 
 	@FXML
 	private void initialize() {

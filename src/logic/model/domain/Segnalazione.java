@@ -22,8 +22,7 @@ public class Segnalazione  {
 		// Costruttore vuoto
 	}
 
-	// Sovrascrivi il metodo equals per confrontare le segnalazioni tramite
-	// l'idSegnalazione
+	// sovrascrivo il metodo equals per confrontare le segnalazioni tramite l'ID
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)

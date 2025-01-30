@@ -10,22 +10,22 @@ import logic.model.dao.queries.UtenteBaseQueries;
 
 public class UtenteBaseDaoDatabase implements UtenteBaseDao {
 
-	private static volatile UtenteBaseDaoDatabase instance;
+//	private static volatile UtenteBaseDaoDatabase instance;
 	private static final Logger logger = Logger.getLogger(UtenteBaseDaoDatabase.class.getName());
 
-	public static UtenteBaseDaoDatabase getInstance() {
-		UtenteBaseDaoDatabase result = instance;
-
-		if (result == null) {
-			synchronized (UtenteBaseDaoDatabase.class) {
-				result = instance;
-				if (result == null) {
-					instance = result = new UtenteBaseDaoDatabase();
-				}
-			}
-		}
-		return result;
-	}
+//	public static UtenteBaseDaoDatabase getInstance() {
+//		UtenteBaseDaoDatabase result = instance;
+//
+//		if (result == null) {
+//			synchronized (UtenteBaseDaoDatabase.class) {
+//				result = instance;
+//				if (result == null) {
+//					instance = result = new UtenteBaseDaoDatabase();
+//				}
+//			}
+//		}
+//		return result;
+//	}
 
 	public int estraiPunti(int idUtente) {
 	    int punti = 0;

@@ -7,16 +7,16 @@ import logic.model.dao.UtenteDao;
 import logic.beans.CredenzialiBean;
 import logic.model.domain.Ruolo;
 import logic.model.domain.Utente;
+import logic.model.domain.UtenteFactory;
 import logic.model.domain.LoggedUser;
 
-public class LoginController { 
+public class LoginController {
 	private static volatile LoginController instance;
-	private static Utente utente = null;
-	private UtenteDao utenteDao;
-	private static UtenteFactory utenteFactory = new UtenteFactory();
-	private static LoggedUser utenteCorrente=LoggedUser.getInstance();
-
 	private static final Logger logger = Logger.getLogger(LoginController.class.getName());
+	private Utente utente = null;
+	private UtenteFactory utenteFactory = UtenteFactory.getInstance();
+	private LoggedUser utenteCorrente = LoggedUser.getInstance();
+	private UtenteDao utenteDao;
 
 	private LoginController() {
 		try {
@@ -46,13 +46,17 @@ public class LoginController {
 		try {
 			String username = credenzialiBean.getUsername();
 			String password = credenzialiBean.getPassword();
-			
+			if (utenteDao.autenticazione(username, password)) {
 
-			int ruoloId = utenteDao.autenticazione(username, password);
-			int idUtente = utenteDao.getIdByUsername(username);
+				int ruoloId = utenteDao.getRuoloIdByUsername(username);
+				int idUtente = utenteDao.getIdByUsername(username);
 
-			setUtente(idUtente, username, Ruolo.fromInt(ruoloId));
-			return 1;
+				setUtente(idUtente, username, Ruolo.fromInt(ruoloId));
+				return 1;
+			} else {
+				logger.warning("Login fallito: credenziali non valide.");
+				return -1;
+			}
 
 		} catch (Exception e) {
 			logger.severe("Errore durante la fase di login.");
@@ -61,16 +65,14 @@ public class LoginController {
 
 	}
 
-	private static void setUtente(int idUtente, String username, Ruolo ruolo) {
+	private void setUtente(int idUtente, String username, Ruolo ruolo) {
 		if (ruolo == null) {
 			throw new IllegalArgumentException("ruolo non può essere null");
 		}
-		utente = utenteFactory.createUtente(idUtente, username, ruolo);	
-		utenteCorrente.setUtente(utente);
-		
-	}
-	
+		utente = utenteFactory.createUtente(idUtente, username, ruolo);
+		utenteCorrente.setUtente(utente); // ad ogni login sovrascrivo
 
+	}
 
 	public String ottieniView(int interfacciaSelezionata) { // restituisce la view iniziale da caricare
 		return utente.getViewIniziale(interfacciaSelezionata);

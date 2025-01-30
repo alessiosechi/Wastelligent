@@ -6,7 +6,7 @@ import java.util.Map;
 public class UtenteBaseDaoInMemory implements UtenteBaseDao {
 
 	// mappa per tenere traccia dei punti degli utenti
-	private Map<Integer, Integer> puntiUtenti;
+	private Map<Integer, Integer> puntiUtenti; // mappo id utente - punti utente
 
 	public UtenteBaseDaoInMemory() {
 		this.puntiUtenti = new HashMap<>();
@@ -14,7 +14,8 @@ public class UtenteBaseDaoInMemory implements UtenteBaseDao {
 
 	@Override
 	public int estraiPunti(int idUtente) {
-		return puntiUtenti.getOrDefault(idUtente, 0); // restituisco i punti dell'utente, se non esistono restituisco 0
+		return puntiUtenti.getOrDefault(idUtente, 0); 
+		// restituisco i punti dell'utente, se non esistono restituisco 0
 	}
 
 	@Override

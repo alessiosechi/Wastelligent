@@ -1,5 +1,7 @@
 package logic.config;
 
+
+
 public class PersistenceConfigurator {
 
     private static PersistenceProvider currentProvider;
@@ -14,4 +16,6 @@ public class PersistenceConfigurator {
     public static PersistenceProvider getCurrentProvider() {
         return currentProvider;
     }
+
+
 }

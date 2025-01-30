@@ -3,12 +3,13 @@ package logic.boundary;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import logic.beans.CredenzialiBean;
+import logic.beans.SignUpBean;
 import logic.controller.RegistrazioneController;
 import logic.decorator.ValidaInput;
 import logic.decorator.ValidatoreSpaziVuoti;
@@ -26,12 +27,21 @@ public class RegistrazioneViewController {
 	private PasswordField passwordField;
 
 	@FXML
+	private ComboBox<TipologiaUtente> tipologiaUtenteComboBox;
+
+	@FXML
 	private Button registratiButton;
 
 	@FXML
 	private Hyperlink loginLink;
 
 	private RegistrazioneController registrazioneController = RegistrazioneController.getInstance();
+
+	@FXML
+	private void initialize() {
+
+		tipologiaUtenteComboBox.getItems().addAll(TipologiaUtente.values());
+	}
 
 	@FXML
 	private void handleRegistratiButtonAction(ActionEvent event) {
@@ -43,6 +53,7 @@ public class RegistrazioneViewController {
 
 		String username = usernameField.getText();
 		String password = passwordField.getText();
+		TipologiaUtente tipologia = tipologiaUtenteComboBox.getValue();
 
 		if (username.isEmpty() || password.isEmpty()) {
 			showAlert(AlertType.WARNING, "Errore", "I campi username e password sono obbligatori.");
@@ -61,12 +72,13 @@ public class RegistrazioneViewController {
 			return;
 		}
 
-		CredenzialiBean credenzialiBean = new CredenzialiBean();
-		credenzialiBean.setUsername(username);
-		credenzialiBean.setPassword(password);
+		SignUpBean signUpBean = new SignUpBean();
+		signUpBean.setUsername(username);
+		signUpBean.setPassword(password);
+		signUpBean.setTipologiaId(tipologia.getValore());
 
 		try {
-			registrazioneController.registraUtente(credenzialiBean);
+			registrazioneController.registraUtente(signUpBean);
 
 			showAlert(AlertType.INFORMATION, "Registrazione avvenuta", "La registrazione è avvenuta con successo.");
 			caricaLoginView();
@@ -75,8 +87,9 @@ public class RegistrazioneViewController {
 		}
 
 	}
+
 	private void caricaLoginView() {
-	    ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);
+		ViewLoader.caricaView(ViewInfo.LOGIN_VIEW);
 	}
 
 	@FXML
@@ -89,6 +102,27 @@ public class RegistrazioneViewController {
 		alert.setTitle(title);
 		alert.setContentText(content);
 		alert.showAndWait();
+	}
+
+	enum TipologiaUtente {
+		UTENTE_BASE(1, "Utente base"), ESPERTO(2, "Esperto ecologico"), OPERATORE(3, "Operatore ecologico");
+
+		private final int valore;
+		private final String descrizione;
+
+		TipologiaUtente(int valore, String descrizione) {
+			this.valore = valore;
+			this.descrizione = descrizione;
+		}
+
+		public int getValore() {
+			return valore;
+		}
+
+		@Override
+		public String toString() {
+			return descrizione;
+		}
 	}
 
 }

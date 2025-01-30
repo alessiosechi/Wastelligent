@@ -46,7 +46,6 @@ public class AssegnaPuntiViewController implements Observer{
 
 	private AssegnaPuntiController assegnaPuntiController = AssegnaPuntiController.getInstance();
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
-    private boolean osservatoreRegistrato = false; 
 	
 	
 	@FXML
@@ -57,11 +56,7 @@ public class AssegnaPuntiViewController implements Observer{
         configuraPulsanti();
         impostaListenerSelezione(valoreInizialeTextField);
         
-        // Verifica se l'osservatore è già stato registrato
-        if (!osservatoreRegistrato) {
-        	assegnaPuntiController.registraOsservatoreSegnalazioniRisolte(this);
-            osservatoreRegistrato = true;  // Segna l'osservatore come registrato
-        }
+    	assegnaPuntiController.registraOsservatoreSegnalazioniRisolte(this);
 	}
 	
 	

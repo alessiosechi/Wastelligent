@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import logic.observer.Observer;
-import logic.observer.Subject2;
+import logic.observer.Subject;
 
-public class UtenteBase extends Utente implements Subject2 {
+public class UtenteBase extends Utente implements Subject {
 	private List<Observer> osservatori = new ArrayList<>();
+
 	private List<Segnalazione> segnalazioni = null;
 	private List<Riscatto> riscatti = null;
+
 	private int punti;
 
 	public UtenteBase(int idUtente, String username) {
@@ -19,6 +21,7 @@ public class UtenteBase extends Utente implements Subject2 {
 	public UtenteBase(int idUtente, String username, List<Segnalazione> segnalazioni, List<Riscatto> riscatti,
 			int punti) {
 		super(idUtente, username);
+
 		this.segnalazioni = segnalazioni;
 		this.riscatti = riscatti;
 		this.punti = punti;
@@ -29,7 +32,7 @@ public class UtenteBase extends Utente implements Subject2 {
 		if (interfaccia == 1) {
 			return "EffettuaSegnalazioneView.fxml";
 		} else {
-			return "EffettuaSegnalazioneView2.fxml";
+			return "/logic/boundary2/SegnalaRifiutiView.fxml";
 		}
 	}
 
@@ -45,8 +48,9 @@ public class UtenteBase extends Utente implements Subject2 {
 		return punti;
 	}
 
-	public void setPunti(int punti) {
+	public void aggiornaPunti(int punti) {
 		this.punti = punti;
+		notificaOsservatori();
 	}
 
 	public void aggiungiRiscatto(Riscatto riscatto) {

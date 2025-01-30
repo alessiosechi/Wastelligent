@@ -61,11 +61,11 @@ public class RiscattaRicompensaViewController implements Observer {
 
 	private RiscattaRicompensaController riscattaRicompensaController = RiscattaRicompensaController.getInstance();
 	private List<RicompensaBean> listaRicompenseAPI;
-	private boolean osservatoreRegistrato = false;
 
 	@FXML
 	public void initialize() {
-
+		riscattaRicompensaController.caricaUtente();
+		riscattaRicompensaController.registraOsservatoreRiscatti(this);
 		caricaPuntiUtente();
 		mostraRicompenseDisponibili();
 		setupEventHandlers();
@@ -73,10 +73,7 @@ public class RiscattaRicompensaViewController implements Observer {
 
 		tableViewRiscatti.setItems(FXCollections.observableArrayList(getRiscatti()));
 
-		if (!osservatoreRegistrato) {
-			riscattaRicompensaController.registraOsservatoreRiscatti(this);
-			osservatoreRegistrato = true;
-		}
+		riscattaRicompensaController.registraOsservatoreRiscatti(this);
 	}
 
 	private void caricaPuntiUtente() {

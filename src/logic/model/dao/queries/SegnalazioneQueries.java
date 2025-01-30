@@ -69,10 +69,11 @@ public class SegnalazioneQueries {
         String query = "SELECT s.id_segnalazione, s.id_utente, s.descrizione, s.foto, s.stato, s.latitudine, s.longitudine " +
                        "FROM assegnazioni a " +
                        "JOIN segnalazioni s ON a.id_segnalazione = s.id_segnalazione " +
-                       "WHERE a.id_operatore = ?";
+                       "WHERE a.id_operatore = ? AND s.stato = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setInt(1, idOperatore); 
+            stmt.setInt(1, idOperatore);
+            stmt.setString(2, StatoSegnalazione.IN_CORSO.getStato()); 
             return stmt.executeQuery();
         }
 

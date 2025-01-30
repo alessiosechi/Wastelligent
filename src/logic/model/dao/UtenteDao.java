@@ -6,11 +6,13 @@ import logic.model.domain.Ruolo;
 import logic.model.domain.Utente;
 
 public interface UtenteDao {
-	public int autenticazione(String username, String password);
+	public boolean autenticazione(String username, String password);
+	
+	public int getRuoloIdByUsername(String username);
 
 	public int getIdByUsername(String username);
 
-	public boolean registraUtente(String username, String password);
+	public boolean registraUtente(String username, String password, Ruolo ruolo);
 
 	public boolean isUsernameTaken(String username);
 	

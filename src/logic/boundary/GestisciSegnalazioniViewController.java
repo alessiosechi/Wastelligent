@@ -44,15 +44,12 @@ public class GestisciSegnalazioniViewController implements Observer{
     private TableColumn<SegnalazioneBean, String> posizioneColumn;
     @FXML
     private TableColumn<SegnalazioneBean, String> statoColumn;
-    
     @FXML
     private ComboBox<String> operatoriEcologiciComboBox;
 	
-    private static GestisciSegnalazioniViewController instance;
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
     private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
 	private static final Logger logger = Logger.getLogger(GestisciSegnalazioniViewController.class.getName());
-    private boolean osservatoreRegistrato = false; 
     private List<OperatoreEcologicoBean> operatoriEcologici;
     
 	private void configureButtons() {
@@ -91,7 +88,7 @@ public class GestisciSegnalazioniViewController implements Observer{
 	    assegnaPuntiButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW));
 	}
 	private void handleEliminaAction() {
-	    Optional<ButtonType> result = showAlert("Conferma Eliminazione", "Sei sicuro di voler eliminare la segnalazione selezionata?");
+	    Optional<ButtonType> result = showAlert("Conferma Eliminazione", "Sei sicuro di voler eliminare la segnalazione selezionata?", Alert.AlertType.CONFIRMATION);
 	    if (result.isPresent() && result.get() == ButtonType.OK) {
 	        SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
 	        if (segnalazioneSelezionata != null) {
@@ -110,17 +107,17 @@ public class GestisciSegnalazioniViewController implements Observer{
 	    SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
 	    
 	    if (operatoreSelezionato != null && segnalazioneSelezionata != null) {
-	        try {
-	            if (risolviSegnalazioneController.assegnaOperatore(segnalazioneSelezionata, operatoreSelezionato)) {
-	                logger.info("Segnalazione assegnata con successo a " + operatoreSelezionato.getUsername());
-	            } else {
-	                showAlert("Errore Assegnazione", "Si è verificato un errore durante l'assegnazione della segnalazione.");
-	            }
-	        } catch (OperatoreNonDisponibileException e) {
-	            showAlert("Operatore Non Disponibile", e.getMessage());
-	        } 
+            try {
+				if (risolviSegnalazioneController.assegnaOperatore(segnalazioneSelezionata, operatoreSelezionato)) {
+				    logger.info("Segnalazione assegnata con successo a " + operatoreSelezionato.getUsername());
+				} else {
+				    showAlert("Errore Assegnazione", "Si è verificato un errore durante l'assegnazione della segnalazione.", Alert.AlertType.INFORMATION);
+				}
+			} catch (OperatoreNonDisponibileException e) {
+				showAlert("Operatore non disponibile", e.getMessage(), Alert.AlertType.INFORMATION);
+			}
 	    } else {
-	        showAlert("Selezione Mancante", "Seleziona sia un operatore che una segnalazione per procedere con l'assegnazione.");
+	        showAlert("Selezione mancante", "Seleziona sia un operatore che una segnalazione per procedere con l'assegnazione.", Alert.AlertType.INFORMATION);
 	    }
 	}
 
@@ -133,11 +130,7 @@ public class GestisciSegnalazioniViewController implements Observer{
         configureTableSelection();
         configureHandlers();
         
-        // verifico se l'osservatore è già stato registrato
-        if (!osservatoreRegistrato) {
-            risolviSegnalazioneController.registraOsservatoreSegnalazioniAttive(this);
-            osservatoreRegistrato = true;  
-        }
+        risolviSegnalazioneController.registraOsservatoreSegnalazioniAttive(this);
     }
 
     private void caricaSegnalazioniDaRisolvere() {
@@ -159,22 +152,19 @@ public class GestisciSegnalazioniViewController implements Observer{
         operatoriEcologiciComboBox.setItems(operatori);
     }
 
-    public static GestisciSegnalazioniViewController getInstance() {
-        if (instance == null) {
-            instance = new GestisciSegnalazioniViewController();
-        }
-        return instance;
-    }
     
 
-    private Optional<ButtonType> showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        
-        return alert.showAndWait();
-    }
+
+	
+	private Optional<ButtonType> showAlert(String title, String message, Alert.AlertType alertType) {
+	    Alert alert = new Alert(alertType);
+	    alert.setTitle(title);
+	    alert.setHeaderText(null);
+	    alert.setContentText(message);
+
+	    return alert.showAndWait();
+	}
+
     
     
 	@Override

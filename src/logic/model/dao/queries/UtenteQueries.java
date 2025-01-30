@@ -9,14 +9,25 @@ import logic.model.domain.Ruolo;
 
 public class UtenteQueries {
 	private UtenteQueries() {}
+	
 	public static ResultSet login(Connection conn, String username, String password) throws SQLException {
-		String sql = "SELECT r.nome FROM utenti u JOIN ruoli r ON u.tipo_utente = r.id_ruolo WHERE u.username = ? AND u.password_hash = ?";
+		String sql = "SELECT username FROM utenti WHERE username = ? AND password_hash = ?";
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 			stmt.setString(1, username);
 			stmt.setString(2, password);
 			return stmt.executeQuery();
 		}
 	}
+	
+	
+	public static ResultSet getRuoloIdByUsername(Connection conn, String username) throws SQLException {
+		String sql = "SELECT r.id_ruolo FROM utenti u JOIN ruoli r ON u.tipo_utente = r.id_ruolo WHERE u.username = ?";
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setString(1, username);
+			return stmt.executeQuery();
+		}
+	}
+	
 
 	public static ResultSet getIdByUsername(Connection conn, String username) throws SQLException {
 		String sql = "SELECT id_utente FROM utenti WHERE username = ?";
@@ -26,12 +37,12 @@ public class UtenteQueries {
 		}
 	}
 
-	public static int registrazione(Connection conn, String username, String password) throws SQLException {
+	public static int registrazione(Connection conn, String username, String password, Ruolo ruolo) throws SQLException {
 		String sql = "INSERT INTO utenti (username, password_hash, tipo_utente) VALUES (?, ?, ?)";
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 			stmt.setString(1, username);
 			stmt.setString(2, password);
-			stmt.setInt(3, Ruolo.UTENTE_BASE.getId());
+			stmt.setInt(3, ruolo.getId());
 			return stmt.executeUpdate();
 		}
 	}

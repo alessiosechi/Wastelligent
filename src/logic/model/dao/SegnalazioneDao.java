@@ -13,9 +13,11 @@ public interface SegnalazioneDao {
 
 	List<Segnalazione> getSegnalazioniByStato(String stato);
 
-	List<Segnalazione> getSegnalazioniRiscontrate(int idUtente);
+	List<Segnalazione> getSegnalazioniRiscontrateByUtente(int idUtente);
 
 	List<Segnalazione> getSegnalazioniAssegnate(int idOperatore);
+	
+//	void getSegnalazioniAssegnate(int idOperatore, List<Segnalazione> segnalazioni);
 
 	void assegnaOperatore(int idSegnalazione, int idOperatore);
 

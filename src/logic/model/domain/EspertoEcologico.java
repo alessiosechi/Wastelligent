@@ -13,4 +13,5 @@ public class EspertoEcologico extends Utente {
 			return "GestisciSegnalazioniView2.fxml";
 		}
 	}
+
 }

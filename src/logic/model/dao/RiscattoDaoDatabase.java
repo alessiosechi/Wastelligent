@@ -14,24 +14,24 @@ import logic.model.domain.Riscatto;
 
 public class RiscattoDaoDatabase implements RiscattoDao {
 
-    private static volatile RiscattoDaoDatabase instance;
+//    private static volatile RiscattoDaoDatabase instance;
     private static final Logger logger = Logger.getLogger(RiscattoDaoDatabase.class.getName());
 
-    private RiscattoDaoDatabase() {
-    }
+//    private RiscattoDaoDatabase() {
+//    }
 
-    public static RiscattoDaoDatabase getInstance() {
-        RiscattoDaoDatabase result = instance;
-        if (result == null) {
-            synchronized (RiscattoDaoDatabase.class) {
-                result = instance;
-                if (result == null) {
-                    instance = result = new RiscattoDaoDatabase();
-                }
-            }
-        }
-        return result;
-    }
+//    public static RiscattoDaoDatabase getInstance() {
+//        RiscattoDaoDatabase result = instance;
+//        if (result == null) {
+//            synchronized (RiscattoDaoDatabase.class) {
+//                result = instance;
+//                if (result == null) {
+//                    instance = result = new RiscattoDaoDatabase();
+//                }
+//            }
+//        }
+//        return result;
+//    }
 
 
     @Override

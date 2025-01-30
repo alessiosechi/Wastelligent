@@ -1,12 +1,15 @@
-package logic.controller;
-
-import logic.model.domain.EspertoEcologico;
-import logic.model.domain.OperatoreEcologico;
-import logic.model.domain.Ruolo;
-import logic.model.domain.Utente;
-import logic.model.domain.UtenteBase;
+package logic.model.domain;
 
 public class UtenteFactory {
+	
+    private static UtenteFactory instance = null;
+
+    public static UtenteFactory getInstance() {
+        if (instance == null) {
+            instance = new UtenteFactory();
+        }
+        return instance;
+    }
     public Utente createUtente(int idUtente, String username, Ruolo ruolo) {
         switch (ruolo) {
             case UTENTE_BASE:

@@ -1,11 +1,7 @@
 package logic.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -30,14 +26,13 @@ import logic.model.domain.UtenteBase;
 import logic.model.domain.Coordinate;
 import logic.model.domain.LoggedUser;
 import logic.observer.Observer;
+import logic.utils.DateUtils;
 
-public class RiscattaRicompensaController { // OK
+public class RiscattaRicompensaController {
 
 	private static volatile RiscattaRicompensaController instance;
-
 	private static final Logger logger = Logger.getLogger(RiscattaRicompensaController.class.getName());
-	
-	UtenteBase utente=null;
+	private UtenteBase utente = null;
 
 	private RicompensaDao ricompensaDao;
 	private UtenteBaseDao utenteBaseDao;
@@ -51,7 +46,7 @@ public class RiscattaRicompensaController { // OK
 			utenteBaseDao = DaoFactory.getDao(UtenteBaseDao.class);
 			segnalazioneDao = DaoFactory.getDao(SegnalazioneDao.class);
 			riscattoDao = DaoFactory.getDao(RiscattoDao.class);
-			coordinateDao=DaoFactory.getDao(CoordinateDao.class);
+			coordinateDao = DaoFactory.getDao(CoordinateDao.class);
 
 		} catch (Exception e) {
 			logger.severe("Errore durante l'inizializzazione: " + e.getMessage());
@@ -69,14 +64,13 @@ public class RiscattaRicompensaController { // OK
 				}
 			}
 		}
-		instance.caricaUtente();
 		return result;
 	}
 	
-    private void caricaUtente() {
+    public void caricaUtente() {
         LoggedUser utenteLoggato = LoggedUser.getInstance();
         int punti = utenteBaseDao.estraiPunti(utenteLoggato.getIdUtente());
-        List<Segnalazione> segnalazioni = segnalazioneDao.getSegnalazioniRiscontrate(utenteLoggato.getIdUtente());
+        List<Segnalazione> segnalazioni = segnalazioneDao.getSegnalazioniRiscontrateByUtente(utenteLoggato.getIdUtente());
         List<Riscatto> riscatti = riscattoDao.getRiscattiByUtente(utenteLoggato.getIdUtente());
 
         utente = new UtenteBase(utenteLoggato.getIdUtente(), utenteLoggato.getUsername(), segnalazioni, riscatti, punti);
@@ -106,8 +100,6 @@ public class RiscattaRicompensaController { // OK
 		return utente.getPunti();
 	}
 
-
-	
 	public List<RiscattoBean> ottieniRiscattiUtente() {
 		try {
 			return convertRiscattoListToBeanList(utente.getRiscatti());
@@ -142,7 +134,7 @@ public class RiscattaRicompensaController { // OK
             		
 
 
-			utente.setPunti(utente.getPunti()-puntiRiscatto);
+			utente.aggiornaPunti(utente.getPunti()-puntiRiscatto);
 			utente.aggiungiRiscatto(riscatto);
 			
 			utenteBaseDao.sottraiPunti(utente.getIdUtente(), puntiRiscatto);
@@ -155,12 +147,11 @@ public class RiscattaRicompensaController { // OK
 			logger.severe("Errore durante il riscatto della ricompensa: " + e.getMessage());
 			return false;
 		}
-
 	}
 
 	private void verificaLimiteGiornaliero() throws DailyRedemptionLimitException {
-		int numeroRiscattiOggi = (int) riscattoDao.getRiscattiByUtente(utente.getIdUtente()).stream()
-				.filter(r -> isOggi(r.getDataRiscatto())).count();
+
+		int numeroRiscattiOggi = (int) utente.getRiscatti().stream().filter(r -> DateUtils.isOggi(r.getDataRiscatto())).count();
 
 		if (numeroRiscattiOggi >= 5) {
 			throw new DailyRedemptionLimitException("Hai raggiunto il limite giornaliero di riscatti.");
@@ -187,21 +178,21 @@ public class RiscattaRicompensaController { // OK
 		}
 	}
 
-	private boolean isOggi(String dataRiscatto) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		try {
-			Date data = sdf.parse(dataRiscatto);
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(data);
-			Calendar oggi = Calendar.getInstance();
-
-			return cal.get(Calendar.YEAR) == oggi.get(Calendar.YEAR)
-					&& cal.get(Calendar.DAY_OF_YEAR) == oggi.get(Calendar.DAY_OF_YEAR);
-		} catch (ParseException e) {
-			logger.severe("Errore nella conversione della data: " + e.getMessage());
-			return false;
-		}
-	}
+//	private boolean isOggi(String dataRiscatto) {
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//		try {
+//			Date data = sdf.parse(dataRiscatto);
+//			Calendar cal = Calendar.getInstance();
+//			cal.setTime(data);
+//			Calendar oggi = Calendar.getInstance();
+//
+//			return cal.get(Calendar.YEAR) == oggi.get(Calendar.YEAR)
+//					&& cal.get(Calendar.DAY_OF_YEAR) == oggi.get(Calendar.DAY_OF_YEAR);
+//		} catch (ParseException e) {
+//			logger.severe("Errore nella conversione della data: " + e.getMessage());
+//			return false;
+//		}
+//	}
 
 	public List<SegnalazioneBean> ottieniSegnalazioniUtente() {
 		try {

@@ -40,11 +40,10 @@ public class SegnalazioniAssegnateViewController implements Observer{
     private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
 	private static final Logger logger = Logger.getLogger(SegnalazioniAssegnateViewController.class.getName());
-    private boolean osservatoreRegistrato = false; 
     
+	@FXML
     public void initialize() {
 		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW));
-		
 		caricaAssegnazioni();
 
         idColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getIdSegnalazione()).asObject());
@@ -63,6 +62,7 @@ public class SegnalazioniAssegnateViewController implements Observer{
                 dettagliButton.setDisable(true);
             }
         });
+
         
         dettagliButton.setOnAction(event -> 
             ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW)
@@ -87,11 +87,9 @@ public class SegnalazioniAssegnateViewController implements Observer{
                 showAlert("Selezione Mancante", "Seleziona una segnalazione.");
             }
         });
-        
-        if (!osservatoreRegistrato) {
-        	risolviSegnalazioneController.registraOsservatoreSegnalazioniAssegnate(this);
-            osservatoreRegistrato = true; 
-        }
+
+    	risolviSegnalazioneController.registraOsservatoreSegnalazioniAssegnate(this);
+
     }     
 
     private Optional<ButtonType> showAlert(String title, String message) {

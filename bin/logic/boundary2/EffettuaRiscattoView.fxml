@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.boundary2.EffettuaRiscattoViewController">
+   <center>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="870.0">
+         <children>
+            <Label layoutX="287.0" layoutY="25.0" text="Riscatta una ricompensa" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="26.25" />
+               </font>
+            </Label>
+            <Label layoutX="43.0" layoutY="178.0" text="Lista ricompense disponibili:" wrapText="true">
+               <font>
+                  <Font size="26.25" />
+               </font>
+            </Label>
+            <Button fx:id="riscattaButton" layoutX="136.0" layoutY="335.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="142.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="RISCATTA" textFill="WHITE">
+               <font>
+                  <Font size="18.75" />
+               </font>
+            </Button>
+            <ChoiceBox fx:id="choiceBoxRicompense" layoutX="43.0" layoutY="247.0" prefHeight="42.0" prefWidth="327.0" />
+            <Label layoutX="43.0" layoutY="466.0" text="Lista riscatti:" wrapText="true">
+               <font>
+                  <Font size="26.25" />
+               </font>
+            </Label>
+            <ListView fx:id="listViewRiscatti" layoutX="43.0" layoutY="523.0" prefHeight="200.0" prefWidth="360.0" />
+            <Label fx:id="saldoPuntiLabel" layoutX="248.0" layoutY="118.0" prefHeight="39.0" prefWidth="69.0" text="0" wrapText="true">
+               <font>
+                  <Font size="26.25" />
+               </font>
+            </Label>
+            <Button fx:id="storicoButton" layoutX="635.0" layoutY="117.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="162.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="STORICO PUNTI" textFill="WHITE">
+               <font>
+                  <Font size="18.75" />
+               </font>
+            </Button>
+            <Label layoutX="483.0" layoutY="178.0" text="Dettagli ricompensa:" wrapText="true">
+               <font>
+                  <Font size="26.25" />
+               </font>
+            </Label>
+            <TextArea fx:id="dettagliRicompensaTextArea" layoutX="483.0" layoutY="235.0" prefHeight="200.0" prefWidth="360.0" />
+            <Label layoutX="43.0" layoutY="118.0" text="Punti accumulati:" wrapText="true">
+               <font>
+                  <Font size="26.25" />
+               </font>
+            </Label>
+            <Label layoutX="483.0" layoutY="466.0" text="Dettagli riscatto:" wrapText="true">
+               <font>
+                  <Font size="26.25" />
+               </font>
+            </Label>
+            <TextArea fx:id="dettagliRiscattoTextArea" layoutX="483.0" layoutY="523.0" prefHeight="200.0" prefWidth="360.0" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

@@ -11,7 +11,7 @@ import logic.model.domain.Segnalazione;
 
 public class SegnalazioneDaoDatabase implements SegnalazioneDao {
 
-    private static volatile SegnalazioneDaoDatabase instance;
+//    private static volatile SegnalazioneDaoDatabase instance;
     private static final Logger logger = Logger.getLogger(SegnalazioneDaoDatabase.class.getName());
     public static final String COL_ID_SEGNALAZIONE = "id_segnalazione";
     public static final String COL_ID_UTENTE = "id_utente";
@@ -22,21 +22,21 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
     public static final String COL_LONGITUDINE = "longitudine";
     public static final String COL_PUNTI = "punti_assegnati";
 
-    private SegnalazioneDaoDatabase() {
-    }
+//    private SegnalazioneDaoDatabase() {
+//    }
 
-    public static SegnalazioneDaoDatabase getInstance() {
-        SegnalazioneDaoDatabase result = instance;
-        if (instance == null) {
-            synchronized (SegnalazioneDaoDatabase.class) {
-                result = instance;
-                if (result == null) {
-                    instance = result = new SegnalazioneDaoDatabase();
-                }
-            }
-        }
-        return result;
-    }
+//    public static SegnalazioneDaoDatabase getInstance() {
+//        SegnalazioneDaoDatabase result = instance;
+//        if (instance == null) {
+//            synchronized (SegnalazioneDaoDatabase.class) {
+//                result = instance;
+//                if (result == null) {
+//                    instance = result = new SegnalazioneDaoDatabase();
+//                }
+//            }
+//        }
+//        return result;
+//    }
 
     @Override
     public void salvaSegnalazione(Segnalazione segnalazione) {
@@ -159,10 +159,39 @@ public class SegnalazioneDaoDatabase implements SegnalazioneDao {
         return segnalazioni;
     }
 
+//    @Override
+//    public void getSegnalazioniAssegnate(int idOperatore, List<Segnalazione> segnalazioni) {
+//        Connection connessione = null;
+//
+//
+//        try {
+//            connessione = DBConnection.getConnection();
+//
+//            ResultSet resultSet = SegnalazioneQueries.getSegnalazioniAssegnate(connessione, idOperatore);
+//
+//            while (resultSet.next()) {
+//                Segnalazione segnalazione = new Segnalazione();
+//                segnalazione.setIdSegnalazione(resultSet.getInt(COL_ID_SEGNALAZIONE));
+//                segnalazione.setIdUtente(resultSet.getInt(COL_ID_UTENTE));
+//                segnalazione.setDescrizione(resultSet.getString(COL_DESCRIZIONE));
+//                segnalazione.setFoto(resultSet.getString(COL_FOTO)); 
+//                segnalazione.setStato(resultSet.getString(COL_STATO));
+//                segnalazione.setLatitudine(resultSet.getDouble(COL_LATITUDINE));
+//                segnalazione.setLongitudine(resultSet.getDouble(COL_LONGITUDINE));
+//
+//                segnalazioni.add(segnalazione);
+//            }
+//
+//        } catch (SQLException e) {
+//            logger.severe("Errore durante il recupero delle segnalazioni assegnate all'operatore " + idOperatore + ": " + e.getMessage());
+//        }
+//
+//
+//    }
 
     
     @Override
-    public List<Segnalazione> getSegnalazioniRiscontrate(int idUtente) {
+    public List<Segnalazione> getSegnalazioniRiscontrateByUtente(int idUtente) {
         Connection connessione = null;
         List<Segnalazione> segnalazioni = new ArrayList<>();
 

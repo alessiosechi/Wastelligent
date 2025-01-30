@@ -8,9 +8,10 @@ import logic.model.domain.StatoSegnalazione;
 
 public class SegnalazioneDaoInMemory implements SegnalazioneDao {
 
+	private static final String ERRORE_SEGNALAZIONE_NON_TROVATA = "Segnalazione non trovata!";
 	private static List<Segnalazione> segnalazioni = new ArrayList<>();
 	private int idSegnalazioneCounter = 0;
-	private static final String ERRORE_SEGNALAZIONE_NON_TROVATA = "Segnalazione non trovata!";
+
 
 	@Override
 	public void salvaSegnalazione(Segnalazione segnalazione) {
@@ -34,7 +35,7 @@ public class SegnalazioneDaoInMemory implements SegnalazioneDao {
 	}
 
 	@Override
-	public List<Segnalazione> getSegnalazioniRiscontrate(int idUtente) {
+	public List<Segnalazione> getSegnalazioniRiscontrateByUtente(int idUtente) {
 		List<Segnalazione> segnalazioniFiltrate = new ArrayList<>();
 		for (Segnalazione segnalazione : segnalazioni) {
 			if (segnalazione.getIdUtente() == idUtente
@@ -94,4 +95,6 @@ public class SegnalazioneDaoInMemory implements SegnalazioneDao {
 		}
 		return null;
 	}
+
+
 }

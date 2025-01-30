@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.boundary2.SegnalaRifiutiViewController">
+   <center>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="870.0">
+         <children>
+            <Label layoutX="287.0" layoutY="25.0" text="Segnala rifiuti abbandonati" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="26.25" />
+               </font>
+            </Label>
+            <Label layoutX="43.0" layoutY="120.0" text="Inserisci descrizione:" wrapText="true">
+               <font>
+                  <Font size="26.25" />
+               </font>
+            </Label>
+            <Label layoutX="486.0" layoutY="88.0" text="Posizione:" wrapText="true">
+               <font>
+                  <Font size="26.25" />
+               </font>
+            </Label>
+            <Button fx:id="submitButton" layoutX="592.0" layoutY="698.0" mnemonicParsing="false" prefHeight="40.5" prefWidth="243.75" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="INVIA SEGNALAZIONE" textFill="WHITE">
+               <font>
+                  <Font size="18.75" />
+               </font>
+            </Button>
+            <Pane fx:id="mapPane" layoutX="486.0" layoutY="212.0" prefHeight="420.0" prefWidth="350.0" style="-fx-background-color: #000000;" />
+            <TextField fx:id="searchField" layoutX="486.0" layoutY="144.0" prefHeight="48.0" prefWidth="350.0" promptText="Cerca un luogo" />
+            <TextField fx:id="descriptionField" layoutX="43.0" layoutY="187.0" prefHeight="250.0" prefWidth="350.0" />
+            <StackPane layoutX="43.0" layoutY="467.0" prefHeight="250.0" prefWidth="350.0">
+            	<ScrollPane fx:id="imageScrollPane" layoutX="43.0" layoutY="467.0" prefHeight="250.0" prefWidth="350.0">
+    				<content>
+        				<ImageView fx:id="imageView" fitHeight="250.0" fitWidth="350.0" layoutX="43.0" layoutY="467.0" pickOnBounds="true" preserveRatio="true"/>
+    				</content>
+				</ScrollPane>
+            
+ 			
+            	<Button fx:id="attachImageButton" layoutX="107.0" layoutY="540.0" mnemonicParsing="false" text="Allega immagine">
+               		<graphic>
+                  		<ImageView fitHeight="106.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
+                     		<image>
+                        		<Image url="@../../../pics/add-pic.png" />
+                     		</image>
+                  		</ImageView>
+               		</graphic>
+            	</Button>
+           
+         </StackPane>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

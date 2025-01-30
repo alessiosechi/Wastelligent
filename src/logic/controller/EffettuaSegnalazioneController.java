@@ -12,11 +12,11 @@ import logic.model.dao.DaoFactory;
 import logic.model.dao.SegnalazioneDao;
 import logic.model.domain.Coordinate;
 import logic.model.domain.Segnalazione;
+import logic.model.domain.SegnalazioniAttive;
 import logic.model.domain.StatoSegnalazione;
 import logic.model.domain.LoggedUser;
 
 public class EffettuaSegnalazioneController { 
-
 	private static volatile EffettuaSegnalazioneController instance;
 	private static final Logger logger = Logger.getLogger(EffettuaSegnalazioneController.class.getName());
 	private SegnalazioneDao segnalazioneDAO;
@@ -61,6 +61,8 @@ public class EffettuaSegnalazioneController {
 		
 		Segnalazione segnalazione = compilaSegnalazione(segnalazioneBean);
 		segnalazioneDAO.salvaSegnalazione(segnalazione);
+		SegnalazioniAttive.getInstance().aggiungiSegnalazione(segnalazione);
+		
 	}
 	
 	public CoordinateBean convertCoordinateToBean(Coordinate coordinate) {
@@ -103,8 +105,7 @@ public class EffettuaSegnalazioneController {
 		double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) + Math.cos(Math.toRadians(lat1))
 				* Math.cos(Math.toRadians(lat2)) * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
 
-		// c rappresenta l'angolo centrale tra i due punti rispetto al centro della
-		// Terra
+		// c rappresenta l'angolo centrale tra i due punti rispetto al centro della Terra
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
 		return R * c; // converto l'angolo in metri

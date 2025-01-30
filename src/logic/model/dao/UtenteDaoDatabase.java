@@ -15,122 +15,127 @@ import logic.model.domain.Utente;
 import logic.model.domain.UtenteBase;
 
 public class UtenteDaoDatabase implements UtenteDao {
-	private static volatile UtenteDaoDatabase instance;
+//	private static volatile UtenteDaoDatabase instance;
 	private static final Logger logger = Logger.getLogger(UtenteDaoDatabase.class.getName());
 
-	private UtenteDaoDatabase() {
-	}
+//	private UtenteDaoDatabase() {
+//	}
 
-	public static UtenteDaoDatabase getInstance() {
-		UtenteDaoDatabase result = instance;
+//	public static UtenteDaoDatabase getInstance() {
+//		UtenteDaoDatabase result = instance;
+//
+//		if (instance == null) {
+//			synchronized (UtenteDaoDatabase.class) {
+//				result = instance;
+//				if (result == null) {
+//					instance = result = new UtenteDaoDatabase();
+//				}
+//			}
+//		}
+//		return result;
+//	}
 
-		if (instance == null) {
-			synchronized (UtenteDaoDatabase.class) {
-				result = instance;
-				if (result == null) {
-					instance = result = new UtenteDaoDatabase();
-				}
-			}
+	@Override
+	public boolean autenticazione(String username, String password) {
+
+		Connection connessione = null;
+
+		try {
+			connessione = DBConnection.getConnection();
+			ResultSet resultSet = UtenteQueries.login(connessione, username, password);
+			return resultSet.next();
+
+		} catch (SQLException e) {
+			logger.severe("Errore durante l'autenticazione dell'utente: " + e.getMessage());
+			return false;
 		}
-		return result;
+
 	}
 
-    @Override
-    public int autenticazione(String username, String password) {
-        int ruoloId = -1;
-	    Connection connessione = null;
+	@Override
+	public int getRuoloIdByUsername(String username) {
+		int ruoloId = -1;
+		Connection connessione = null;
 
-        try {
-	        connessione = DBConnection.getConnection();
-            ResultSet resultSet = UtenteQueries.login(connessione, username, password);
+		try {
+			connessione = DBConnection.getConnection();
+			ResultSet resultSet = UtenteQueries.getRuoloIdByUsername(connessione, username);
 
-            if (resultSet.next()) {
-                String ruolo = resultSet.getString("nome");
-                switch (ruolo) {
-                    case "UTENTE_BASE":
-                        ruoloId = Ruolo.UTENTE_BASE.getId();
-                        break;
-                    case "ESPERTO_ECOLOGICO":
-                        ruoloId = Ruolo.ESPERTO_ECOLOGICO.getId();
-                        break;
-                    case "OPERATORE_ECOLOGICO":
-                        ruoloId = Ruolo.OPERATORE_ECOLOGICO.getId();
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Ruolo sconosciuto: " + ruolo);
-                }
-            } else {
-                logger.warning("Username e/o password non validi!");
-            }
-        } catch (SQLException e) {
-            logger.severe("Errore durante l'autenticazione dell'utente: " + e.getMessage());
-        }
+			if (resultSet.next()) {
+				ruoloId = resultSet.getInt("id_ruolo");
 
-        return ruoloId;
-    }
+			} else {
+				logger.warning("Username non valido!");
+			}
+		} catch (SQLException e) {
+			logger.severe("Errore durante l'autenticazione dell'utente: " + e.getMessage());
+		}
 
-    @Override
-    public int getIdByUsername(String username) {
-        int idUtente = -1;
-	    Connection connessione = null;
+		return ruoloId;
+	}
 
-        try {
-	        connessione = DBConnection.getConnection();
-            ResultSet resultSet = UtenteQueries.getIdByUsername(connessione, username);
+	@Override
+	public int getIdByUsername(String username) {
+		int idUtente = -1;
+		Connection connessione = null;
 
-            if (resultSet.next()) {
-                idUtente = resultSet.getInt("id_utente");
-            } else {
-                logger.warning("Username non trovato!");
-            }
-        } catch (SQLException e) {
-            logger.severe("Errore durante il recupero dell'identificativo: " + e.getMessage());
-        }
+		try {
+			connessione = DBConnection.getConnection();
+			ResultSet resultSet = UtenteQueries.getIdByUsername(connessione, username);
 
-        return idUtente;
-    }
+			if (resultSet.next()) {
+				idUtente = resultSet.getInt("id_utente");
+			} else {
+				logger.warning("Username non trovato!");
+			}
+		} catch (SQLException e) {
+			logger.severe("Errore durante il recupero dell'identificativo: " + e.getMessage());
+		}
 
-    @Override
-    public boolean registraUtente(String username, String password) {
-        boolean success = false;
-	    Connection connessione = null;
-        try {
-	        connessione = DBConnection.getConnection();
-        	connessione.setAutoCommit(false); 
-            int righeAggiornate = UtenteQueries.registrazione(connessione, username, password);
+		return idUtente;
+	}
 
-            if (righeAggiornate > 0) {
-            	connessione.commit(); 
-                success = true;
-            } else {
-            	connessione.rollback(); 
-            }
-        } catch (SQLException e) {
-            logger.severe("Errore durante la registrazione dell'utente: " + e.getMessage());
-        }
+	@Override
+	public boolean registraUtente(String username, String password, Ruolo ruolo) {
+		boolean success = false;
+		Connection connessione = null;
+		try {
+			connessione = DBConnection.getConnection();
+			connessione.setAutoCommit(false);
+			int righeAggiornate = UtenteQueries.registrazione(connessione, username, password, ruolo);
 
-        return success;
-    }
+			if (righeAggiornate > 0) {
+				connessione.commit();
+				success = true;
+			} else {
+				connessione.rollback();
+			}
+		} catch (SQLException e) {
+			logger.severe("Errore durante la registrazione dell'utente: " + e.getMessage());
+		}
 
-    @Override
-    public boolean isUsernameTaken(String username) {
-        boolean taken = false;
-	    Connection connessione = null;
+		return success;
+	}
 
-        try {
-	        connessione = DBConnection.getConnection();
-            ResultSet resultSet = UtenteQueries.isUsernameTaken(connessione, username);
+	@Override
+	public boolean isUsernameTaken(String username) {
+		boolean taken = false;
+		Connection connessione = null;
 
-            if (resultSet.next()) {
-                taken = resultSet.getInt("username_count") > 0;
-            }
-        } catch (SQLException e) {
-            logger.severe("Errore durante la verifica della disponibilità dello username: " + e.getMessage());
-        }
+		try {
+			connessione = DBConnection.getConnection();
+			ResultSet resultSet = UtenteQueries.isUsernameTaken(connessione, username);
 
-        return taken;
-    }
-    
+			if (resultSet.next()) {
+				taken = resultSet.getInt("username_count") > 0;
+			}
+		} catch (SQLException e) {
+			logger.severe("Errore durante la verifica della disponibilità dello username: " + e.getMessage());
+		}
+
+		return taken;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Utente> List<T> getUtentiByRuolo(Ruolo ruolo) {
@@ -170,9 +175,5 @@ public class UtenteDaoDatabase implements UtenteDao {
 
 		return utenti;
 	}
-
-	
-	
-
 
 }
