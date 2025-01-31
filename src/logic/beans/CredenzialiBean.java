@@ -5,9 +5,6 @@ public class CredenzialiBean {
 	private String username;
 	private String password;
 
-	public CredenzialiBean() {
-	}
-
 	public String getUsername() {
 		return username;
 	}

@@ -147,12 +147,12 @@ public class EffettuaSegnalazioneViewController {
 
 	private boolean inviaSegnalazione(String description, String photoPath) {
 		if (description == null || description.isEmpty()) {
-			showAlert("Errore", "La descrizione è obbligatoria per inviare la segnalazione.");
+			showAlert("Descrizione mancante", "La descrizione è obbligatoria per inviare la segnalazione.");
 			return false;
 		}
 
 		if (currentMarker == null) {
-			showAlert("Errore", "Devi prima selezionare una posizione.");
+			showAlert("Posizione mancante", "Devi prima selezionare una posizione.");
 			return false;
 		}
 		try {

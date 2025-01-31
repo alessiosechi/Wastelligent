@@ -5,9 +5,6 @@ public class CoordinateBean {
 	private double latitudine;
 	private double longitudine;
 
-	public CoordinateBean() {
-	}
-
 	public double getLatitudine() {
 		return latitudine;
 	}

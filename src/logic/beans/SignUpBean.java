@@ -5,9 +5,6 @@ public class SignUpBean {
 	private String password;
 	private int tipologiaId;
 
-	public SignUpBean() {
-	}
-
 	public String getUsername() {
 		return username;
 	}

@@ -7,9 +7,6 @@ public class RiscattoBean {
 	private String codiceRiscatto;
 	private String dataRiscatto;
 
-	public RiscattoBean() {
-	}
-
 	public int getIdUtente() {
 		return idUtente;
 	}

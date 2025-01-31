@@ -134,20 +134,6 @@ public class UtenteDaoDatabase implements UtenteDao {
 				UtenteFactory utenteFactory = UtenteFactory.getInstance();
 				Utente utente = utenteFactory.createUtente(idUtente, username, ruolo);
 
-//				switch (ruolo) {
-//				case UTENTE_BASE:
-//					utente = new UtenteBase(idUtente, username);
-//					break;
-//				case ESPERTO_ECOLOGICO:
-//					utente = new EspertoEcologico(idUtente, username);
-//					break;
-//				case OPERATORE_ECOLOGICO:
-//					utente = new OperatoreEcologico(idUtente, username);
-//					break;
-//				default:
-//					throw new SQLException("Ruolo utente sconosciuto");
-//				}
-
 				utenti.add((T) utente); // cast a T
 			}
 		} catch (SQLException e) {

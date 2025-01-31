@@ -7,16 +7,11 @@ public class SegnalazioneBean {
 	private String stato;
 	private double latitudine;
 	private double longitudine;
-
 	private int puntiAssegnati;
 	private String posizione;
-
 	private int idSegnalazione;
-
 	private int idOperatore;
 
-	public SegnalazioneBean() {
-	}
 
 	public int getIdUtente() {
 		return idUtente;

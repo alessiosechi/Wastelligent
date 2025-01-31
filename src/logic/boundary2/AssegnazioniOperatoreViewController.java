@@ -90,7 +90,7 @@ public class AssegnazioniOperatoreViewController implements Observer {
 	}
 
 	private void completaSegnalazione() {
-		SegnalazioneBean segnalazioneSelezionata = tableViewSegnalazioni.getSelectionModel().getSelectedItem();
+		segnalazioneSelezionata = tableViewSegnalazioni.getSelectionModel().getSelectedItem();
 
 		if (segnalazioneSelezionata != null) {
 			boolean successo = risolviSegnalazioneController.completaSegnalazione(segnalazioneSelezionata);

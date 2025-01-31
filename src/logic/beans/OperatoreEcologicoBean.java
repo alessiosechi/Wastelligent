@@ -4,9 +4,6 @@ public class OperatoreEcologicoBean {
 	private int idUtente;
 	private String username;
 
-	public OperatoreEcologicoBean() {
-	}
-
 	public void setIdUtente(int idUtente) {
 		this.idUtente = idUtente;
 	}

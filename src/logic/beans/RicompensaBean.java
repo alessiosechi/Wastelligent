@@ -8,9 +8,6 @@ public class RicompensaBean {
 	private String descrizione;
 	private String dataScadenza;
 
-	public RicompensaBean() {
-	}
-
 	public int getIdRicompensa() {
 		return idRicompensa;
 	}

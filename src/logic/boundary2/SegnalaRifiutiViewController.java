@@ -91,7 +91,6 @@ public class SegnalaRifiutiViewController {
 					.add(new FileChooser.ExtensionFilter("Immagini", "*.png", "*.jpg", "*.jpeg"));
 			File selectedFile = fileChooser.showOpenDialog(null);
 			if (selectedFile != null) {
-//    	        imageView.setImage(new Image(selectedFile.toURI().toString()));
 				Image image = new Image(selectedFile.toURI().toString());
 				configuraImageView(image);
 			}

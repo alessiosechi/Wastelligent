@@ -36,13 +36,13 @@ public class SidebarController {
 		String coloreOriginale = "#216838";
 		String coloreHover = "#1A5A31";
 
-		button.setOnMouseEntered(event -> {
-			button.setStyle("-fx-background-color: " + coloreHover + ";");
-		});
+		button.setOnMouseEntered(event -> 
+			button.setStyle("-fx-background-color: " + coloreHover + ";")
+		);
 
-		button.setOnMouseExited(event -> {
-			button.setStyle("-fx-background-color: " + coloreOriginale + ";");
-		});
+		button.setOnMouseExited(event -> 
+			button.setStyle("-fx-background-color: " + coloreOriginale + ";")
+		);
 
 	}
 
