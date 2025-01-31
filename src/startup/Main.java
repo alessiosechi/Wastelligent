@@ -14,9 +14,11 @@ public class Main extends Application {
 		ViewLoader.setStage(primaryStage);
 		ViewLoader.caricaView(ViewInfo.CONFIGURATION_VIEW);
 	}
+	
 
 	public static void main(String[] args) {
 		launch(args);
 	}
+	
 
 }
