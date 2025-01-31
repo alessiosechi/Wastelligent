@@ -1,4 +1,4 @@
-package logic.boundary;
+package logic.boundary.components;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,7 +39,6 @@ public class RegistrazioneViewController {
 
 	@FXML
 	private void initialize() {
-
 		tipologiaUtenteComboBox.getItems().addAll(TipologiaUtente.values());
 	}
 
@@ -105,7 +104,9 @@ public class RegistrazioneViewController {
 	}
 
 	enum TipologiaUtente {
-		UTENTE_BASE(1, "Utente base"), ESPERTO(2, "Esperto ecologico"), OPERATORE(3, "Operatore ecologico");
+		UTENTE_BASE(1, "Utente base"),
+		ESPERTO(2, "Esperto ecologico"),
+		OPERATORE(3, "Operatore ecologico");
 
 		private final int valore;
 		private final String descrizione;

@@ -2,8 +2,7 @@ package logic.model.domain;
 
 import java.util.Objects;
 
-
-public class Segnalazione  {
+public class Segnalazione {
 
 	private int idSegnalazione;
 	private String descrizione;

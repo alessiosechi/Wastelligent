@@ -8,7 +8,6 @@ public class RiscattoBean {
 	private String dataRiscatto;
 
 	public RiscattoBean() {
-		// Costruttore vuoto
 	}
 
 	public int getIdUtente() {
@@ -18,7 +17,6 @@ public class RiscattoBean {
 	public void setIdUtente(int idUtente) {
 		this.idUtente = idUtente;
 	}
-
 
 	public int getPunti() {
 		return punti;
@@ -43,24 +41,25 @@ public class RiscattoBean {
 	public void setDataRiscatto(String dataRiscatto) {
 		this.dataRiscatto = dataRiscatto;
 	}
-	
+
 	public void setRicompensaBean(RicompensaBean ricompensaBean) {
 		this.ricompensaBean = ricompensaBean;
 	}
-	
-    public String getNomeRicompensa() {
-        return ricompensaBean.getNome();
-    }
 
-    public String getDescrizioneRicompensa() {
-        return ricompensaBean.getDescrizione();
-    }
+	public String getNomeRicompensa() {
+		return ricompensaBean.getNome();
+	}
 
-    public int getValoreRicompensa() {
-        return ricompensaBean.getValore();
-    }
-    public String getDataScadenzaRicompensa() {
-        return ricompensaBean.getDataScadenza();
-    }
+	public String getDescrizioneRicompensa() {
+		return ricompensaBean.getDescrizione();
+	}
+
+	public int getValoreRicompensa() {
+		return ricompensaBean.getValore();
+	}
+
+	public String getDataScadenzaRicompensa() {
+		return ricompensaBean.getDataScadenza();
+	}
 
 }

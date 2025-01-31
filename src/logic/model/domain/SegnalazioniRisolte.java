@@ -10,9 +10,6 @@ public class SegnalazioniRisolte extends SegnalazioniSubject {
 		}
 		return instance;
 	}
-	
-	
-	// tutte le istanze dell'applicazione dovranno condividere lo stesso stato di SegnalazioniRisolte
-	
 
+	// tutte le istanze dell'applicazione dovranno condividere lo stesso stato di SegnalazioniRisolte
 }

@@ -16,7 +16,7 @@ public class RiscattoDaoFileSystem implements RiscattoDao {
 
     @Override
     public void registra(Riscatto riscatto) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, true))) { // modalità append (true): non sovrascrivo il file esistente
 
             writer.write(riscattoToCsv(riscatto));
             writer.newLine(); // aggiungo una nuova riga per il prossimo riscatto
@@ -60,7 +60,7 @@ public class RiscattoDaoFileSystem implements RiscattoDao {
     private Riscatto csvToRiscatto(String csvLine) {
         String[] fields = csvLine.split(",");
         if (fields.length != 8) {
-            return null; // se la riga non contiene il numero corretto di campi, ignoriamola
+            return null; // se la riga non contiene il numero corretto di campi, la ignoro
         }
 
         String nome = fields[0];

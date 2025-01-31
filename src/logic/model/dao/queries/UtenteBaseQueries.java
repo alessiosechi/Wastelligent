@@ -6,36 +6,38 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UtenteBaseQueries {
-	private UtenteBaseQueries() {}
-    public static ResultSet estraiPunti(Connection connessione, int idUtente) throws SQLException {
-        String sql = "SELECT punti FROM punti_utenti WHERE id_utente = ?";
+	private UtenteBaseQueries() {
+	}
 
-        try (PreparedStatement stmt = connessione.prepareStatement(sql)) {
-            stmt.setInt(1, idUtente);
+	public static ResultSet estraiPunti(Connection connessione, int idUtente) throws SQLException {
+		String sql = "SELECT punti FROM punti_utenti WHERE id_utente = ?";
 
-            return stmt.executeQuery();
-        }
-    }
+		try (PreparedStatement stmt = connessione.prepareStatement(sql)) {
+			stmt.setInt(1, idUtente);
 
-    public static int aggiungiPunti(Connection connessione, int idUtente, int puntiDaAggiungere) throws SQLException {
-        String sql = "UPDATE punti_utenti SET punti = punti + ? WHERE id_utente = ?";
+			return stmt.executeQuery();
+		}
+	}
 
-        try (PreparedStatement stmt = connessione.prepareStatement(sql)) {
-            stmt.setInt(1, puntiDaAggiungere);
-            stmt.setInt(2, idUtente);
+	public static int aggiungiPunti(Connection connessione, int idUtente, int puntiDaAggiungere) throws SQLException {
+		String sql = "UPDATE punti_utenti SET punti = punti + ? WHERE id_utente = ?";
 
-            return stmt.executeUpdate();
-        }
-    }
+		try (PreparedStatement stmt = connessione.prepareStatement(sql)) {
+			stmt.setInt(1, puntiDaAggiungere);
+			stmt.setInt(2, idUtente);
 
-    public static int sottraiPunti(Connection connessione, int idUtente, int puntiDaSottrarre) throws SQLException {
-        String sql = "UPDATE punti_utenti SET punti = punti - ? WHERE id_utente = ?";
+			return stmt.executeUpdate();
+		}
+	}
 
-        try (PreparedStatement stmt = connessione.prepareStatement(sql)) {
-            stmt.setInt(1, puntiDaSottrarre);
-            stmt.setInt(2, idUtente);
+	public static int sottraiPunti(Connection connessione, int idUtente, int puntiDaSottrarre) throws SQLException {
+		String sql = "UPDATE punti_utenti SET punti = punti - ? WHERE id_utente = ?";
 
-            return stmt.executeUpdate();
-        }
-    }
+		try (PreparedStatement stmt = connessione.prepareStatement(sql)) {
+			stmt.setInt(1, puntiDaSottrarre);
+			stmt.setInt(2, idUtente);
+
+			return stmt.executeUpdate();
+		}
+	}
 }

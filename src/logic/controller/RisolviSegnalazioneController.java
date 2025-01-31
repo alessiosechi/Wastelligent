@@ -21,8 +21,7 @@ import logic.model.domain.Coordinate;
 import logic.model.domain.LoggedUser;
 import logic.observer.Observer;
 
-public class RisolviSegnalazioneController { 
-
+public class RisolviSegnalazioneController {
 
 	private static volatile RisolviSegnalazioneController instance;
 	private static final Logger logger = Logger.getLogger(RisolviSegnalazioneController.class.getName());
@@ -31,7 +30,6 @@ public class RisolviSegnalazioneController {
 	private UtenteDao utenteDao;
 	private CoordinateDao coordinateDao;
 
-	
 	private RisolviSegnalazioneController() {
 		try {
 			segnalazioneDao = DaoFactory.getDao(SegnalazioneDao.class);
@@ -41,8 +39,7 @@ public class RisolviSegnalazioneController {
 			logger.severe("Errore durante l'inizializzazione dei DAO: " + e.getMessage());
 		}
 	}
-	
-	
+
 	public static RisolviSegnalazioneController getInstance() {
 		RisolviSegnalazioneController result = instance;
 
@@ -56,8 +53,7 @@ public class RisolviSegnalazioneController {
 		}
 		return result;
 	}
-	
-	
+
 	public void registraOsservatoreSegnalazioniAttive(Observer observer) {
 		SegnalazioniAttive.getInstance().registraOsservatore(observer);
 	}
@@ -65,7 +61,7 @@ public class RisolviSegnalazioneController {
 	public List<SegnalazioneBean> getSegnalazioniAttive() {
 		return convertSegnalazioneListToBeanList(SegnalazioniAttive.getInstance().getSegnalazioni());
 	}
-    
+
 	public void registraOsservatoreSegnalazioniAssegnate(Observer observer) {
 		operatoreLoggato.registraOsservatore(observer);
 	}
@@ -73,7 +69,7 @@ public class RisolviSegnalazioneController {
 	public List<SegnalazioneBean> getSegnalazioniAssegnate() {
 		return convertSegnalazioneListToBeanList(operatoreLoggato.getSegnalazioni());
 	}
-	
+
 	public List<SegnalazioneBean> getSegnalazioniRicevute() {
 
 		try {
@@ -99,7 +95,7 @@ public class RisolviSegnalazioneController {
 		}
 
 	}
-  
+
 	public void eliminaSegnalazione(SegnalazioneBean segnalazioneBean) {
 		try {
 			segnalazioneDao.eliminaSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean));
@@ -118,7 +114,7 @@ public class RisolviSegnalazioneController {
 					operatori.remove(o);
 				}
 			}
-			
+
 			// restituisco solo gli operatori diponibili
 			return convertOperatoriEcologiciListToBeanList(operatori);
 
@@ -128,39 +124,36 @@ public class RisolviSegnalazioneController {
 		}
 	}
 
-	public boolean assegnaOperatore(SegnalazioneBean segnalazioneBean, OperatoreEcologicoBean operatoreScelto) throws  OperatoreNonDisponibileException{
+	public boolean assegnaOperatore(SegnalazioneBean segnalazioneBean, OperatoreEcologicoBean operatoreScelto)
+			throws OperatoreNonDisponibileException {
 		try {
 
-	        if (!isDisponibile(operatoreScelto.getIdUtente())) {
-	        	throw new OperatoreNonDisponibileException("L'operatore scelto non è disponibile al momento (è occupato nella risoluzione di altre segnalazioni)");
-	        }
+			if (!isDisponibile(operatoreScelto.getIdUtente())) {
+				throw new OperatoreNonDisponibileException(
+						"L'operatore scelto non è disponibile al momento (è occupato nella risoluzione di altre segnalazioni)");
+			}
 			segnalazioneDao.aggiornaStato(segnalazioneBean.getIdSegnalazione(), StatoSegnalazione.IN_CORSO.getStato());
 			segnalazioneDao.assegnaOperatore(segnalazioneBean.getIdSegnalazione(), operatoreScelto.getIdUtente());
 
-
-
 			SegnalazioniAttive.getInstance().rimuoviSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean));
 			return true;
-		} catch(OperatoreNonDisponibileException e) {
+		} catch (OperatoreNonDisponibileException e) {
 			throw e;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return false;
 		}
 	}
-	
-	
+
 	private boolean isDisponibile(int idOperatore) {
-	    try {
-	        List<Segnalazione> segnalazioniAssegnate = segnalazioneDao.getSegnalazioniAssegnate(idOperatore);
+		try {
+			List<Segnalazione> segnalazioniAssegnate = segnalazioneDao.getSegnalazioniAssegnate(idOperatore);
 
-	        return segnalazioniAssegnate.size() < 5;
-	    } catch (Exception e) {
-	        logger.severe("Errore durante la verifica della disponibilità dell'operatore: " + e.getMessage());
-	        return false;
-	    }
+			return segnalazioniAssegnate.size() < 5;
+		} catch (Exception e) {
+			logger.severe("Errore durante la verifica della disponibilità dell'operatore: " + e.getMessage());
+			return false;
+		}
 	}
-
-	
 
 	public List<SegnalazioneBean> getSegnalazioniDaRisolvere() {
 		try {
@@ -183,8 +176,7 @@ public class RisolviSegnalazioneController {
 			return new ArrayList<>();
 		}
 	}
-	
-	
+
 	private void caricaDatiOperatoreLoggato() {
 		LoggedUser loggedUser = LoggedUser.getInstance();
 
@@ -192,8 +184,7 @@ public class RisolviSegnalazioneController {
 		operatoreLoggato = new OperatoreEcologico(loggedUser.getIdUtente(), loggedUser.getUsername(),
 				segnalazioniAssegnate);
 	}
-	
-	
+
 	public boolean completaSegnalazione(SegnalazioneBean segnalazioneBean) {
 		try {
 			operatoreLoggato.completaSegnalazione(convertSegnalazioneBeanToEntity(segnalazioneBean));
@@ -206,12 +197,9 @@ public class RisolviSegnalazioneController {
 			return false;
 		}
 	}
-    
 
-	
-
-    
-	public List<OperatoreEcologicoBean> convertOperatoriEcologiciListToBeanList(List<OperatoreEcologico> operatoriEcologici) {
+	public List<OperatoreEcologicoBean> convertOperatoriEcologiciListToBeanList(
+			List<OperatoreEcologico> operatoriEcologici) {
 		if (operatoriEcologici != null) {
 			List<OperatoreEcologicoBean> operatoriBeanList = new ArrayList<>();
 
@@ -227,7 +215,7 @@ public class RisolviSegnalazioneController {
 			return new ArrayList<>();
 		}
 	}
-	
+
 	private List<SegnalazioneBean> convertSegnalazioneListToBeanList(List<Segnalazione> segnalazioni) {
 		if (segnalazioni == null) {
 			return new ArrayList<>();
@@ -242,11 +230,9 @@ public class RisolviSegnalazioneController {
 
 		return segnalazioneBeanList;
 	}
-	
-	
-	
-    private SegnalazioneBean convertSegnalazioneToBean(Segnalazione s) {
-        SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
+
+	private SegnalazioneBean convertSegnalazioneToBean(Segnalazione s) {
+		SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
 
 		segnalazioneBean.setDescrizione(s.getDescrizione());
 		segnalazioneBean.setFoto(s.getFoto());
@@ -257,14 +243,14 @@ public class RisolviSegnalazioneController {
 		segnalazioneBean.setPosizione(s.getPosizione());
 		segnalazioneBean.setStato(s.getStato());
 		segnalazioneBean.setIdSegnalazione(s.getIdSegnalazione());
-		
+
 		segnalazioneBean.setIdOperatore(s.getIdOperatore());
 
-        return segnalazioneBean;
-    }
-    
-    private Segnalazione convertSegnalazioneBeanToEntity(SegnalazioneBean s) {
-        Segnalazione segnalazione = new Segnalazione();
+		return segnalazioneBean;
+	}
+
+	private Segnalazione convertSegnalazioneBeanToEntity(SegnalazioneBean s) {
+		Segnalazione segnalazione = new Segnalazione();
 
 		segnalazione.setDescrizione(s.getDescrizione());
 		segnalazione.setFoto(s.getFoto());
@@ -276,9 +262,7 @@ public class RisolviSegnalazioneController {
 		segnalazione.setStato(s.getStato());
 		segnalazione.setIdSegnalazione(s.getIdSegnalazione());
 
-        return segnalazione;
-    }
-    
-    
-	
+		return segnalazione;
+	}
+
 }

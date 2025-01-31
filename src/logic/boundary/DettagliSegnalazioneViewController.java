@@ -26,6 +26,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import logic.beans.SegnalazioneBean;
+import logic.boundary.components.ViewInfo;
+import logic.boundary.components.ViewLoader;
 
 
 public class DettagliSegnalazioneViewController {
@@ -61,7 +63,7 @@ public class DettagliSegnalazioneViewController {
         this.callerType = callerType;
 
     }
-    private void configureView() {
+    private void configuraView() {
         switch (callerType) {
             case CONTROLLER1:
 				indietroButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW));
@@ -101,20 +103,20 @@ public class DettagliSegnalazioneViewController {
 
 	@FXML
 	public void initialize() {
-        configureView();
-	    loadImage();
-	    setupMapView();
-	    setupPositionLabel();
+        configuraView();
+	    caricaImmagine();
+	    configuraMapView();
+	    configuraLabel();
 		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW));
 	}
-	private void loadImage() {
+	private void caricaImmagine() {
 	    if (segnalazioneBean != null && segnalazioneBean.getFoto() != null) {
 	        String imagePath = "file:/" + segnalazioneBean.getFoto().replace("\\", "/");
 	        try {
 	            Image image = new Image(imagePath);
-	            configureImageView(image);
-	            setupImageViewTooltip();
-	            setupImageViewDoubleClick(image);
+	            configuraImageView(image);
+	            configuraImageViewTooltip();
+	            configuraImageViewDoubleClick(image);
 	        } catch (Exception e) {
 	            logger.info("Errore durante il caricamento dell'immagine: " + e.getMessage());
 	        }
@@ -122,29 +124,29 @@ public class DettagliSegnalazioneViewController {
 	}
 	
 	
-	private void configureImageView(Image image) {
+	private void configuraImageView(Image image) {
 	    imageView.setImage(image);
 	    imageView.setFitWidth(image.getWidth());
 	    imageView.setFitHeight(image.getHeight());
 	    imageScrollPane.setContent(imageView);
 	}
 
-	private void setupImageViewTooltip() {
+	private void configuraImageViewTooltip() {
 	    Tooltip tooltip = new Tooltip("Fai doppio click per vedere l'immagine intera");
 	    tooltip.setShowDelay(Duration.millis(200));
 	    Tooltip.install(imageView, tooltip);
 	}
 
-	private void setupImageViewDoubleClick(Image image) {
+	private void configuraImageViewDoubleClick(Image image) {
 	    imageView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 	        if (event.getClickCount() == 2) {
-	            showFullImagePopup(image);
+	        	mostraPopupImmagineIntera(image);
 	        }
 	    });
 	}
 	
 	
-	private void setupMapView() {
+	private void configuraMapView() {
 	    MapView mapView = new MapView();
 	    mapView.initialize(Configuration.builder().projection(Projection.WEB_MERCATOR).showZoomControls(true).build());
 	    mapPane.getChildren().add(mapView);
@@ -173,7 +175,7 @@ public class DettagliSegnalazioneViewController {
 	        }
 	    });
 	}
-	private void setupPositionLabel() {
+	private void configuraLabel() {
 	    String testoPosizione = segnalazioneBean.getPosizione();
 	    posizioneLabel.setText(testoPosizione);
 
@@ -182,7 +184,7 @@ public class DettagliSegnalazioneViewController {
 	}
 
 
-    private void showFullImagePopup(Image image) {
+    private void mostraPopupImmagineIntera(Image image) {
         ImageView fullImageView = new ImageView(image);
         StackPane root = new StackPane(fullImageView);
         Scene scene = new Scene(root);

@@ -1,8 +1,6 @@
 package logic.exceptions;
 
-public class ConnessioneAPIException extends Exception{
-
-	
+public class ConnessioneAPIException extends Exception {
 
 	/**
 	 * 

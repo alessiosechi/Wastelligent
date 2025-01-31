@@ -8,11 +8,8 @@ public class RicompensaBean {
 	private String descrizione;
 	private String dataScadenza;
 
-
 	public RicompensaBean() {
-        // Costruttore vuoto
 	}
-
 
 	public int getIdRicompensa() {
 		return idRicompensa;
@@ -29,7 +26,6 @@ public class RicompensaBean {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
 
 	public int getValore() {
 		return valore;
@@ -54,9 +50,5 @@ public class RicompensaBean {
 	public void setDataScadenza(String dataScadenza) {
 		this.dataScadenza = dataScadenza;
 	}
-
-
-
-
 
 }

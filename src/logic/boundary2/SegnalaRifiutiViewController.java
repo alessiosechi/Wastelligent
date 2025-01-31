@@ -23,176 +23,166 @@ import java.io.File;
 
 public class SegnalaRifiutiViewController {
 
-    @FXML
-    private BorderPane rootPane;
+	@FXML
+	private BorderPane rootPane;
 
-    @FXML
-    private TextField descriptionField;
+	@FXML
+	private TextField descriptionField;
 
-    @FXML
-    private TextField searchField;
+	@FXML
+	private TextField searchField;
 
-    @FXML
-    private Pane mapPane;
+	@FXML
+	private Pane mapPane;
 
-    @FXML
-    private Button attachImageButton;
+	@FXML
+	private Button attachImageButton;
 
-    @FXML
-    private ImageView imageView;
-    
-    @FXML
-    private ScrollPane imageScrollPane;
+	@FXML
+	private ImageView imageView;
 
-    @FXML
-    private Button submitButton;
+	@FXML
+	private ScrollPane imageScrollPane;
 
-    private MapView mapView;
-    private Marker currentMarker;
+	@FXML
+	private Button submitButton;
 
-    private EffettuaSegnalazioneController effettuaSegnalazioneController = EffettuaSegnalazioneController.getInstance();
+	private MapView mapView;
+	private Marker currentMarker;
+
+	private EffettuaSegnalazioneController effettuaSegnalazioneController = EffettuaSegnalazioneController
+			.getInstance();
 
 	@FXML
 	public void initialize() {
 
-		AnchorPane sidebar = SidebarLoader.loadSidebar(SidebarType.UTENTE_BASE_SIDEBAR);
+		AnchorPane sidebar = SidebarLoader.caricaSidebar(SidebarType.UTENTE_BASE_SIDEBAR);
 		rootPane.setLeft(sidebar);
-		
-		
 
-		initMapView();
+		inizializzaMapView();
 
-		initButtonActions();
+		configuraPulsanti();
 
 	}
 
-    private void initMapView() {
-        mapView = new MapView();
-        mapView.initialize(Configuration.builder().projection(Projection.WEB_MERCATOR).showZoomControls(true).build());
+	private void inizializzaMapView() {
+		mapView = new MapView();
+		mapView.initialize(Configuration.builder().projection(Projection.WEB_MERCATOR).showZoomControls(true).build());
 
-        mapView.setZoom(12); // Zoom iniziale
-        mapView.setCenter(new Coordinate(41.9028, 12.4964)); // Coordinate iniziali (Roma)
+		mapView.setZoom(12);
+		mapView.setCenter(new Coordinate(41.9028, 12.4964));
 
-        // Aggiungo la mappa al Pane
-        mapPane.getChildren().add(mapView);
-        mapView.setPrefWidth(mapPane.getPrefWidth());
-        mapView.setPrefHeight(mapPane.getPrefHeight());
+		mapPane.getChildren().add(mapView);
+		mapView.setPrefWidth(mapPane.getPrefWidth());
+		mapView.setPrefHeight(mapPane.getPrefHeight());
 
-        // Evento click sulla mappa
-        mapView.addEventHandler(MapViewEvent.MAP_CLICKED, event -> {
-            Coordinate coordinate = event.getCoordinate().normalize();
-            placeMarker(coordinate);
-        });
-    }
+		mapView.addEventHandler(MapViewEvent.MAP_CLICKED, event -> {
+			Coordinate coordinate = event.getCoordinate().normalize();
+			inserisciMarker(coordinate);
+		});
+	}
 
-    private void initButtonActions() {
-    	imageView.setDisable(true); // Disabilita l'ImageView
+	private void configuraPulsanti() {
+		imageView.setDisable(true);
 
-    	attachImageButton.setOnAction(event -> {
-    	    FileChooser fileChooser = new FileChooser();
-    	    fileChooser.getExtensionFilters().add(
-    	            new FileChooser.ExtensionFilter("Immagini", "*.png", "*.jpg", "*.jpeg")
-    	    );
-    	    File selectedFile = fileChooser.showOpenDialog(null);
-    	    if (selectedFile != null) {
+		attachImageButton.setOnAction(event -> {
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.getExtensionFilters()
+					.add(new FileChooser.ExtensionFilter("Immagini", "*.png", "*.jpg", "*.jpeg"));
+			File selectedFile = fileChooser.showOpenDialog(null);
+			if (selectedFile != null) {
 //    	        imageView.setImage(new Image(selectedFile.toURI().toString()));
-    	        Image image = new Image(selectedFile.toURI().toString());
-    	        configureImageView(image); 
-    	    }
-    	});
-        searchField.setOnAction(event -> {
-            String searchQuery = searchField.getText();
-            if (!searchQuery.isEmpty()) {
+				Image image = new Image(selectedFile.toURI().toString());
+				configuraImageView(image);
+			}
+		});
+		searchField.setOnAction(event -> {
+			String searchQuery = searchField.getText();
+			if (!searchQuery.isEmpty()) {
 
 				CoordinateBean posizioneBean = effettuaSegnalazioneController
 						.getCoordinates(new LocationRequestBean(searchQuery));
-				Coordinate coordinate = new Coordinate(posizioneBean.getLatitudine(),
-						posizioneBean.getLongitudine());
+				Coordinate coordinate = new Coordinate(posizioneBean.getLatitudine(), posizioneBean.getLongitudine());
 
 				mapView.setCenter(coordinate);
-				placeMarker(coordinate);
-            } else {
-                showAlert("Errore", "La ricerca non può essere vuota.");
-            }
-        });
+				inserisciMarker(coordinate);
+			} else {
+				showAlert("Errore", "La ricerca non può essere vuota.");
+			}
+		});
 
-        // Azione per il pulsante "Invia segnalazione"
-        submitButton.setOnAction(event -> {
-            String description = descriptionField.getText();
-            String photoPath = (imageView.getImage() != null) ? imageView.getImage().getUrl() : null;
-            boolean success = inviaSegnalazione(description, photoPath);
-            if (success) {
-                clearFields();
-            }
-        });
-    }
-    
-    private void configureImageView(Image image) {
+		submitButton.setOnAction(event -> {
+			String description = descriptionField.getText();
+			String photoPath = (imageView.getImage() != null) ? imageView.getImage().getUrl() : null;
+			boolean success = inviaSegnalazione(description, photoPath);
+			if (success) {
+				resettaCampi();
+			}
+		});
+	}
 
-        
-	    imageView.setImage(image);
-	    imageView.setFitWidth(image.getWidth());
-	    imageView.setFitHeight(image.getHeight());
+	private void configuraImageView(Image image) {
 
-        // Mantenere il rapporto di aspetto dell'immagine
-        imageView.setPreserveRatio(true);
-        imageScrollPane.setContent(imageView);
-    }
+		imageView.setImage(image);
+		imageView.setFitWidth(image.getWidth());
+		imageView.setFitHeight(image.getHeight());
 
+		imageView.setPreserveRatio(true);
+		imageScrollPane.setContent(imageView);
+	}
 
-    private void placeMarker(Coordinate coordinate) {
-        if (currentMarker != null) {
-            mapView.removeMarker(currentMarker);
-        }
+	private void inserisciMarker(Coordinate coordinate) {
+		if (currentMarker != null) {
+			mapView.removeMarker(currentMarker);
+		}
 
-        currentMarker = Marker.createProvided(Marker.Provided.RED).setPosition(coordinate).setVisible(true);
-        mapView.addMarker(currentMarker);
-    }
+		currentMarker = Marker.createProvided(Marker.Provided.RED).setPosition(coordinate).setVisible(true);
+		mapView.addMarker(currentMarker);
+	}
 
-    private boolean inviaSegnalazione(String description, String photoPath) {
-        try {
-            SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
-            segnalazioneBean.setDescrizione(description);
-            segnalazioneBean.setFoto(photoPath);
+	private boolean inviaSegnalazione(String description, String photoPath) {
+		try {
+			SegnalazioneBean segnalazioneBean = new SegnalazioneBean();
+			segnalazioneBean.setDescrizione(description);
+			segnalazioneBean.setFoto(photoPath);
 
-            // Uso la posizione del marker corrente
-            if (currentMarker != null) {
-                segnalazioneBean.setLatitudine(currentMarker.getPosition().getLatitude());
-                segnalazioneBean.setLongitudine(currentMarker.getPosition().getLongitude());
-            }
+			if (currentMarker != null) {
+				segnalazioneBean.setLatitudine(currentMarker.getPosition().getLatitude());
+				segnalazioneBean.setLongitudine(currentMarker.getPosition().getLongitude());
+			}
 
-            // Invio della segnalazione
-            effettuaSegnalazioneController.inviaSegnalazione(segnalazioneBean);
+			effettuaSegnalazioneController.inviaSegnalazione(segnalazioneBean);
 
-            // Mostro messaggio di successo
-            showAlert("Successo", "Segnalazione inviata con successo!");
-            return true;
+			showAlert("Successo", "Segnalazione inviata con successo!");
+			return true;
 
-        } catch (SegnalazioneVicinaException e) {
-            showAlert("Attenzione", "Esiste già una segnalazione nelle vicinanze!");
-            return false;
+		} catch (SegnalazioneVicinaException e) {
+			showAlert("Attenzione", "Esiste già una segnalazione nelle vicinanze!");
+			return false;
 
-        } catch (Exception e) {
-            showAlert("Errore", "Si è verificato un errore durante l'invio della segnalazione.");
-            return false;
-        }
-    }
+		} catch (Exception e) {
+			showAlert("Errore", "Si è verificato un errore durante l'invio della segnalazione.");
+			return false;
+		}
+	}
 
-    private void clearFields() {
-        descriptionField.clear();
-        imageView.setImage(null);
-        if (currentMarker != null) {
-            mapView.removeMarker(currentMarker);
-            currentMarker = null;
-        }
-        mapView.setCenter(new Coordinate(41.9028, 12.4964));
-    }
+	private void resettaCampi() {
+		descriptionField.clear();
+		imageView.setImage(null);
+		searchField.clear();
+		searchField.setPromptText("Cerca un luogo");
+		if (currentMarker != null) {
+			mapView.removeMarker(currentMarker);
+			currentMarker = null;
+		}
+		mapView.setCenter(new Coordinate(41.9028, 12.4964));
+	}
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+	private void showAlert(String title, String message) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+		alert.showAndWait();
+	}
 }

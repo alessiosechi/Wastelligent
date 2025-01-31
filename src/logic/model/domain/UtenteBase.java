@@ -30,7 +30,7 @@ public class UtenteBase extends Utente implements Subject {
 	@Override
 	public String getViewIniziale(int interfaccia) {
 		if (interfaccia == 1) {
-			return "EffettuaSegnalazioneView.fxml";
+			return "/logic/boundary/EffettuaSegnalazioneView.fxml";
 		} else {
 			return "/logic/boundary2/SegnalaRifiutiView.fxml";
 		}

@@ -8,32 +8,13 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import logic.model.dao.queries.UtenteQueries;
-import logic.model.domain.EspertoEcologico;
-import logic.model.domain.OperatoreEcologico;
 import logic.model.domain.Ruolo;
 import logic.model.domain.Utente;
-import logic.model.domain.UtenteBase;
+import logic.model.domain.UtenteFactory;
 
 public class UtenteDaoDatabase implements UtenteDao {
-//	private static volatile UtenteDaoDatabase instance;
+
 	private static final Logger logger = Logger.getLogger(UtenteDaoDatabase.class.getName());
-
-//	private UtenteDaoDatabase() {
-//	}
-
-//	public static UtenteDaoDatabase getInstance() {
-//		UtenteDaoDatabase result = instance;
-//
-//		if (instance == null) {
-//			synchronized (UtenteDaoDatabase.class) {
-//				result = instance;
-//				if (result == null) {
-//					instance = result = new UtenteDaoDatabase();
-//				}
-//			}
-//		}
-//		return result;
-//	}
 
 	@Override
 	public boolean autenticazione(String username, String password) {
@@ -150,22 +131,22 @@ public class UtenteDaoDatabase implements UtenteDao {
 				int idUtente = resultSet.getInt("id_utente");
 				String username = resultSet.getString("username");
 
-				Utente utente = null;
+				UtenteFactory utenteFactory = UtenteFactory.getInstance();
+				Utente utente = utenteFactory.createUtente(idUtente, username, ruolo);
 
-				// creo l'istanza dell'utente corretta in base al ruolo
-				switch (ruolo) {
-				case UTENTE_BASE:
-					utente = new UtenteBase(idUtente, username);
-					break;
-				case ESPERTO_ECOLOGICO:
-					utente = new EspertoEcologico(idUtente, username);
-					break;
-				case OPERATORE_ECOLOGICO:
-					utente = new OperatoreEcologico(idUtente, username);
-					break;
-				default:
-					throw new SQLException("Ruolo utente sconosciuto");
-				}
+//				switch (ruolo) {
+//				case UTENTE_BASE:
+//					utente = new UtenteBase(idUtente, username);
+//					break;
+//				case ESPERTO_ECOLOGICO:
+//					utente = new EspertoEcologico(idUtente, username);
+//					break;
+//				case OPERATORE_ECOLOGICO:
+//					utente = new OperatoreEcologico(idUtente, username);
+//					break;
+//				default:
+//					throw new SQLException("Ruolo utente sconosciuto");
+//				}
 
 				utenti.add((T) utente); // cast a T
 			}

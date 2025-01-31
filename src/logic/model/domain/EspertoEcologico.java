@@ -8,9 +8,9 @@ public class EspertoEcologico extends Utente {
 	@Override
 	public String getViewIniziale(int interfaccia) {
 		if (interfaccia == 1) {
-			return "GestisciSegnalazioniView.fxml";
+			return "/logic/boundary/GestisciSegnalazioniView.fxml";
 		} else {
-			return "GestisciSegnalazioniView2.fxml";
+			return "/logic/boundary2/AssegnaSegnalazioniView.fxml";
 		}
 	}
 

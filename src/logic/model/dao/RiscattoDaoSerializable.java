@@ -40,7 +40,6 @@ public class RiscattoDaoSerializable implements RiscattoDao {
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
             riscatti = (List<Riscatto>) in.readObject();
         } catch (FileNotFoundException e) {
-            // se il file non esiste, restituisco una lista vuota
             logger.warning("File non trovato.");
         } catch (IOException | ClassNotFoundException e) {
             logger.severe("Errore durante il caricamento dei riscatti: " + e.getMessage());
@@ -48,7 +47,7 @@ public class RiscattoDaoSerializable implements RiscattoDao {
         return riscatti;
     }
 
-    // Salva la lista di riscatti nel file
+    // salva la lista aggiornata nel file
     private void salvaRiscatti(List<Riscatto> riscatti) {
         try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH);
              ObjectOutputStream out = new ObjectOutputStream(fileOut)) {

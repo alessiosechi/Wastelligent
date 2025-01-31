@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class DBConnection { // potrei dichiararla protected
+public class DBConnection {
 	private static Connection connection;
 	private static final Logger logger = Logger.getLogger(DBConnection.class.getName());
 
@@ -13,7 +13,7 @@ public class DBConnection { // potrei dichiararla protected
 	}
 
 	static {
-		// codice che viene eseguito dalla JVM la prima volta
+		// codice che viene eseguito dalla JVM una sola volta (quando la classe viene caricata in memoria dalla JVM)
 		try (InputStream input = new FileInputStream("resources/db.properties")) {
 			Properties properties = new Properties();
 			properties.load(input);
@@ -23,7 +23,6 @@ public class DBConnection { // potrei dichiararla protected
 			String pass = properties.getProperty("LOGIN_PASS");
 
 			connection = DriverManager.getConnection(connectionUrl, user, pass);
-			
 
 		} catch (IOException | SQLException e) {
 			logger.severe("Si è verificato un errore: " + e.getMessage());
@@ -33,12 +32,8 @@ public class DBConnection { // potrei dichiararla protected
 	public static Connection getConnection() {
 		return connection;
 	}
-	
-	
-	
 
-	/*
-	 * dalle slide: "SE POSSIBILE APRIRE UNA SOLA CONNESSIONE PER APPLICAZIONE PER
-	 * CHIUDERLA SOLO QUANDO NON CI SARANNO ULTERIORI INTERAZIONI CON IL DBMS"
-	 */
+	// apro una sola connessione che verrà chiusa quando non ci saranno ulteriori
+	// interazioni con il DBMS (al termine dell'applicazione)
+
 }

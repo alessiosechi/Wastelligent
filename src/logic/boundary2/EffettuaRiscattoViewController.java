@@ -14,8 +14,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import logic.beans.RicompensaBean;
 import logic.beans.RiscattoBean;
-import logic.boundary.ViewInfo;
-import logic.boundary.ViewLoader;
+import logic.boundary.components.ViewInfo;
+import logic.boundary.components.ViewLoader;
 import logic.controller.RiscattaRicompensaController;
 import logic.exceptions.ConnessioneAPIException;
 import logic.exceptions.DailyRedemptionLimitException;
@@ -26,155 +26,150 @@ import logic.observer.Observer;
 import java.util.List;
 
 public class EffettuaRiscattoViewController implements Observer {
-    @FXML
-    private BorderPane rootPane;
-    @FXML
-    private Label saldoPuntiLabel;
-    @FXML
-    private ChoiceBox<String> choiceBoxRicompense;  
-    @FXML
-    private Button riscattaButton;  
-    @FXML
-    private Button storicoButton;  
-    @FXML
-    private ListView<String> listViewRiscatti;  
-    @FXML
-    private TextArea dettagliRicompensaTextArea;   
-    @FXML
-    private TextArea dettagliRiscattoTextArea;
+	@FXML
+	private BorderPane rootPane;
+	@FXML
+	private Label saldoPuntiLabel;
+	@FXML
+	private ChoiceBox<String> choiceBoxRicompense;
+	@FXML
+	private Button riscattaButton;
+	@FXML
+	private Button storicoButton;
+	@FXML
+	private ListView<String> listViewRiscatti;
+	@FXML
+	private TextArea dettagliRicompensaTextArea;
+	@FXML
+	private TextArea dettagliRiscattoTextArea;
 
-    private RiscattaRicompensaController riscattaRicompensaController = RiscattaRicompensaController.getInstance();
-    private List<RicompensaBean> listaRicompenseAPI;
+	private RiscattaRicompensaController riscattaRicompensaController = RiscattaRicompensaController.getInstance();
+	private List<RicompensaBean> listaRicompenseAPI;
 
-    @FXML
-    public void initialize() {
-        AnchorPane sidebar = SidebarLoader.loadSidebar(SidebarType.UTENTE_BASE_SIDEBAR);
-        rootPane.setLeft(sidebar);
-        
-        
-        riscattaRicompensaController.caricaUtente();
-        riscattaRicompensaController.registraOsservatoreRiscatti(this);
-        
-        
+	@FXML
+	public void initialize() {
+		AnchorPane sidebar = SidebarLoader.caricaSidebar(SidebarType.UTENTE_BASE_SIDEBAR);
+		rootPane.setLeft(sidebar);
 
-        caricaPuntiUtente();
-        mostraRicompenseDisponibili();
-        caricaRiscatti(); 
-        setupEventHandlers();
-    }
+		riscattaRicompensaController.caricaUtente();
+		riscattaRicompensaController.registraOsservatoreRiscatti(this);
 
-    private void caricaPuntiUtente() {
-        int puntiUtente = riscattaRicompensaController.ottieniPuntiUtente();
-        saldoPuntiLabel.setText(String.valueOf(puntiUtente));
-    }
+		caricaPuntiUtente();
+		caricaRiscatti();
+		mostraRicompenseDisponibili();
+		configuraEventi();
+	}
 
-    private void mostraRicompenseDisponibili() {
-        try {
-            listaRicompenseAPI = riscattaRicompensaController.ottieniRicompenseAPI();
-        } catch (ConnessioneAPIException e) {
-            showAlert("Errore di connessione", e.getMessage());
-        }
+	private void caricaPuntiUtente() {
+		int puntiUtente = riscattaRicompensaController.ottieniPuntiUtente();
+		saldoPuntiLabel.setText(String.valueOf(puntiUtente));
+	}
 
-        ObservableList<String> ricompense = FXCollections.observableArrayList();
-        for (RicompensaBean ricompensa : listaRicompenseAPI) {
-            ricompense.add(ricompensa.getNome());
-        }
-        choiceBoxRicompense.setItems(ricompense);
-    }
-    private void caricaRiscatti() {
-        List<RiscattoBean> riscatti = riscattaRicompensaController.getRiscatti();
+	private void mostraRicompenseDisponibili() {
+		try {
+			listaRicompenseAPI = riscattaRicompensaController.ottieniRicompenseAPI();
+		} catch (ConnessioneAPIException e) {
+			showAlert("Errore di connessione", e.getMessage());
+		}
 
-        ObservableList<String> riscattoStrings = FXCollections.observableArrayList();
-        for (RiscattoBean riscatto : riscatti) {
-            riscattoStrings.add(riscatto.getNomeRicompensa() + " - " + riscatto.getDataRiscatto());
-        }
+		ObservableList<String> ricompense = FXCollections.observableArrayList();
+		for (RicompensaBean ricompensa : listaRicompenseAPI) {
+			ricompense.add(ricompensa.getNome());
+		}
+		choiceBoxRicompense.setItems(ricompense);
+	}
 
-        listViewRiscatti.setItems(riscattoStrings);
-    }
+	private void caricaRiscatti() {
+		List<RiscattoBean> riscatti = riscattaRicompensaController.getRiscatti();
 
-    private void setupEventHandlers() {
-        dettagliRicompensaTextArea.setEditable(false);
-        dettagliRiscattoTextArea.setEditable(false);
-        riscattaButton.setOnAction(this::riscattaSelezione);
-        storicoButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.STORICO_PUNTI_VIEW));
+		ObservableList<String> riscattoStrings = FXCollections.observableArrayList();
+		for (RiscattoBean riscatto : riscatti) {
+			riscattoStrings.add(riscatto.getNomeRicompensa() + " - " + riscatto.getDataRiscatto());
+		}
 
-        choiceBoxRicompense.setOnAction(event -> {
-            int selectedIndex = choiceBoxRicompense.getSelectionModel().getSelectedIndex();
-            if (selectedIndex >= 0) {
-                RicompensaBean ricompensaSelezionata = listaRicompenseAPI.get(selectedIndex);
-                mostraDettagliRicompensa(ricompensaSelezionata);
-            }
-        });
-        
-        listViewRiscatti.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                RiscattoBean selezionato = riscattaRicompensaController.getRiscatti().get(listViewRiscatti.getSelectionModel().getSelectedIndex());
-                
-                String dettagli = String.format(
-                        "Nome ricompensa: %s%nCodice Riscatto: %s%nPunti: %d%nData riscatto: %s%nValore: %d€%nDescrizione: %s%nData scadenza: %s", 
-                        selezionato.getNomeRicompensa(), selezionato.getCodiceRiscatto(), selezionato.getPunti(), 
-                        selezionato.getDataRiscatto(), selezionato.getValoreRicompensa(), selezionato.getDescrizioneRicompensa(), 
-                        selezionato.getDataScadenzaRicompensa());
+		listViewRiscatti.setItems(riscattoStrings);
+	}
 
-                dettagliRiscattoTextArea.setText(dettagli);
-            }
-        });
-        
-    }
+	private void configuraEventi() {
+		dettagliRicompensaTextArea.setEditable(false);
+		dettagliRiscattoTextArea.setEditable(false);
+		riscattaButton.setOnAction(this::riscattaSelezione);
+		storicoButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.STORICO_PUNTI_VIEW));
 
-    private void mostraDettagliRicompensa(RicompensaBean ricompensaBean) {
-        int puntiNecessari = riscattaRicompensaController.calcolaPuntiNecessari(ricompensaBean.getValore());
-        String dettagli = String.format(
-                "Nome: %s%nValore: %d€%nDescrizione: %s%nData scadenza: %s%nPunti necessari: %d",
-                ricompensaBean.getNome(), ricompensaBean.getValore(), ricompensaBean.getDescrizione(),
-                ricompensaBean.getDataScadenza(), puntiNecessari);
-        dettagliRicompensaTextArea.setText(dettagli);
-    }
+		choiceBoxRicompense.setOnAction(event -> {
+			int selectedIndex = choiceBoxRicompense.getSelectionModel().getSelectedIndex();
+			if (selectedIndex >= 0) {
+				RicompensaBean ricompensaSelezionata = listaRicompenseAPI.get(selectedIndex);
+				mostraDettagliRicompensa(ricompensaSelezionata);
+			}
+		});
 
-    private void riscattaSelezione(ActionEvent event) {
-        int selectedIndex = choiceBoxRicompense.getSelectionModel().getSelectedIndex();
+		listViewRiscatti.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+			if (newSelection != null) {
+				RiscattoBean selezionato = riscattaRicompensaController.getRiscatti()
+						.get(listViewRiscatti.getSelectionModel().getSelectedIndex());
 
-        if (selectedIndex < 0) {
-            showAlert("Nessuna Ricompensa Selezionata", "Seleziona una ricompensa.");
-            return;
-        }
+				String dettagli = String.format(
+						"Nome ricompensa: %s%nCodice Riscatto: %s%nPunti: %d%nData riscatto: %s%nValore: %d€%nDescrizione: %s%nData scadenza: %s",
+						selezionato.getNomeRicompensa(), selezionato.getCodiceRiscatto(), selezionato.getPunti(),
+						selezionato.getDataRiscatto(), selezionato.getValoreRicompensa(),
+						selezionato.getDescrizioneRicompensa(), selezionato.getDataScadenzaRicompensa());
 
-        RicompensaBean ricompensaBean = listaRicompenseAPI.get(selectedIndex);
+				dettagliRiscattoTextArea.setText(dettagli);
+			}
+		});
 
-        try {
-            boolean result = riscattaRicompensaController.riscatta(ricompensaBean);
+	}
 
-            String message = result ? "Ricompensa riscattata con successo!" : "Impossibile riscattare la ricompensa. Riprova.";
-            showAlert(result ? "Successo" : "Errore", message);
+	private void mostraDettagliRicompensa(RicompensaBean ricompensaBean) {
+		int puntiNecessari = riscattaRicompensaController.calcolaPuntiNecessari(ricompensaBean.getValore());
+		String dettagli = String.format(
+				"Nome: %s%nValore: %d€%nDescrizione: %s%nData scadenza: %s%nPunti necessari: %d",
+				ricompensaBean.getNome(), ricompensaBean.getValore(), ricompensaBean.getDescrizione(),
+				ricompensaBean.getDataScadenza(), puntiNecessari);
+		dettagliRicompensaTextArea.setText(dettagli);
+	}
 
-        } catch (DailyRedemptionLimitException e) {
-            showAlert("Limite riscatti giornalieri raggiunto", e.getMessage());
-        } catch (InsufficientPointsException e) {
-            showAlert("Punti insufficienti", e.getMessage());
-        } catch (GestioneRiscattoException e) {
-            showAlert("Errore nel recupero del codice di riscatto", e.getMessage());
-        } catch (Exception e) {
-            showAlert("Errore", "Si è verificato un errore imprevisto. Riprova più tardi.");
-        }
-    }
+	private void riscattaSelezione(ActionEvent event) {
+		int selectedIndex = choiceBoxRicompense.getSelectionModel().getSelectedIndex();
 
-    // Mostra gli alert
-    private void showAlert(String titolo, String messaggio) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titolo);
-        alert.setHeaderText(null);
-        alert.setContentText(messaggio);
-        alert.showAndWait();
-    }
+		if (selectedIndex < 0) {
+			showAlert("Nessuna Ricompensa Selezionata", "Seleziona una ricompensa.");
+			return;
+		}
 
+		RicompensaBean ricompensaBean = listaRicompenseAPI.get(selectedIndex);
 
-    @Override
-    public void update() {
-        ObservableList<String> riscattoStrings = FXCollections.observableArrayList();
-        for (RiscattoBean riscatto : riscattaRicompensaController.getRiscatti()) {
-            riscattoStrings.add(riscatto.getNomeRicompensa() + " - " + riscatto.getDataRiscatto());
-        }
-        listViewRiscatti.setItems(riscattoStrings);
-        saldoPuntiLabel.setText(String.valueOf(riscattaRicompensaController.ottieniPuntiUtente()));
-    }
+		try {
+			boolean result = riscattaRicompensaController.riscatta(ricompensaBean);
+
+			String message = result ? "Ricompensa riscattata con successo!"
+					: "Impossibile riscattare la ricompensa. Riprova.";
+			showAlert(result ? "Successo" : "Errore", message);
+
+		} catch (DailyRedemptionLimitException e) {
+			showAlert("Limite riscatti giornalieri raggiunto", e.getMessage());
+		} catch (InsufficientPointsException e) {
+			showAlert("Punti insufficienti", e.getMessage());
+		} catch (GestioneRiscattoException e) {
+			showAlert("Errore nel recupero del codice di riscatto", e.getMessage());
+		} catch (Exception e) {
+			showAlert("Errore", "Si è verificato un errore imprevisto. Riprova più tardi.");
+		}
+	}
+
+	private void showAlert(String titolo, String messaggio) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle(titolo);
+		alert.setHeaderText(null);
+		alert.setContentText(messaggio);
+		alert.showAndWait();
+	}
+
+	@Override
+	public void update() {
+		caricaRiscatti();
+		caricaPuntiUtente();
+	}
+
 }

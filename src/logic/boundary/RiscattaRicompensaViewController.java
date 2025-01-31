@@ -14,6 +14,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import logic.beans.RicompensaBean;
 import logic.beans.RiscattoBean;
+import logic.boundary.components.ViewInfo;
+import logic.boundary.components.ViewLoader;
 import logic.controller.RiscattaRicompensaController;
 import logic.exceptions.ConnessioneAPIException;
 import logic.exceptions.DailyRedemptionLimitException;
@@ -28,7 +30,6 @@ public class RiscattaRicompensaViewController implements Observer {
 	@FXML
 	private TableView<RiscattoBean> tableViewRiscatti;
 
-	// colonne della TableView
 	@FXML
 	private TableColumn<RiscattoBean, String> colNomeRicompensa;
 	@FXML
@@ -36,7 +37,7 @@ public class RiscattaRicompensaViewController implements Observer {
 	@FXML
 	private TableColumn<RiscattoBean, String> colDescrizione;
 	@FXML
-	private TableColumn<RiscattoBean, Integer> colValore;
+	private TableColumn<RiscattoBean, String> colValore;
 	@FXML
 	private TableColumn<RiscattoBean, String> colDataRiscatto;
 	@FXML
@@ -68,7 +69,7 @@ public class RiscattaRicompensaViewController implements Observer {
 		riscattaRicompensaController.registraOsservatoreRiscatti(this);
 		caricaPuntiUtente();
 		mostraRicompenseDisponibili();
-		setupEventHandlers();
+		configuraEventi();
 		configuraColonneTableView();
 
 		tableViewRiscatti.setItems(FXCollections.observableArrayList(getRiscatti()));
@@ -96,7 +97,7 @@ public class RiscattaRicompensaViewController implements Observer {
 		comboBoxRicompense.setItems(ricompense);
 	}
 
-	private void setupEventHandlers() {
+	private void configuraEventi() {
 		nuovaSegnalazioneButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.EFFETTUA_SEGNALAZIONE_VIEW));
 		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW));
 		visualizzaStoricoButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.STORICO_VIEW));
@@ -117,14 +118,15 @@ public class RiscattaRicompensaViewController implements Observer {
 				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNomeRicompensa()));
 		colCodiceRiscatto
 				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCodiceRiscatto()));
-		colDescrizione
-				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescrizioneRicompensa()));
-		colValore
-				.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getValoreRicompensa()).asObject());
+		colDescrizione.setCellValueFactory(
+				cellData -> new SimpleStringProperty(cellData.getValue().getDescrizioneRicompensa()));
+		colValore.setCellValueFactory(cellData ->
+	    new SimpleStringProperty(cellData.getValue().getValoreRicompensa() + " €"));
+
 		colDataRiscatto
 				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDataRiscatto()));
-		colDataScadenza
-				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDataScadenzaRicompensa()));
+		colDataScadenza.setCellValueFactory(
+				cellData -> new SimpleStringProperty(cellData.getValue().getDataScadenzaRicompensa()));
 		colPuntiUtilizzati
 				.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getPunti()).asObject());
 	}

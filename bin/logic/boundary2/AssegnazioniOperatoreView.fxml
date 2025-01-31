@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.boundary2.AssegnazioniOperatoreViewController">
+   <center>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="870.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="292.0" layoutY="25.0" text="Segnalazioni assegnate" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="26.25" />
+               </font>
+            </Label>
+            <TableView fx:id="tableViewSegnalazioni" layoutX="14.0" layoutY="142.0" prefHeight="476.0" prefWidth="672.0">
+               <columns>
+                  <TableColumn fx:id="colIdSegnalazione" prefWidth="114.0" text="ID" />
+                  <TableColumn fx:id="colDescrizione" prefWidth="278.0" text="Descrizione" />
+                  <TableColumn fx:id="colPosizione" prefWidth="279.0" text="Posizione" />
+               </columns>
+            </TableView>
+            <Button fx:id="fotoButton" layoutX="712.0" layoutY="201.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="144.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="FOTO" textFill="WHITE">
+               <font>
+                  <Font size="18.75" />
+               </font>
+            </Button>
+            <Button fx:id="posizioneButton" layoutX="712.0" layoutY="142.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="144.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="POSIZIONE" textFill="WHITE">
+               <font>
+                  <Font size="18.75" />
+               </font>
+            </Button>
+            <Button fx:id="completaButton" layoutX="546.0" layoutY="659.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="144.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="COMPLETA" textFill="WHITE">
+               <font>
+                  <Font size="18.75" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

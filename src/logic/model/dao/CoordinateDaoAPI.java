@@ -15,96 +15,90 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class CoordinateDaoAPI implements CoordinateDao {
-    private static final String CHIAVE_API_GEOCODING = "eeaf6def78f849edb3ea062981a4af9a"; // chiave API
+	private static final String CHIAVE_API_GEOCODING = "eeaf6def78f849edb3ea062981a4af9a"; // chiave API
 	private static final Logger logger = Logger.getLogger(CoordinateDaoAPI.class.getName());
 
-    @Override
-    public Coordinate ottieniCoordinate(String posizioneTesto) {
-        try {
-            // Codifica la query
-            String posizioneCodificata = URLEncoder.encode(posizioneTesto, "UTF-8");
+	@Override
+	public Coordinate ottieniCoordinate(String posizioneTesto) {
+		try {
+			// codifico in un formato URL-safe
+			String posizioneCodificata = URLEncoder.encode(posizioneTesto, "UTF-8");
 
-            // Costruisci l'URL come stringa
-            String urlStringa = String.format("https://api.opencagedata.com/geocode/v1/json?q=%s&key=%s", posizioneCodificata, CHIAVE_API_GEOCODING);
+			// creo la stringa da usare per la richiesta HTTP
+			String urlStringa = String.format("https://api.opencagedata.com/geocode/v1/json?q=%s&key=%s",
+					posizioneCodificata, CHIAVE_API_GEOCODING);
 
-            URI uri = new URI(urlStringa);
-            URL url = uri.toURL();
+			URI uri = new URI(urlStringa);
+			URL url = uri.toURL();
 
-            // Apertura della connessione e lettura della risposta
-            HttpURLConnection connessione = (HttpURLConnection) url.openConnection();
-            connessione.setRequestMethod("GET");
+			// apro la connessione HTTP
+			HttpURLConnection connessione = (HttpURLConnection) url.openConnection();
+			connessione.setRequestMethod("GET");
 
-            try (InputStreamReader lettore = new InputStreamReader(connessione.getInputStream());
-                 Scanner scanner = new Scanner(lettore)) {
+			try (InputStreamReader lettore = new InputStreamReader(connessione.getInputStream());
+					Scanner scanner = new Scanner(lettore)) {
 
-                StringBuilder risposta = new StringBuilder();
-                while (scanner.hasNextLine()) {
-                    risposta.append(scanner.nextLine());
-                }
+				StringBuilder risposta = new StringBuilder();
+				while (scanner.hasNextLine()) {
+					risposta.append(scanner.nextLine());
+				}
 
-                // Analisi della risposta
-                Gson gson = new Gson();
-                JsonObject json = gson.fromJson(risposta.toString(), JsonObject.class);
-                JsonArray risultati = json.getAsJsonArray("results");
+				// converto la risposta in un oggetto JsonObject
+				Gson gson = new Gson();
+				JsonObject json = gson.fromJson(risposta.toString(), JsonObject.class);
+				JsonArray risultati = json.getAsJsonArray("results");
 
-                if (!risultati.isEmpty()) {
-                    JsonObject geometria = risultati.get(0).getAsJsonObject().getAsJsonObject("geometry");
-                    double latitudine = geometria.get("lat").getAsDouble();
-                    double longitudine = geometria.get("lng").getAsDouble();
-                    return new Coordinate(latitudine, longitudine);
-                } else {
-                    // In caso di risultato vuoto
-                    return null;
-                }
-            }
-        } catch (Exception e) {
-            logger.severe("Errore durante il recupero delle coordinate: " + e.getMessage());
-            return null;  
-        }
-    }
-    
-    @Override
-    public String ottieniPosizione(Coordinate coordinate) {
-        try {
-            // Costruisci l'URL come stringa
-            String urlStringa = String.format("https://api.opencagedata.com/geocode/v1/json?q=%f,+%f&key=%s", coordinate.getLatitudine(), coordinate.getLongitudine(), CHIAVE_API_GEOCODING);
+				if (!risultati.isEmpty()) {
+					// estraggo i valori lat e lng dalla sezione geometry della risposta JSON
+					JsonObject geometria = risultati.get(0).getAsJsonObject().getAsJsonObject("geometry");
+					double latitudine = geometria.get("lat").getAsDouble();
+					double longitudine = geometria.get("lng").getAsDouble();
+					return new Coordinate(latitudine, longitudine);
+				} else {
+					return null;
+				}
+			}
+		} catch (Exception e) {
+			logger.severe("Errore durante il recupero delle coordinate: " + e.getMessage());
+			return null;
+		}
+	}
 
-            URI uri = new URI(urlStringa);
-            URL url = uri.toURL();
+	@Override
+	public String ottieniPosizione(Coordinate coordinate) {
+		try {
+			String urlStringa = String.format("https://api.opencagedata.com/geocode/v1/json?q=%f,+%f&key=%s",
+					coordinate.getLatitudine(), coordinate.getLongitudine(), CHIAVE_API_GEOCODING);
 
-            // Apertura della connessione e lettura della risposta
-            HttpURLConnection connessione = (HttpURLConnection) url.openConnection();
-            connessione.setRequestMethod("GET");
+			URI uri = new URI(urlStringa);
+			URL url = uri.toURL();
 
-            try (InputStreamReader lettore = new InputStreamReader(connessione.getInputStream());
-                 Scanner scanner = new Scanner(lettore)) {
+			HttpURLConnection connessione = (HttpURLConnection) url.openConnection();
+			connessione.setRequestMethod("GET");
 
-                StringBuilder risposta = new StringBuilder();
-                while (scanner.hasNextLine()) {
-                    risposta.append(scanner.nextLine());
-                }
+			try (InputStreamReader lettore = new InputStreamReader(connessione.getInputStream());
+					Scanner scanner = new Scanner(lettore)) {
 
-                // Analisi della risposta
-                Gson gson = new Gson();
-                JsonObject json = gson.fromJson(risposta.toString(), JsonObject.class);
-                JsonArray risultati = json.getAsJsonArray("results");
+				StringBuilder risposta = new StringBuilder();
+				while (scanner.hasNextLine()) {
+					risposta.append(scanner.nextLine());
+				}
 
-                if (!risultati.isEmpty()) {
-                    // Ottieni l'indirizzo formattato dal primo risultato
-                    JsonObject primoRisultato = risultati.get(0).getAsJsonObject();
-                    return primoRisultato.get("formatted").getAsString(); // Restituisce l'indirizzo formattato
-                } else {
-                    return "null"; 
-                }
-            }
-        } catch (Exception e) {
-            logger.severe("Errore durante il recupero dell'indirizzo: " + e.getMessage());
-            return "null"; 
-        }
-    }
+				Gson gson = new Gson();
+				JsonObject json = gson.fromJson(risposta.toString(), JsonObject.class);
+				JsonArray risultati = json.getAsJsonArray("results");
 
-    
-    
-
+				if (!risultati.isEmpty()) {
+					JsonObject primoRisultato = risultati.get(0).getAsJsonObject();
+					return primoRisultato.get("formatted").getAsString();
+				} else {
+					return null;
+				}
+			}
+		} catch (Exception e) {
+			logger.severe("Errore durante il recupero dell'indirizzo: " + e.getMessage());
+			return null;
+		}
+	}
 
 }

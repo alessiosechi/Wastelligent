@@ -2,8 +2,8 @@ package startup;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import logic.boundary.ViewInfo;
-import logic.boundary.ViewLoader;
+import logic.boundary.components.ViewInfo;
+import logic.boundary.components.ViewLoader;
 
 public class Main extends Application {
 

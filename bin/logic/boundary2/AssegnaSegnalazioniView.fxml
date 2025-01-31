@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.boundary2.AssegnaSegnalazioniViewController">
+   <center>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="870.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="308.0" layoutY="27.0" text="Assegna segnalazioni" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="26.25" />
+               </font>
+            </Label>
+            <TableView fx:id="tableViewSegnalazioni" layoutX="14.0" layoutY="142.0" prefHeight="476.0" prefWidth="672.0">
+               <columns>
+                  <TableColumn fx:id="colIdSegnalazione" prefWidth="83.0" text="ID" />
+                  <TableColumn fx:id="colDescrizione" prefWidth="242.0" text="Descrizione" />
+                  <TableColumn fx:id="colPosizione" prefWidth="205.0" text="Posizione" />
+                  <TableColumn fx:id="colStato" prefWidth="141.0" text="Stato" />
+               </columns>
+            </TableView>
+            <Button fx:id="fotoButton" layoutX="712.0" layoutY="201.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="144.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="FOTO" textFill="WHITE">
+               <font>
+                  <Font size="18.75" />
+               </font>
+            </Button>
+            <Button fx:id="posizioneButton" layoutX="712.0" layoutY="142.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="144.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="POSIZIONE" textFill="WHITE">
+               <font>
+                  <Font size="18.75" />
+               </font>
+            </Button>
+            <Button fx:id="assegnaButton" layoutX="546.0" layoutY="659.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="144.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="ASSEGNA" textFill="WHITE">
+               <font>
+                  <Font size="18.75" />
+               </font>
+            </Button>
+            <ComboBox fx:id="operatoriComboBox" layoutX="297.0" layoutY="660.0" prefHeight="40.0" prefWidth="217.0" promptText="Seleziona operatore" />
+            <Button fx:id="eliminaButton" layoutX="14.0" layoutY="659.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="144.0" style="-fx-background-color: #992224; -fx-background-radius: 10;" text="ELIMINA" textFill="WHITE">
+               <font>
+                  <Font size="18.75" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

@@ -49,12 +49,11 @@
             <Font size="18.75" />
          </font>
       </Button>
-      <TableView fx:id="segnalazioniTable" layoutX="29.25" layoutY="246.0" prefHeight="289.5" prefWidth="1021.5">
+      <TableView fx:id="segnalazioniTable" layoutX="29.0" layoutY="246.0" prefHeight="340.0" prefWidth="1022.0">
          <columns>
-            <TableColumn fx:id="idColumn" prefWidth="105.0" text="ID" />
-            <TableColumn fx:id="descrizioneColumn" prefWidth="285.0" text="Descrizione" />
-            <TableColumn fx:id="posizioneColumn" prefWidth="285.0" text="Posizione" />
-            <TableColumn fx:id="operatoreColumn" prefWidth="285.0" text="Operatore" />
+            <TableColumn fx:id="idColumn" prefWidth="126.0" text="ID" />
+            <TableColumn fx:id="descrizioneColumn" prefWidth="439.0" text="Descrizione" />
+            <TableColumn fx:id="posizioneColumn" prefWidth="456.0" text="Posizione" />
          </columns>
       </TableView>
       <Button fx:id="dettagliButton" layoutX="29.25" layoutY="637.5" mnemonicParsing="false" prefHeight="40.5" prefWidth="135.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="DETTAGLI" textFill="WHITE">

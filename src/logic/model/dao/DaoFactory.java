@@ -12,7 +12,6 @@ public class DaoFactory {
 	private static Map<Class<?>, Object> daoMap = new HashMap<>();
 
 	private DaoFactory() {
-		// costruttore vuoto
 	}
 
 	@SuppressWarnings("unchecked")

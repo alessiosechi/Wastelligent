@@ -11,7 +11,5 @@ public class SegnalazioniAttive extends SegnalazioniSubject {
 		return instance;
 	}
 
-	
-	
 	// tutte le istanze dell'applicazione dovranno condividere lo stesso stato di SegnalazioniAttive
 }

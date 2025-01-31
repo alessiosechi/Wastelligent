@@ -12,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import logic.beans.SegnalazioneBean;
+import logic.boundary.components.ViewInfo;
+import logic.boundary.components.ViewLoader;
 import logic.controller.RiscattaRicompensaController;
 
 public class StoricoViewController {

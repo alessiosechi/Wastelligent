@@ -1,21 +1,18 @@
 package logic.config;
 
-
-
 public class PersistenceConfigurator {
 
-    private static PersistenceProvider currentProvider;
-    private PersistenceConfigurator() {
-    	// Costruttore vuoto
-    }
+	private static PersistenceProvider currentProvider;
 
-    public static void configurePersistence(PersistenceProvider provider) {
-        currentProvider = provider;
-    }
+	private PersistenceConfigurator() {
+	}
 
-    public static PersistenceProvider getCurrentProvider() {
-        return currentProvider;
-    }
+	public static void configurePersistence(PersistenceProvider provider) {
+		currentProvider = provider;
+	}
 
+	public static PersistenceProvider getCurrentProvider() {
+		return currentProvider;
+	}
 
 }

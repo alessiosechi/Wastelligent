@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="210.0" style="-fx-background-color: #216838;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" >
+<AnchorPane fx:id="sidebarPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="210.0" style="-fx-background-color: #216838;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button fx:id="sidebarButton1" layoutY="248.0" mnemonicParsing="false" prefHeight="90.75" prefWidth="209.25" style="-fx-background-color: #216838;" text="SEGNALA&#10;RIFIUTI" textAlignment="CENTER" textFill="WHITE">
          <font>

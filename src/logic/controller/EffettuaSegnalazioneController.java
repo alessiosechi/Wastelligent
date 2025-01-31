@@ -16,7 +16,7 @@ import logic.model.domain.SegnalazioniAttive;
 import logic.model.domain.StatoSegnalazione;
 import logic.model.domain.LoggedUser;
 
-public class EffettuaSegnalazioneController { 
+public class EffettuaSegnalazioneController {
 	private static volatile EffettuaSegnalazioneController instance;
 	private static final Logger logger = Logger.getLogger(EffettuaSegnalazioneController.class.getName());
 	private SegnalazioneDao segnalazioneDAO;
@@ -25,7 +25,7 @@ public class EffettuaSegnalazioneController {
 	private EffettuaSegnalazioneController() {
 		try {
 			segnalazioneDAO = DaoFactory.getDao(SegnalazioneDao.class);
-			coordinateDao=DaoFactory.getDao(CoordinateDao.class);
+			coordinateDao = DaoFactory.getDao(CoordinateDao.class);
 		} catch (Exception e) {
 			logger.severe("Errore durante l'inizializzazione del DAO: " + e.getMessage());
 		}
@@ -58,13 +58,13 @@ public class EffettuaSegnalazioneController {
 		if (verificaSegnalazioniVicine(segnalazioneBean.getLatitudine(), segnalazioneBean.getLongitudine())) {
 			throw new SegnalazioneVicinaException("Segnalazione troppo vicina a un'altra esistente.");
 		}
-		
+
 		Segnalazione segnalazione = compilaSegnalazione(segnalazioneBean);
 		segnalazioneDAO.salvaSegnalazione(segnalazione);
 		SegnalazioniAttive.getInstance().aggiungiSegnalazione(segnalazione);
-		
+
 	}
-	
+
 	public CoordinateBean convertCoordinateToBean(Coordinate coordinate) {
 		CoordinateBean coordinateBean = new CoordinateBean();
 		coordinateBean.setLatitudine(coordinate.getLatitudine());
@@ -78,8 +78,8 @@ public class EffettuaSegnalazioneController {
 
 		// calcolo la distanza e verifico se è entro 20 metri
 		for (Segnalazione esistente : segnalazioniEsistenti) {
-			double distanza = calcolaDistanza(latitudine, longitudine,
-					esistente.getLatitudine(), esistente.getLongitudine());
+			double distanza = calcolaDistanza(latitudine, longitudine, esistente.getLatitudine(),
+					esistente.getLongitudine());
 
 			double max = 20.0;
 			if (distanza <= max) {
@@ -105,14 +105,13 @@ public class EffettuaSegnalazioneController {
 		double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) + Math.cos(Math.toRadians(lat1))
 				* Math.cos(Math.toRadians(lat2)) * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
 
-		// c rappresenta l'angolo centrale tra i due punti rispetto al centro della Terra
+		// c rappresenta l'angolo centrale tra i due punti rispetto al centro della
+		// Terra
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
 		return R * c; // converto l'angolo in metri
 
 	}
-
-
 
 	public Segnalazione compilaSegnalazione(SegnalazioneBean segnalazioneBean) {
 		Segnalazione segnalazione = new Segnalazione();

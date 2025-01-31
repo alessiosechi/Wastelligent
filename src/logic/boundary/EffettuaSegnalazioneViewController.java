@@ -16,6 +16,8 @@ import javafx.stage.FileChooser;
 import logic.beans.CoordinateBean;
 import logic.beans.LocationRequestBean;
 import logic.beans.SegnalazioneBean;
+import logic.boundary.components.ViewInfo;
+import logic.boundary.components.ViewLoader;
 import logic.controller.EffettuaSegnalazioneController;
 import logic.exceptions.SegnalazioneVicinaException;
 
@@ -47,15 +49,16 @@ public class EffettuaSegnalazioneViewController {
 	private MapView mapView;
 	private Marker currentMarker;
 
-	private EffettuaSegnalazioneController effettuaSegnalazioneController = EffettuaSegnalazioneController.getInstance();
+	private EffettuaSegnalazioneController effettuaSegnalazioneController = EffettuaSegnalazioneController
+			.getInstance();
 
 	@FXML
-	public void initialize() { 
-		initMapView();
-		initButtonActions();
+	public void initialize() {
+		inizializzaMapView();
+		configuraPulsanti();
 	}
 
-	private void initMapView() {
+	private void inizializzaMapView() {
 		mapView = new MapView();
 		mapView.initialize(Configuration.builder().projection(Projection.WEB_MERCATOR).showZoomControls(true).build());
 
@@ -70,11 +73,11 @@ public class EffettuaSegnalazioneViewController {
 		// se clicco sulla mappa viene creato un marker sulla posizione cliccata
 		mapView.addEventHandler(MapViewEvent.MAP_CLICKED, event -> {
 			Coordinate coordinate = event.getCoordinate().normalize();
-			placeMarker(coordinate);
+			inserisciMarker(coordinate);
 		});
 	}
 
-	private void initButtonActions() {
+	private void configuraPulsanti() {
 		// azione associata al pulsante browseButton
 		browseButton.setOnAction(event -> {
 			FileChooser fileChooser = new FileChooser();
@@ -108,7 +111,7 @@ public class EffettuaSegnalazioneViewController {
 							posizioneBean.getLongitudine());
 
 					mapView.setCenter(coordinate);
-					placeMarker(coordinate);
+					inserisciMarker(coordinate);
 				} catch (Exception e) {
 					showAlert("Errore", "Impossibile trovare la posizione.");
 				}
@@ -133,7 +136,7 @@ public class EffettuaSegnalazioneViewController {
 		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW));
 	}
 
-	private void placeMarker(Coordinate coordinate) {
+	private void inserisciMarker(Coordinate coordinate) {
 		if (currentMarker != null) {
 			mapView.removeMarker(currentMarker);
 		}
@@ -143,6 +146,15 @@ public class EffettuaSegnalazioneViewController {
 	}
 
 	private boolean inviaSegnalazione(String description, String photoPath) {
+		if (description == null || description.isEmpty()) {
+			showAlert("Errore", "La descrizione è obbligatoria per inviare la segnalazione.");
+			return false;
+		}
+
+		if (currentMarker == null) {
+			showAlert("Errore", "Devi prima selezionare una posizione.");
+			return false;
+		}
 		try {
 
 			SegnalazioneBean segnalazioneBean = new SegnalazioneBean();

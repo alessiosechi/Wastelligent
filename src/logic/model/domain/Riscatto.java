@@ -2,10 +2,8 @@ package logic.model.domain;
 
 import java.io.Serializable;
 
-public class Riscatto implements Serializable{
-	/**
-	 * 
-	 */
+public class Riscatto implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 	private Ricompensa ricompensa;
 	private int idUtente;
@@ -75,23 +73,13 @@ public class Riscatto implements Serializable{
 	public String getDataScadenzaRicompensa() {
 		return ricompensa.getDataScadenza();
 	}
-	
-	
-	
-    @Override
-    public String toString() {
-        return "Riscatto {" +
-                "Ricompensa {" +
-                    "Nome='" + getNomeRicompensa() + '\'' +
-                    ", Descrizione='" + getDescrizioneRicompensa() + '\'' +
-                    ", Valore=" + getValoreRicompensa() +
-                    ", Data Scadenza='" + getDataScadenzaRicompensa() + '\'' +
-                "}, " +
-                "idUtente=" + idUtente +
-                ", Punti=" + punti +
-                ", Codice Riscatto='" + codiceRiscatto + '\'' +
-                ", Data Riscatto='" + dataRiscatto + '\'' +
-                '}';
-    }
+
+	@Override
+	public String toString() {
+		return "Riscatto {" + "Ricompensa {" + "Nome='" + getNomeRicompensa() + '\'' + ", Descrizione='"
+				+ getDescrizioneRicompensa() + '\'' + ", Valore=" + getValoreRicompensa() + ", Data Scadenza='"
+				+ getDataScadenzaRicompensa() + '\'' + "}, " + "idUtente=" + idUtente + ", Punti=" + punti
+				+ ", Codice Riscatto='" + codiceRiscatto + '\'' + ", Data Riscatto='" + dataRiscatto + '\'' + '}';
+	}
 
 }

@@ -11,7 +11,7 @@
    <center>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="870.0">
          <children>
-            <Label layoutX="372.0" layoutY="25.0" text="Storico punti" wrapText="true">
+            <Label layoutX="355.0" layoutY="25.0" text="Storico punti" wrapText="true">
                <font>
                   <Font name="System Bold" size="26.25" />
                </font>

@@ -6,7 +6,6 @@ public class CoordinateBean {
 	private double longitudine;
 
 	public CoordinateBean() {
-		// Costruttore vuoto
 	}
 
 	public double getLatitudine() {

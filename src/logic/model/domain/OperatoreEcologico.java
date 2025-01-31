@@ -22,9 +22,9 @@ public class OperatoreEcologico extends Utente implements Subject {
 	@Override
 	public String getViewIniziale(int interfaccia) {
 		if (interfaccia == 1) {
-			return "SegnalazioniAssegnateView.fxml";
+			return "/logic/boundary/SegnalazioniAssegnateView.fxml";
 		} else {
-			return "";
+			return "/logic/boundary2/AssegnazioniOperatoreView.fxml";
 		}
 	}
 

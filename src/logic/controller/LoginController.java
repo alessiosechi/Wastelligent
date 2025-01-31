@@ -74,7 +74,7 @@ public class LoginController {
 
 	}
 
-	public String ottieniView(int interfacciaSelezionata) { // restituisce la view iniziale da caricare
+	public String ottieniView(int interfacciaSelezionata) { // restituisco la view iniziale da caricare
 		return utente.getViewIniziale(interfacciaSelezionata);
 	}
 

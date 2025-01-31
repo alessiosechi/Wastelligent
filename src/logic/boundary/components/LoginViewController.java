@@ -1,4 +1,4 @@
-package logic.boundary;
+package logic.boundary.components;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,8 +29,6 @@ public class LoginViewController {
 	@FXML
 	private Hyperlink registerLink;
 
-
-
 	private LoginController loginController = LoginController.getInstance();
 
 	@FXML
@@ -44,7 +42,7 @@ public class LoginViewController {
 
 	}
 
-	// il metodo che viene eseguito al click del button "LOGIN"
+	// metodo che viene eseguito al click del button "LOGIN"
 	@FXML
 	private void handleLoginButtonAction(ActionEvent event) {
 
@@ -67,8 +65,6 @@ public class LoginViewController {
 	}
 
 	private void authenticate(String username, String password, int interfacciaSelezionata) {
-
-		// chiedo al LoginController di effettuare il login
 		CredenzialiBean credenzialiBean = new CredenzialiBean();
 		credenzialiBean.setUsername(username);
 		credenzialiBean.setPassword(password);
@@ -98,7 +94,5 @@ public class LoginViewController {
 		alert.setContentText(content);
 		alert.showAndWait();
 	}
-
-
 
 }

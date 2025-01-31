@@ -11,7 +11,7 @@
    <center>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="870.0">
          <children>
-            <Label layoutX="287.0" layoutY="25.0" text="Riscatta una ricompensa" wrapText="true">
+            <Label layoutX="285.0" layoutY="25.0" text="Riscatta una ricompensa" wrapText="true">
                <font>
                   <Font name="System Bold" size="26.25" />
                </font>
@@ -38,7 +38,7 @@
                   <Font size="26.25" />
                </font>
             </Label>
-            <Button fx:id="storicoButton" layoutX="635.0" layoutY="117.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="162.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="STORICO PUNTI" textFill="WHITE">
+            <Button fx:id="storicoButton" layoutX="483.0" layoutY="117.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="162.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="STORICO PUNTI" textFill="WHITE">
                <font>
                   <Font size="18.75" />
                </font>

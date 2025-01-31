@@ -32,7 +32,7 @@ public class UtenteDaoInMemory implements UtenteDao {
 		if (utente != null) {
 			return getRuoloIdByClasse(utente);
 		}
-		return -1; // restituisco -1 se l'utente non esiste
+		return -1;
 	}
 
 	private static Integer getRuoloIdByClasse(Utente utente) {

@@ -12,7 +12,6 @@ public class SegnalazioneDaoInMemory implements SegnalazioneDao {
 	private static List<Segnalazione> segnalazioni = new ArrayList<>();
 	private int idSegnalazioneCounter = 0;
 
-
 	@Override
 	public void salvaSegnalazione(Segnalazione segnalazione) {
 		idSegnalazioneCounter++;
@@ -95,6 +94,5 @@ public class SegnalazioneDaoInMemory implements SegnalazioneDao {
 		}
 		return null;
 	}
-
 
 }

@@ -1,7 +1,6 @@
 package logic.boundary;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 import javafx.beans.property.SimpleIntegerProperty;
@@ -11,110 +10,114 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import logic.beans.SegnalazioneBean;
+import logic.boundary.components.ViewInfo;
+import logic.boundary.components.ViewLoader;
 import logic.controller.RisolviSegnalazioneController;
 import logic.observer.Observer;
 
-public class SegnalazioniAssegnateViewController implements Observer{
-	
+public class SegnalazioniAssegnateViewController implements Observer {
+
 	@FXML
 	private Button exitButton;
 	@FXML
 	private Button dettagliButton;
 	@FXML
 	private Button completaButton;
-	
+
 	@FXML
-    private TableView<SegnalazioneBean> segnalazioniTable; 
-    @FXML
-    private TableColumn<SegnalazioneBean, Integer> idColumn;
-    @FXML
-    private TableColumn<SegnalazioneBean, String> descrizioneColumn;
-    @FXML
-    private TableColumn<SegnalazioneBean, String> posizioneColumn;
-	
-	
-    private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
+	private TableView<SegnalazioneBean> segnalazioniTable;
+	@FXML
+	private TableColumn<SegnalazioneBean, Integer> idColumn;
+	@FXML
+	private TableColumn<SegnalazioneBean, String> descrizioneColumn;
+	@FXML
+	private TableColumn<SegnalazioneBean, String> posizioneColumn;
+
+	private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
 	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
 	private static final Logger logger = Logger.getLogger(SegnalazioniAssegnateViewController.class.getName());
-    
+
 	@FXML
-    public void initialize() {
-		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW));
+	public void initialize() {
+		configuraPulsanti();
+		configuraColonneTabella();
+		configuraSelezioneTabella();
+		configuraEventiPulsanti();
 		caricaAssegnazioni();
 
-        idColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getIdSegnalazione()).asObject());
-        descrizioneColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescrizione()));
-        posizioneColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPosizione()));
+		risolviSegnalazioneController.registraOsservatoreSegnalazioniAssegnate(this);
 
-        dettagliButton.setDisable(true);
+	}
 
-        segnalazioniTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                dettagliButton.setDisable(false);
+	private void configuraPulsanti() {
+		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW));
+		dettagliButton.setDisable(true);
+	}
 
-                dettagliSegnalazioneViewController.setSegnalazioneBean(newValue);
-                dettagliSegnalazioneViewController.setCallerType(CallerType.CONTROLLER3);
-            } else {
-                dettagliButton.setDisable(true);
-            }
-        });
+	private void configuraColonneTabella() {
+		idColumn.setCellValueFactory(
+				cellData -> new SimpleIntegerProperty(cellData.getValue().getIdSegnalazione()).asObject());
+		descrizioneColumn
+				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescrizione()));
+		posizioneColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPosizione()));
+	}
 
-        
-        dettagliButton.setOnAction(event -> 
-            ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW)
-        );     
+	private void configuraSelezioneTabella() {
+		segnalazioniTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue != null) {
+				dettagliButton.setDisable(false);
+				dettagliSegnalazioneViewController.setSegnalazioneBean(newValue);
+				dettagliSegnalazioneViewController.setCallerType(CallerType.CONTROLLER3);
+			} else {
+				dettagliButton.setDisable(true);
+			}
+		});
+	}
 
-        completaButton.setOnAction(event -> {
+	private void configuraEventiPulsanti() {
+		dettagliButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW));
 
-            SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
+		completaButton.setOnAction(event -> {
+			SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
+			if (segnalazioneSelezionata != null) {
+				boolean successo = risolviSegnalazioneController.completaSegnalazione(segnalazioneSelezionata);
+				if (successo) {
+					logger.info("Segnalazione completata!");
+				} else {
+					showAlert("Errore Completamento",
+							"Si è verificato un errore durante il completamento della segnalazione.");
+				}
+			} else {
+				showAlert("Selezione Mancante", "Seleziona una segnalazione.");
+			}
+		});
+	}
 
-            if (segnalazioneSelezionata != null) {
+	private void caricaAssegnazioni() {
 
-                boolean successo = risolviSegnalazioneController.completaSegnalazione(segnalazioneSelezionata);
+		List<SegnalazioneBean> segnalazioniAssegnate = risolviSegnalazioneController.getSegnalazioniDaRisolvere();
 
-                if (successo) {
-                    logger.info("Segnalazione completata!");
+		ObservableList<SegnalazioneBean> segnalazioni = FXCollections.observableArrayList(segnalazioniAssegnate);
+		segnalazioniTable.setItems(segnalazioni);
+	}
 
-                } else {
-                    showAlert("Errore Completamento", "Si è verificato un errore durante il completamento della segnalazione.");
-                }
-            } else {
-
-                showAlert("Selezione Mancante", "Seleziona una segnalazione.");
-            }
-        });
-
-    	risolviSegnalazioneController.registraOsservatoreSegnalazioniAssegnate(this);
-
-    }     
-
-    private Optional<ButtonType> showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        
-        return alert.showAndWait();
-    }
-        
-    private void caricaAssegnazioni() {
-    	
-        List<SegnalazioneBean> segnalazioniAssegnate = risolviSegnalazioneController.getSegnalazioniDaRisolvere();
-          
-        ObservableList<SegnalazioneBean> segnalazioni = FXCollections.observableArrayList(segnalazioniAssegnate);
-        segnalazioniTable.setItems(segnalazioni);
-    }
+	private void showAlert(String title, String message) {
+		Alert alert = new Alert(Alert.AlertType.WARNING);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+		alert.showAndWait();
+	}
 
 	@Override
 	public void update() {
-        List<SegnalazioneBean> segnalazioniAssegnate = risolviSegnalazioneController.getSegnalazioniAssegnate();
-        
-        ObservableList<SegnalazioneBean> segnalazioni = FXCollections.observableArrayList(segnalazioniAssegnate);
-        segnalazioniTable.setItems(segnalazioni);	
+		List<SegnalazioneBean> segnalazioniAssegnate = risolviSegnalazioneController.getSegnalazioniAssegnate();
+
+		ObservableList<SegnalazioneBean> segnalazioni = FXCollections.observableArrayList(segnalazioniAssegnate);
+		segnalazioniTable.setItems(segnalazioni);
 	}
-	
+
 }

@@ -1,4 +1,4 @@
-package logic.boundary;
+package logic.boundary.components;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
