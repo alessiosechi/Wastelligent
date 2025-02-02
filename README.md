@@ -37,9 +37,9 @@ Per incentivare la partecipazione degli utenti, il sistema include un programma 
      ```
      
 3. **Importare il progetto**:
-   - Dopo aver clonato il progetto, apri il tuo IDE (Eclipse o un altro).
-   - Importa il progetto selezionando **File** > **Import** > **Existing Projects into Workspace**.
-   - Selezionare la cartella del progetto clonato e clicca su **Finish**.
+   - Dopo aver clonato il progetto, aprire l'IDE (Eclipse o un altro).
+   - Importare il progetto selezionando **File** > **Import** > **Existing Projects into Workspace**.
+   - Selezionare la cartella del progetto clonato.
 
 4. **Configurare le dipendenze**:
    - All'interno della cartella del progetto, è presente una cartella chiamata **libs**. Questa cartella contiene tutti i file `.jar` necessari per il progetto.
