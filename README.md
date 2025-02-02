@@ -35,7 +35,7 @@ Per incentivare la partecipazione degli utenti, il sistema include un programma 
      ```bash
      git clone https://github.com/tuo-username/Wastelligent.git
      ```
-
+     
 3. **Importare il progetto**:
    - Dopo aver clonato il progetto, apri il tuo IDE (Eclipse o un altro).
    - Importa il progetto selezionando **File** > **Import** > **Existing Projects into Workspace**.
@@ -45,17 +45,13 @@ Per incentivare la partecipazione degli utenti, il sistema include un programma 
    - All'interno della cartella del progetto, è presente una cartella chiamata **libs**. Questa cartella contiene tutti i file `.jar` necessari per il progetto.
    - Aggiungere manualmente tutti i file `.jar` nella cartella **libs** come dipendenze.
 
-5. **Cartelle del progetto**:
-   - **SRC**: Contiene il codice sorgente del progetto.
-   - **SRC/Test**: Contiene le classi di test scritte con JUnit, utilizzate per il testing di alcune funzionalità.
-
 6. **Creazione del database [opzionale]**:
      - Eseguire lo script SQL presente nella cartella DB attraverso il software HeidiSQL per creare le tabelle necessarie.
      - Modificare il file `resources/db.properties` per configurare la connessione al proprio database MySQL. 
    
 ### Esecuzione dell'applicazione
 
-Se non è stato creato il database, avviare l'applicazione e scegliere di **utilizzare la versione demo**.
+Se non è stato creato il database, avviare l'applicazione e scegliere di **utilizzare la versione demo**. Altrimenti, se il database è stato creato, scegliere la versione che si desidera utilizzare.
    
    
 
