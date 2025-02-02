@@ -57,7 +57,7 @@ public class ViewLoader {
 			stage.setTitle(ViewInfo.DETTAGLI_VIEW.getTitle());
 			stage.show();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.severe("Errore durante il caricamento di DettagliSegnalazioneView: " + e.getMessage());
 		}
 	}
 

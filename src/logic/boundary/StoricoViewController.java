@@ -76,12 +76,7 @@ public class StoricoViewController {
 	private void impostaListenerSelezione() {
 		tableViewSegnalazioni.getSelectionModel().selectedItemProperty()
 				.addListener((observable, oldValue, newValue) -> {
-					if (newValue != null) {
-						vediDettagliButton.setDisable(false);
-
-					} else {
-						vediDettagliButton.setDisable(true);
-					}
+				    vediDettagliButton.setDisable(newValue == null);
 				});
 	}
 
