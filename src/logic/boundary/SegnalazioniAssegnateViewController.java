@@ -65,9 +65,9 @@ public class SegnalazioniAssegnateViewController implements Observer {
 	}
 
 	private void configuraSelezioneTabella() {
-		segnalazioniTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-		    dettagliButton.setDisable(newValue == null);
-		});
+		segnalazioniTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> 
+		    dettagliButton.setDisable(newValue == null)
+		);
 	}
 
 	private void configuraEventiPulsanti() {
