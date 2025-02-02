@@ -22,43 +22,40 @@ Per incentivare la partecipazione degli utenti, il sistema include un programma 
 
 ### Prerequisiti
 
-- **JavaFX**: Per eseguire il progetto, è necessario scaricare JavaFX dal [sito ufficiale](https://openjfx.io/) e configurarlo correttamente nel tuo ambiente di sviluppo (Eclipse, IntelliJ, o un altro IDE).
+- **JavaFX**: Per eseguire il progetto, è necessario scaricare JavaFX dal [sito ufficiale](https://openjfx.io/) e configurarlo correttamente nell'ambiente di sviluppo (Eclipse, IntelliJ, o un altro IDE).
 
 ### Configurazione dell'ambiente
 
-1. **Scarica e configura JavaFX**:
-   - Visita il sito ufficiale di JavaFX e scarica l'ultima versione.
-   - Segui le istruzioni per configurare JavaFX all'interno del tuo IDE (ad esempio, in Eclipse puoi aggiungere JavaFX nelle impostazioni di progetto).
+1. **Configurazione JavaFX**:
+   - Visitare il sito ufficiale di JavaFX e scaricare l'ultima versione.
+   - Seguire le istruzioni per configurare JavaFX all'interno dell'IDE.
 
 2. **Clonare la repository**:
-   - Clona questo repository nella tua macchina locale:
+   - Clonare questo repository nella propria macchina locale:
      ```bash
      git clone https://github.com/tuo-username/Wastelligent.git
      ```
 
-3. **Importare il progetto in Eclipse**:
-   - Dopo aver clonato il progetto, apri Eclipse (o un altro IDE a tua scelta).
-   - Seleziona "Importa" > "Progetto esistente" > "Progetto Java".
-   - Seleziona la cartella del progetto che hai clonato.
+3. **Importare il progetto**:
+   - Dopo aver clonato il progetto, apri il tuo IDE (Eclipse o un altro).
+   - Importa il progetto selezionando **File** > **Import** > **Existing Projects into Workspace**.
+   - Selezionare la cartella del progetto clonato e clicca su **Finish**.
 
 4. **Configurare le dipendenze**:
-   - All'interno della cartella del progetto, troverai una cartella chiamata **Lib**. Questa cartella contiene tutti i file `.jar` necessari per il progetto.
-   - Aggiungi tutti i file `.jar` nella cartella **Lib** come dipendenze nel tuo progetto, affinché il progetto possa essere eseguito correttamente.
+   - All'interno della cartella del progetto, è presente una cartella chiamata **libs**. Questa cartella contiene tutti i file `.jar` necessari per il progetto.
+   - Aggiungere manualmente tutti i file `.jar` nella cartella **libs** come dipendenze.
 
 5. **Cartelle del progetto**:
    - **SRC**: Contiene il codice sorgente del progetto.
-   - **Test**: Contiene le classi di test scritte con JUnit, utilizzate per il testing delle funzionalità. All'interno della cartella **Test** troverai i test per le principali funzionalità del sistema, come la gestione delle segnalazioni, l'assegnazione delle ricompense e il flusso di lavoro tra utenti base, esperti ecologici e operatori ecologici. I test sono organizzati per garantire la correttezza del codice e la stabilità del sistema.
+   - **SRC/Test**: Contiene le classi di test scritte con JUnit, utilizzate per il testing di alcune funzionalità.
 
-6. **Creazione del database**:
-   - **Opzione 1: Configurazione del database (per l'esecuzione completa)**:
-     - Prima di eseguire l'applicazione, è necessario creare le tabelle nel tuo database MySQL.
-     - Assicurati di avere MySQL configurato correttamente e crea le tabelle utilizzando gli script SQL forniti (se presenti nel progetto) o seguendo le specifiche del database nel codice sorgente.
-   
-   - **Opzione 2: Utilizzare la versione demo**:
-     - Se non desideri configurare il database, puoi utilizzare una **versione demo** dell'applicazione. In questa versione, il sistema è preconfigurato con un set di dati di esempio e non richiede una connessione a un database MySQL. Questa modalità ti permette di testare le funzionalità principali senza la necessità di configurare il database.
+6. **Creazione del database [opzionale]**:
+     - Eseguire lo script SQL presente nella cartella DB attraverso il software HeidiSQL per creare le tabelle necessarie.
+     - Modificare il file `resources/db.properties` per configurare la connessione al proprio database MySQL. 
    
 ### Esecuzione dell'applicazione
 
-1. Avvia l'applicazione dal tuo IDE o eseguendo il comando appropriato nel terminale:
-   ```bash
-   java -jar Wastelligent.jar
+Se non è stato creato il database, avviare l'applicazione e scegliere di **utilizzare la versione demo**.
+   
+   
+
