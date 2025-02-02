@@ -120,8 +120,8 @@ public class RiscattaRicompensaViewController implements Observer {
 				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCodiceRiscatto()));
 		colDescrizione.setCellValueFactory(
 				cellData -> new SimpleStringProperty(cellData.getValue().getDescrizioneRicompensa()));
-		colValore.setCellValueFactory(cellData ->
-	    new SimpleStringProperty(cellData.getValue().getValoreRicompensa() + " €"));
+		colValore.setCellValueFactory(
+				cellData -> new SimpleStringProperty(cellData.getValue().getValoreRicompensa() + " €"));
 
 		colDataRiscatto
 				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDataRiscatto()));

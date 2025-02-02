@@ -49,8 +49,6 @@ public class GestisciSegnalazioniViewController implements Observer {
 	@FXML
 	private ComboBox<String> operatoriEcologiciComboBox;
 
-	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController
-			.getInstance();
 	private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
 	private static final Logger logger = Logger.getLogger(GestisciSegnalazioniViewController.class.getName());
 	private List<OperatoreEcologicoBean> operatoriEcologici;
@@ -82,8 +80,6 @@ public class GestisciSegnalazioniViewController implements Observer {
 			eliminaButton.setDisable(false);
 			assegnaButton.setDisable(false);
 
-			dettagliSegnalazioneViewController.setSegnalazioneBean(newValue);
-			dettagliSegnalazioneViewController.setCallerType(CallerType.CONTROLLER2);
 		} else {
 			vediDettagliButton.setDisable(true);
 			eliminaButton.setDisable(true);
@@ -92,7 +88,8 @@ public class GestisciSegnalazioniViewController implements Observer {
 	}
 
 	private void configuraAzioniPulsanti() {
-		vediDettagliButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW));
+		vediDettagliButton.setOnAction(event -> ViewLoader.caricaDettagliSegnalazioneView(
+				segnalazioniTable.getSelectionModel().getSelectedItem(), CallerType.CONTROLLER2));
 		eliminaButton.setOnAction(event -> gestisciEliminazione());
 		assegnaButton.setOnAction(event -> gestisciAssegnazione());
 		assegnaPuntiButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.ASSEGNA_PUNTI_VIEW));
@@ -118,11 +115,11 @@ public class GestisciSegnalazioniViewController implements Observer {
 			operatoreSelezionato = null;
 		}
 
-		SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
+		SegnalazioneBean segnalazione = segnalazioniTable.getSelectionModel().getSelectedItem();
 
 		if (operatoreSelezionato != null) {
 			try {
-				if (risolviSegnalazioneController.assegnaOperatore(segnalazioneSelezionata, operatoreSelezionato)) {
+				if (risolviSegnalazioneController.assegnaOperatore(segnalazione, operatoreSelezionato)) {
 					logger.info("Segnalazione assegnata con successo a " + operatoreSelezionato.getUsername());
 				} else {
 					showAlert("Errore Assegnazione",

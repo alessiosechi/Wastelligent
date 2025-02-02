@@ -37,7 +37,6 @@ public class SegnalazioniAssegnateViewController implements Observer {
 	private TableColumn<SegnalazioneBean, String> posizioneColumn;
 
 	private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
-	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController.getInstance();
 	private static final Logger logger = Logger.getLogger(SegnalazioniAssegnateViewController.class.getName());
 
 	@FXML
@@ -69,8 +68,6 @@ public class SegnalazioniAssegnateViewController implements Observer {
 		segnalazioniTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue != null) {
 				dettagliButton.setDisable(false);
-				dettagliSegnalazioneViewController.setSegnalazioneBean(newValue);
-				dettagliSegnalazioneViewController.setCallerType(CallerType.CONTROLLER3);
 			} else {
 				dettagliButton.setDisable(true);
 			}
@@ -78,12 +75,14 @@ public class SegnalazioniAssegnateViewController implements Observer {
 	}
 
 	private void configuraEventiPulsanti() {
-		dettagliButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW));
+		dettagliButton.setOnAction(event -> ViewLoader.caricaDettagliSegnalazioneView(
+				segnalazioniTable.getSelectionModel().getSelectedItem(), CallerType.CONTROLLER3));
 
 		completaButton.setOnAction(event -> {
-			SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
-			if (segnalazioneSelezionata != null) {
-				boolean successo = risolviSegnalazioneController.completaSegnalazione(segnalazioneSelezionata);
+			SegnalazioneBean segnalazione = segnalazioniTable.getSelectionModel().getSelectedItem();
+			if (segnalazione != null) {
+				boolean successo = risolviSegnalazioneController
+						.completaSegnalazione(segnalazioniTable.getSelectionModel().getSelectedItem());
 				if (successo) {
 					logger.info("Segnalazione completata!");
 				} else {

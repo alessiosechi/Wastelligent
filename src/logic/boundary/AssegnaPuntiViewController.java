@@ -41,8 +41,6 @@ public class AssegnaPuntiViewController implements Observer {
 	private TableColumn<SegnalazioneBean, String> posizioneColumn;
 
 	private AssegnaPuntiController assegnaPuntiController = AssegnaPuntiController.getInstance();
-	private DettagliSegnalazioneViewController dettagliSegnalazioneViewController = DettagliSegnalazioneViewController
-			.getInstance();
 
 	@FXML
 	public void initialize() {
@@ -66,14 +64,15 @@ public class AssegnaPuntiViewController implements Observer {
 	private void configuraPulsanti() {
 		dettagliButton.setDisable(true);
 		assegnaButton.setDisable(true);
-		dettagliButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.DETTAGLI_VIEW));
+		dettagliButton.setOnAction(event -> ViewLoader.caricaDettagliSegnalazioneView(
+				segnalazioniTable.getSelectionModel().getSelectedItem(), CallerType.CONTROLLER1));
 		assegnaButton.setOnAction(event -> assegnaPuntiSegnalazione());
 		exitButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.LOGIN_VIEW));
 		gestisciSegnalazioniButton.setOnAction(event -> ViewLoader.caricaView(ViewInfo.GESTISCI_SEGNALAZIONI_VIEW));
 	}
 
 	private void assegnaPuntiSegnalazione() {
-		SegnalazioneBean segnalazioneSelezionata = segnalazioniTable.getSelectionModel().getSelectedItem();
+		SegnalazioneBean segnalazione = segnalazioniTable.getSelectionModel().getSelectedItem();
 		String inputTextField = puntiTextField.getText();
 
 		if (inputTextField.isEmpty()) {
@@ -84,13 +83,13 @@ public class AssegnaPuntiViewController implements Observer {
 		try {
 
 			int punti = Integer.parseInt(inputTextField);
-			segnalazioneSelezionata.setPuntiAssegnati(punti);
+			segnalazione.setPuntiAssegnati(punti);
 		} catch (NumberFormatException e) {
 
 			showAlert("Errore", "Inserisci un numero intero valido.");
 		}
-		
-		boolean successo = assegnaPuntiController.assegnaPunti(segnalazioneSelezionata);
+
+		boolean successo = assegnaPuntiController.assegnaPunti(segnalazione);
 
 		if (!successo) {
 			showAlert("Errore Assegnazione", "Si è verificato un errore durante l'assegnazione dei punti.");
@@ -104,8 +103,6 @@ public class AssegnaPuntiViewController implements Observer {
 				dettagliButton.setDisable(false);
 				assegnaButton.setDisable(false);
 
-				dettagliSegnalazioneViewController.setSegnalazioneBean(newValue);
-				dettagliSegnalazioneViewController.setCallerType(CallerType.CONTROLLER1);
 			} else {
 				dettagliButton.setDisable(true);
 				assegnaButton.setDisable(true);
