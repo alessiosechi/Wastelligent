@@ -1,7 +1,6 @@
 package logic.boundary2;
 
 import com.sothawo.mapjfx.*;
-import com.sothawo.mapjfx.event.MapViewEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -75,11 +74,6 @@ public class SegnalaRifiutiViewController {
 		mapPane.getChildren().add(mapView);
 		mapView.setPrefWidth(mapPane.getPrefWidth());
 		mapView.setPrefHeight(mapPane.getPrefHeight());
-
-		mapView.addEventHandler(MapViewEvent.MAP_CLICKED, event -> {
-			Coordinate coordinate = event.getCoordinate().normalize();
-			inserisciMarker(coordinate);
-		});
 	}
 
 	private void configuraPulsanti() {

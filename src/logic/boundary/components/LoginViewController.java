@@ -49,13 +49,13 @@ public class LoginViewController {
 		String username = usernameField.getText();
 		String password = passwordField.getText();
 
-		if (username.equals("1")) {
+		if (username.equals("test1")) {
 			username = "utente_base1";
 			password = "password1";
-		} else if (username.equals("2")) {
+		} else if (username.equals("test2")) {
 			username = "esperto_eco1";
 			password = "password2";
-		} else if (username.equals("3")) {
+		} else if (username.equals("test3")) {
 			username = "operatore_eco1";
 			password = "password3";
 		}
