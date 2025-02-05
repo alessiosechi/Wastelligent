@@ -17,7 +17,7 @@ import logic.observer.Observer;
 
 public class AssegnaPuntiController {
 
-	private static volatile AssegnaPuntiController instance;
+	private static AssegnaPuntiController instance = null;
 	private static final Logger logger = Logger.getLogger(AssegnaPuntiController.class.getName());
 	private SegnalazioneDao segnalazioneDao;
 	private UtenteBaseDao utenteBaseDao;
@@ -34,19 +34,10 @@ public class AssegnaPuntiController {
 	}
 
 	public static AssegnaPuntiController getInstance() {
-		AssegnaPuntiController result = instance;
+		if (instance == null)
+			instance = new AssegnaPuntiController();
 
-		if (instance == null) {
-			synchronized (AssegnaPuntiController.class) {
-				result = instance;
-				if (result == null) {
-					instance = result = new AssegnaPuntiController();
-
-				}
-			}
-		}
-
-		return result;
+		return instance;
 	}
 
 	public void registraOsservatoreSegnalazioniRisolte(Observer observer) {

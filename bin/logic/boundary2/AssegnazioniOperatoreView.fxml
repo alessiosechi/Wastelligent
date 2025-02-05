@@ -16,7 +16,7 @@
                   <Font name="System Bold" size="26.25" />
                </font>
             </Label>
-            <TableView fx:id="tableViewSegnalazioni" layoutX="14.0" layoutY="142.0" prefHeight="476.0" prefWidth="672.0">
+            <TableView fx:id="tableViewSegnalazioni" layoutX="14.0" layoutY="142.0" prefHeight="231.0" prefWidth="672.0">
                <columns>
                   <TableColumn fx:id="colIdSegnalazione" prefWidth="114.0" text="ID" />
                   <TableColumn fx:id="colDescrizione" prefWidth="278.0" text="Descrizione" />
@@ -33,11 +33,23 @@
                   <Font size="18.75" />
                </font>
             </Button>
-            <Button fx:id="completaButton" layoutX="546.0" layoutY="659.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="144.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="COMPLETA" textFill="WHITE">
+            <Button fx:id="completaButton" layoutX="712.0" layoutY="647.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="144.0" style="-fx-background-color: #216838; -fx-background-radius: 10;" text="COMPLETA&#10;TUTTO" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="18.75" />
                </font>
             </Button>
+            <Label layoutX="23.0" layoutY="432.0" text="Contrassegna come completate:" wrapText="true">
+               <font>
+                  <Font size="26.25" />
+               </font>
+            </Label>
+            <TableView fx:id="tableViewSegnalazioniDaCompletare" layoutX="14.0" layoutY="487.0" prefHeight="231.0" prefWidth="672.0">
+               <columns>
+                  <TableColumn fx:id="colIdSegnalazione2" prefWidth="114.0" text="ID" />
+                  <TableColumn fx:id="colDescrizione2" prefWidth="278.0" text="Descrizione" />
+                  <TableColumn fx:id="colPosizione2" prefWidth="279.0" text="Posizione" />
+               </columns>
+            </TableView>
          </children>
       </AnchorPane>
    </center>

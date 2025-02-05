@@ -11,7 +11,7 @@ import logic.model.domain.UtenteFactory;
 import logic.model.domain.LoggedUser;
 
 public class LoginController {
-	private static volatile LoginController instance;
+	private static LoginController instance = null;
 	private static final Logger logger = Logger.getLogger(LoginController.class.getName());
 	private Utente utente = null;
 	private UtenteFactory utenteFactory = UtenteFactory.getInstance();
@@ -27,19 +27,10 @@ public class LoginController {
 	}
 
 	public static LoginController getInstance() {
-		LoginController result = instance;
+		if (instance == null)
+			instance = new LoginController();
 
-		if (instance == null) {
-			// blocco sincronizzato
-			synchronized (LoginController.class) {
-				result = instance;
-				if (result == null) {
-					instance = result = new LoginController();
-				}
-			}
-		}
-
-		return result;
+		return instance;
 	}
 
 	public int effettuaLogin(CredenzialiBean credenzialiBean) {

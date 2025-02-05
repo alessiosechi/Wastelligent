@@ -23,7 +23,7 @@ import logic.observer.Observer;
 
 public class RisolviSegnalazioneController {
 
-	private static volatile RisolviSegnalazioneController instance;
+	private static RisolviSegnalazioneController instance = null;
 	private static final Logger logger = Logger.getLogger(RisolviSegnalazioneController.class.getName());
 	private OperatoreEcologico operatoreLoggato = null;
 	private SegnalazioneDao segnalazioneDao;
@@ -41,17 +41,10 @@ public class RisolviSegnalazioneController {
 	}
 
 	public static RisolviSegnalazioneController getInstance() {
-		RisolviSegnalazioneController result = instance;
+		if (instance == null)
+			instance = new RisolviSegnalazioneController();
 
-		if (instance == null) {
-			synchronized (RisolviSegnalazioneController.class) {
-				result = instance;
-				if (result == null) {
-					instance = result = new RisolviSegnalazioneController();
-				}
-			}
-		}
-		return result;
+		return instance;
 	}
 
 	public void registraOsservatoreSegnalazioniAttive(Observer observer) {

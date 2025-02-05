@@ -9,12 +9,10 @@ import logic.model.dao.DaoFactory;
 import logic.model.dao.UtenteDao;
 import logic.model.domain.Ruolo;
 
-public class RegistrazioneController { 
-	private static volatile RegistrazioneController instance;
+public class RegistrazioneController {
+	private static RegistrazioneController instance = null;
 	private static final Logger logger = Logger.getLogger(RegistrazioneController.class.getName());
 	private UtenteDao utenteDao;
-
-
 
 	private RegistrazioneController() {
 		try {
@@ -25,17 +23,10 @@ public class RegistrazioneController {
 	}
 
 	public static RegistrazioneController getInstance() {
-		RegistrazioneController result = instance;
-		if (instance == null) {
-			synchronized (RegistrazioneController.class) {
-				result = instance;
-				if (result == null) {
-					instance = result = new RegistrazioneController();
-				}
-			}
-		}
+		if (instance == null)
+			instance = new RegistrazioneController();
 
-		return result;
+		return instance;
 	}
 	
 	public void registraUtente(SignUpBean signUpBean) throws UsernameAlreadyTakenException, RegistrazioneUtenteException {

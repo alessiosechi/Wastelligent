@@ -2,7 +2,7 @@ package logic.model.domain;
 
 public class LoggedUser {
 
-	private static LoggedUser instance;
+	private static LoggedUser instance = null;
 	private Utente utente;
 
 	private LoggedUser() {

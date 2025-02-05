@@ -17,7 +17,7 @@ import logic.model.domain.StatoSegnalazione;
 import logic.model.domain.LoggedUser;
 
 public class EffettuaSegnalazioneController {
-	private static volatile EffettuaSegnalazioneController instance;
+	private static EffettuaSegnalazioneController instance = null;
 	private static final Logger logger = Logger.getLogger(EffettuaSegnalazioneController.class.getName());
 	private SegnalazioneDao segnalazioneDAO;
 	private CoordinateDao coordinateDao;
@@ -32,18 +32,10 @@ public class EffettuaSegnalazioneController {
 	}
 
 	public static EffettuaSegnalazioneController getInstance() {
-		EffettuaSegnalazioneController result = instance;
+		if (instance == null)
+			instance = new EffettuaSegnalazioneController();
 
-		if (instance == null) {
-			synchronized (EffettuaSegnalazioneController.class) {
-				result = instance;
-				if (result == null) {
-					instance = result = new EffettuaSegnalazioneController();
-				}
-			}
-		}
-
-		return result;
+		return instance;
 	}
 
 	// metodo che restituisce le coordinate in base alla posizione fornita

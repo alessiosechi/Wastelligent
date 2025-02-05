@@ -30,7 +30,7 @@ import logic.utils.DateUtils;
 
 public class RiscattaRicompensaController {
 
-	private static volatile RiscattaRicompensaController instance;
+	private static RiscattaRicompensaController instance = null;
 	private static final Logger logger = Logger.getLogger(RiscattaRicompensaController.class.getName());
 	private UtenteBase utente = null;
 
@@ -54,17 +54,10 @@ public class RiscattaRicompensaController {
 	}
 
 	public static RiscattaRicompensaController getInstance() {
-		RiscattaRicompensaController result = instance;
+		if (instance == null)
+			instance = new RiscattaRicompensaController();
 
-		if (instance == null) {
-			synchronized (RiscattaRicompensaController.class) {
-				result = instance;
-				if (result == null) {
-					instance = result = new RiscattaRicompensaController();
-				}
-			}
-		}
-		return result;
+		return instance;
 	}
 	
     public void caricaUtente() {

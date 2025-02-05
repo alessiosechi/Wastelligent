@@ -2,7 +2,7 @@ package logic.model.domain;
 
 public class SegnalazioniRisolte extends SegnalazioniSubject {
 
-	private static SegnalazioniRisolte instance;
+	private static SegnalazioniRisolte instance = null;
 
 	public static SegnalazioniRisolte getInstance() {
 		if (instance == null) {
