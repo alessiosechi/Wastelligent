@@ -54,7 +54,7 @@ public class DettagliSegnalazione {
 		mapView.initialize(config);
 
 		mapView.initializedProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue != null) {
+			if (newValue != null) { // quando la mappa è inizializzata 
 				Coordinate coordinate = new Coordinate(latitudine, longitudine);
 				mapView.setCenter(coordinate);
 				mapView.setZoom(15);
@@ -62,7 +62,7 @@ public class DettagliSegnalazione {
 				Marker marker = Marker.createProvided(Marker.Provided.RED).setPosition(coordinate).setVisible(true);
 				mapView.addMarker(marker);
 
-				Platform.runLater(mapView::requestLayout);
+				Platform.runLater(mapView::requestLayout); // forzo l'aggiornamento del layout
 			}
 		});
 

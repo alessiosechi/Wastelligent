@@ -6,11 +6,11 @@ Wastelligent è un sistema progettato per consentire ai cittadini di segnalare r
 
 Il sistema prevede tre tipi di utenti:
 
-- **Utente base**: Può segnalare la presenza di rifiuti abbandonati e discariche illegali, indicando la posizione, una descrizione del problema e, se possibile, una foto. Può anche partecipare attivamente alla risoluzione della segnalazione.
+- **Utente base**: può segnalare la presenza di rifiuti abbandonati e discariche illegali, indicando la posizione, una descrizione del problema e, se possibile, una foto. Può anche partecipare attivamente alla risoluzione della segnalazione.
   
-- **Esperto ecologico**: Riceve le segnalazioni degli utenti base e le assegna agli operatori ecologici disponibili per la rimozione dei rifiuti.
+- **Esperto ecologico**: riceve le segnalazioni degli utenti base e le assegna agli operatori ecologici disponibili per la rimozione dei rifiuti.
 
-- **Operatore ecologico**: Dopo aver ricevuto l'assegnazione di una segnalazione, l'operatore ecologico interviene per la rimozione dei rifiuti e segna la segnalazione come completata una volta risolto il problema.
+- **Operatore ecologico**: dopo aver ricevuto l'assegnazione di una segnalazione, l'operatore ecologico interviene per la rimozione dei rifiuti e segna la segnalazione come completata una volta risolto il problema.
 
 ## Programma di ricompense
 

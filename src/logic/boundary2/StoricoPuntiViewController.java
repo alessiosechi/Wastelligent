@@ -55,7 +55,7 @@ public class StoricoPuntiViewController {
 				.addListener((observable, oldValue, newValue) -> {
 					segnalazioneSelezionata = newValue;
 
-					// Abilita i pulsanti solo se una segnalazione è selezionata
+					// abilito i button solo se una segnalazione è selezionata
 					boolean selezioneValida = (newValue != null);
 					fotoButton.setDisable(!selezioneValida);
 					posizioneButton.setDisable(!selezioneValida);

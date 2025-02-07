@@ -162,10 +162,8 @@ public class EffettuaSegnalazioneViewController {
 			segnalazioneBean.setFoto(photoPath);
 
 			// uso la posizione corrente del marker
-			if (currentMarker != null) {
-				segnalazioneBean.setLatitudine(currentMarker.getPosition().getLatitude());
-				segnalazioneBean.setLongitudine(currentMarker.getPosition().getLongitude());
-			}
+			segnalazioneBean.setLatitudine(currentMarker.getPosition().getLatitude());
+			segnalazioneBean.setLongitudine(currentMarker.getPosition().getLongitude());
 
 			// invio della segnalazione
 			effettuaSegnalazioneController.inviaSegnalazione(segnalazioneBean);

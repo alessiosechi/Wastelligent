@@ -51,6 +51,19 @@ public class SegnalaRifiutiViewController {
 
 	private EffettuaSegnalazioneController effettuaSegnalazioneController = EffettuaSegnalazioneController
 			.getInstance();
+	
+	
+	
+	/**
+	 * Differenze principali tra SegnalaRifiutiView e EffettuaSegnalazioneView:
+	 * - al posto della barra del menu, viene utilizzata una sidebar, ma è definita in un file FXML separato e caricata dinamicamente;
+	 * - non è presente un button per cercare la posizione: dopo averla inserita, bisogna premere Invio;
+	 * - il layout usa un BorderPane con un AnchorPane al centro, invece di un AnchorPane come contenitore principale;
+	 * - i campi di testo sono TextField anziché TextArea;
+	 * - l'immagine allegata viene visualizzata in uno ScrollPane con ImageView, senza un TextArea per inserire manualmente il percorso;
+	 * - la posizione può essere impostata solo tramite ricerca nel TextField, senza possibilità di aggiungere un marker manualmente sulla mappa;
+	 */
+
 
 	@FXML
 	public void initialize() {

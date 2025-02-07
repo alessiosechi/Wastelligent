@@ -49,17 +49,6 @@ public class LoginViewController {
 		String username = usernameField.getText();
 		String password = passwordField.getText();
 
-		if (username.equals("test1")) {
-			username = "utente_base1";
-			password = "password1";
-		} else if (username.equals("test2")) {
-			username = "esperto_eco1";
-			password = "password2";
-		} else if (username.equals("test3")) {
-			username = "operatore_eco1";
-			password = "password3";
-		}
-
 		int interfacciaSelezionata = interfaceOption1.isSelected() ? 1 : 2;
 		authenticate(username, password, interfacciaSelezionata);
 	}

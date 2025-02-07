@@ -3,7 +3,6 @@ package logic.boundary2;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -122,10 +121,13 @@ public class AssegnaSegnalazioniViewController implements Observer {
 	}
 
 	private void caricaOperatoriEcologici() {
-		operatoriEcologici = risolviSegnalazioneController.getOperatoriEcologiciDisponibili();
-		operatoriComboBox.setItems(FXCollections.observableArrayList(
-				operatoriEcologici.stream().map(OperatoreEcologicoBean::getUsername).collect(Collectors.toList())));
+	    operatoriEcologici = risolviSegnalazioneController.getOperatoriEcologiciDisponibili();
+	    operatoriComboBox.setItems(FXCollections.observableArrayList(
+	        operatoriEcologici.stream().map(OperatoreEcologicoBean::getUsername).toList()));
+	     
+	    // per ogni oggetto OperatoreEcologicoBean, estraggo il valore del suo campo username
 	}
+
 
 	private void gestisciEliminazione() {
 		Optional<ButtonType> result = showAlert(Alert.AlertType.CONFIRMATION, "Conferma Eliminazione",
@@ -133,8 +135,8 @@ public class AssegnaSegnalazioniViewController implements Observer {
 
 		result.filter(buttonType -> buttonType == ButtonType.OK)
 				.ifPresent(buttonType -> Optional.ofNullable(segnalazioneSelezionata).ifPresentOrElse(
-						s -> risolviSegnalazioneController.eliminaSegnalazione(s),
-						() -> logger.info("Nessuna segnalazione selezionata.")));
+						s -> risolviSegnalazioneController.eliminaSegnalazione(s), // s è la segnalazione selezionata
+						() -> logger.info("Nessuna segnalazione selezionata."))); // con () non prendo input
 	}
 
 	private void gestisciAssegnazione() {
