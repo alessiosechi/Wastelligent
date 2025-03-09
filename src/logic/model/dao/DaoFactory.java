@@ -22,7 +22,7 @@ public class DaoFactory {
 			T dao = createDao(daoClass);
 			daoMap.put(daoClass, dao);
 		}
-		return (T) daoMap.get(daoClass);
+		return (T) daoMap.get(daoClass); // restituisco istanza del tipo generico T
 	}
 
 	// metodo per creare il DAO specifico in base al tipo

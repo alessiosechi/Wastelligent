@@ -24,7 +24,7 @@ public class EffettuaSegnalazioneController {
 
 	private EffettuaSegnalazioneController() {
 		try {
-			segnalazioneDAO = DaoFactory.getDao(SegnalazioneDao.class);
+			segnalazioneDAO = DaoFactory.getDao(SegnalazioneDao.class); 
 			coordinateDao = DaoFactory.getDao(CoordinateDao.class);
 		} catch (Exception e) {
 			logger.severe("Errore durante l'inizializzazione del DAO: " + e.getMessage());
