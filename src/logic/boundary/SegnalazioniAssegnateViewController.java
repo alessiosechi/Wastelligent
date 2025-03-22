@@ -36,7 +36,7 @@ public class SegnalazioniAssegnateViewController implements Observer {
 	@FXML
 	private TableColumn<SegnalazioneBean, String> posizioneColumn;
 
-	private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
+	private RisolviSegnalazioneController risolviSegnalazioneController = new RisolviSegnalazioneController();
 	private static final Logger logger = Logger.getLogger(SegnalazioniAssegnateViewController.class.getName());
 
 	@FXML

@@ -17,25 +17,17 @@ import logic.model.domain.StatoSegnalazione;
 import logic.model.domain.LoggedUser;
 
 public class EffettuaSegnalazioneController {
-	private static EffettuaSegnalazioneController instance = null;
 	private static final Logger logger = Logger.getLogger(EffettuaSegnalazioneController.class.getName());
 	private SegnalazioneDao segnalazioneDAO;
 	private CoordinateDao coordinateDao;
 
-	private EffettuaSegnalazioneController() {
+	public EffettuaSegnalazioneController() {
 		try {
 			segnalazioneDAO = DaoFactory.getDao(SegnalazioneDao.class); 
 			coordinateDao = DaoFactory.getDao(CoordinateDao.class);
 		} catch (Exception e) {
 			logger.severe("Errore durante l'inizializzazione del DAO: " + e.getMessage());
 		}
-	}
-
-	public static EffettuaSegnalazioneController getInstance() {
-		if (instance == null)
-			instance = new EffettuaSegnalazioneController();
-
-		return instance;
 	}
 
 	// metodo che restituisce le coordinate in base alla posizione fornita

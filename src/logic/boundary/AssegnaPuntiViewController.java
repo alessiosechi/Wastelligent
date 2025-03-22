@@ -40,7 +40,7 @@ public class AssegnaPuntiViewController implements Observer {
 	@FXML
 	private TableColumn<SegnalazioneBean, String> posizioneColumn;
 
-	private AssegnaPuntiController assegnaPuntiController = AssegnaPuntiController.getInstance();
+	private AssegnaPuntiController assegnaPuntiController = new AssegnaPuntiController();
 
 	@FXML
 	public void initialize() {

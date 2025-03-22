@@ -16,14 +16,12 @@ import logic.model.domain.StatoSegnalazione;
 import logic.observer.Observer;
 
 public class AssegnaPuntiController {
-
-	private static AssegnaPuntiController instance = null;
 	private static final Logger logger = Logger.getLogger(AssegnaPuntiController.class.getName());
 	private SegnalazioneDao segnalazioneDao;
 	private UtenteBaseDao utenteBaseDao;
 	private CoordinateDao coordinateDao;
 
-	private AssegnaPuntiController() {
+	public AssegnaPuntiController() {
 		try {
 			segnalazioneDao = DaoFactory.getDao(SegnalazioneDao.class);
 			utenteBaseDao = DaoFactory.getDao(UtenteBaseDao.class);
@@ -31,13 +29,6 @@ public class AssegnaPuntiController {
 		} catch (Exception e) {
 			logger.severe("Errore durante l'inizializzazione dei Dao: " + e.getMessage());
 		}
-	}
-
-	public static AssegnaPuntiController getInstance() {
-		if (instance == null)
-			instance = new AssegnaPuntiController();
-
-		return instance;
 	}
 
 	public void registraOsservatoreSegnalazioniRisolte(Observer observer) {

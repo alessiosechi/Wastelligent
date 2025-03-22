@@ -49,8 +49,7 @@ public class EffettuaSegnalazioneViewController {
 	private MapView mapView;
 	private Marker currentMarker;
 
-	private EffettuaSegnalazioneController effettuaSegnalazioneController = EffettuaSegnalazioneController
-			.getInstance();
+	private EffettuaSegnalazioneController effettuaSegnalazioneController = new EffettuaSegnalazioneController();
 
 	@FXML
 	public void initialize() {

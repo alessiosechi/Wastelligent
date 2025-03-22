@@ -43,7 +43,7 @@ public class AssegnaSegnalazioniViewController implements Observer {
 	@FXML
 	private ComboBox<String> operatoriComboBox;
 
-	private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
+	private RisolviSegnalazioneController risolviSegnalazioneController = new RisolviSegnalazioneController();
 	private List<OperatoreEcologicoBean> operatoriEcologici;
 	private static final Logger logger = Logger.getLogger(AssegnaSegnalazioniViewController.class.getName());
 	private SegnalazioneBean segnalazioneSelezionata = null;

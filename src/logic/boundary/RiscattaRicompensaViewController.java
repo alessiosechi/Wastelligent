@@ -60,12 +60,11 @@ public class RiscattaRicompensaViewController implements Observer {
 	@FXML
 	private Button visualizzaStoricoButton;
 
-	private RiscattaRicompensaController riscattaRicompensaController = RiscattaRicompensaController.getInstance();
+	private RiscattaRicompensaController riscattaRicompensaController = new RiscattaRicompensaController();
 	private List<RicompensaBean> listaRicompenseAPI;
 
 	@FXML
 	public void initialize() {
-		riscattaRicompensaController.caricaUtente();
 		riscattaRicompensaController.registraOsservatoreRiscatti(this);
 		caricaPuntiUtente();
 		mostraRicompenseDisponibili();

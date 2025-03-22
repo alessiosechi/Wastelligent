@@ -29,7 +29,7 @@ public class LoginViewController {
 	@FXML
 	private Hyperlink registerLink;
 
-	private LoginController loginController = LoginController.getInstance();
+	private LoginController loginController = new LoginController();
 
 	@FXML
 	private void initialize() {

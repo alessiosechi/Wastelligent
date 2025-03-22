@@ -10,23 +10,15 @@ import logic.model.dao.UtenteDao;
 import logic.model.domain.Ruolo;
 
 public class RegistrazioneController {
-	private static RegistrazioneController instance = null;
 	private static final Logger logger = Logger.getLogger(RegistrazioneController.class.getName());
 	private UtenteDao utenteDao;
 
-	private RegistrazioneController() {
+	public RegistrazioneController() {
 		try {
 			utenteDao = DaoFactory.getDao(UtenteDao.class);
 		} catch (Exception e) {
 			logger.severe("Errore durante l'inizializzazione del DAO: " + e.getMessage());
 		}
-	}
-
-	public static RegistrazioneController getInstance() {
-		if (instance == null)
-			instance = new RegistrazioneController();
-
-		return instance;
 	}
 	
 	public void registraUtente(SignUpBean signUpBean) throws UsernameAlreadyTakenException, RegistrazioneUtenteException {

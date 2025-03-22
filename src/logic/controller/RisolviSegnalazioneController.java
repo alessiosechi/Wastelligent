@@ -22,15 +22,13 @@ import logic.model.domain.LoggedUser;
 import logic.observer.Observer;
 
 public class RisolviSegnalazioneController {
-
-	private static RisolviSegnalazioneController instance = null;
 	private static final Logger logger = Logger.getLogger(RisolviSegnalazioneController.class.getName());
 	private OperatoreEcologico operatoreLoggato = null;
 	private SegnalazioneDao segnalazioneDao;
 	private UtenteDao utenteDao;
 	private CoordinateDao coordinateDao;
 
-	private RisolviSegnalazioneController() {
+	public RisolviSegnalazioneController() {
 		try {
 			segnalazioneDao = DaoFactory.getDao(SegnalazioneDao.class);
 			utenteDao = DaoFactory.getDao(UtenteDao.class);
@@ -38,13 +36,6 @@ public class RisolviSegnalazioneController {
 		} catch (Exception e) {
 			logger.severe("Errore durante l'inizializzazione dei DAO: " + e.getMessage());
 		}
-	}
-
-	public static RisolviSegnalazioneController getInstance() {
-		if (instance == null)
-			instance = new RisolviSegnalazioneController();
-
-		return instance;
 	}
 
 	public void registraOsservatoreSegnalazioniAttive(Observer observer) {

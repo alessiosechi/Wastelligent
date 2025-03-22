@@ -38,7 +38,7 @@ public class StoricoViewController {
 	@FXML
 	private TableColumn<SegnalazioneBean, Integer> colPunti;
 
-	private RiscattaRicompensaController riscattaRicompensaController = RiscattaRicompensaController.getInstance();
+	private RiscattaRicompensaController riscattaRicompensaController = new RiscattaRicompensaController();
 
 	@FXML
 	public void initialize() {

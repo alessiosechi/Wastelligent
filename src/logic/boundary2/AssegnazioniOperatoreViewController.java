@@ -45,7 +45,7 @@ public class AssegnazioniOperatoreViewController implements Observer {
 	@FXML
 	private TableColumn<SegnalazioneBean, String> colPosizione2;
 
-	private RisolviSegnalazioneController risolviSegnalazioneController = RisolviSegnalazioneController.getInstance();
+	private RisolviSegnalazioneController risolviSegnalazioneController = new RisolviSegnalazioneController();
 	private static final Logger logger = Logger.getLogger(AssegnazioniOperatoreViewController.class.getName());
 	private SegnalazioneBean segnalazioneSelezionata = null;
 

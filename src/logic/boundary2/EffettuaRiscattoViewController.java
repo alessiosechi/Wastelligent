@@ -43,7 +43,7 @@ public class EffettuaRiscattoViewController implements Observer {
 	@FXML
 	private TextArea dettagliRiscattoTextArea;
 
-	private RiscattaRicompensaController riscattaRicompensaController = RiscattaRicompensaController.getInstance();
+	private RiscattaRicompensaController riscattaRicompensaController = new RiscattaRicompensaController();
 	private List<RicompensaBean> listaRicompenseAPI;
 
 	@FXML
@@ -51,7 +51,6 @@ public class EffettuaRiscattoViewController implements Observer {
 		AnchorPane sidebar = SidebarLoader.caricaSidebar(SidebarType.UTENTE_BASE_SIDEBAR);
 		rootPane.setLeft(sidebar);
 
-		riscattaRicompensaController.caricaUtente();
 		riscattaRicompensaController.registraOsservatoreRiscatti(this);
 
 		caricaPuntiUtente();

@@ -29,8 +29,6 @@ import logic.observer.Observer;
 import logic.utils.DateUtils;
 
 public class RiscattaRicompensaController {
-
-	private static RiscattaRicompensaController instance = null;
 	private static final Logger logger = Logger.getLogger(RiscattaRicompensaController.class.getName());
 	private UtenteBase utente = null;
 
@@ -40,27 +38,21 @@ public class RiscattaRicompensaController {
 	private RiscattoDao riscattoDao;
 	private CoordinateDao coordinateDao;
 
-	private RiscattaRicompensaController() {
+	public RiscattaRicompensaController() {
 		try {
 			ricompensaDao = DaoFactory.getDao(RicompensaDao.class);
 			utenteBaseDao = DaoFactory.getDao(UtenteBaseDao.class);
 			segnalazioneDao = DaoFactory.getDao(SegnalazioneDao.class);
 			riscattoDao = DaoFactory.getDao(RiscattoDao.class);
 			coordinateDao = DaoFactory.getDao(CoordinateDao.class);
+			caricaUtente();
 
 		} catch (Exception e) {
 			logger.severe("Errore durante l'inizializzazione: " + e.getMessage());
 		}
 	}
-
-	public static RiscattaRicompensaController getInstance() {
-		if (instance == null)
-			instance = new RiscattaRicompensaController();
-
-		return instance;
-	}
 	
-    public void caricaUtente() {
+    private void caricaUtente() {
         LoggedUser utenteLoggato = LoggedUser.getInstance();
         int punti = utenteBaseDao.estraiPunti(utenteLoggato.getIdUtente());
         List<Segnalazione> segnalazioni = segnalazioneDao.getSegnalazioniRiscontrateByUtente(utenteLoggato.getIdUtente());

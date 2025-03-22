@@ -11,26 +11,18 @@ import logic.model.domain.UtenteFactory;
 import logic.model.domain.LoggedUser;
 
 public class LoginController {
-	private static LoginController instance = null;
 	private static final Logger logger = Logger.getLogger(LoginController.class.getName());
 	private Utente utente = null;
 	private UtenteFactory utenteFactory = UtenteFactory.getInstance();
 	private LoggedUser utenteCorrente = LoggedUser.getInstance();
 	private UtenteDao utenteDao;
 
-	private LoginController() {
+	public LoginController() {
 		try {
 			utenteDao = DaoFactory.getDao(UtenteDao.class);
 		} catch (Exception e) {
 			logger.severe("Errore durante l'inizializzazione del DAO: " + e.getMessage());
 		}
-	}
-
-	public static LoginController getInstance() {
-		if (instance == null)
-			instance = new LoginController();
-
-		return instance;
 	}
 
 	public int effettuaLogin(CredenzialiBean credenzialiBean) {

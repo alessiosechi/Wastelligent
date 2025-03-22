@@ -45,7 +45,7 @@ public class ValutaSegnalazioniViewController implements Observer {
 	private Label puntiLabel;
 
 	private SegnalazioneBean segnalazioneSelezionata = null;
-	private AssegnaPuntiController assegnaPuntiController = AssegnaPuntiController.getInstance();
+	private AssegnaPuntiController assegnaPuntiController = new AssegnaPuntiController();
 
 	@FXML
 	public void initialize() {

@@ -35,7 +35,7 @@ public class RegistrazioneViewController {
 	@FXML
 	private Hyperlink loginLink;
 
-	private RegistrazioneController registrazioneController = RegistrazioneController.getInstance();
+	private RegistrazioneController registrazioneController = new RegistrazioneController();
 
 	@FXML
 	private void initialize() {
