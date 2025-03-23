@@ -20,14 +20,13 @@ public class UtenteBaseQueries {
 	}
 
 	public static int aggiungiPunti(Connection connessione, int idUtente, int puntiDaAggiungere) throws SQLException {
-		String sql = "UPDATE punti_utenti SET punti = punti + ? WHERE id_utente = ?";
+	    String sql = "INSERT INTO punti_utenti (id_utente, punti) VALUES (?, ?) ON DUPLICATE KEY UPDATE punti = punti + VALUES(punti)";
 
-		try (PreparedStatement stmt = connessione.prepareStatement(sql)) {
-			stmt.setInt(1, puntiDaAggiungere);
-			stmt.setInt(2, idUtente);
-
-			return stmt.executeUpdate();
-		}
+	    try (PreparedStatement stmt = connessione.prepareStatement(sql)) {
+	        stmt.setInt(1, idUtente);
+	        stmt.setInt(2, puntiDaAggiungere);
+	        return stmt.executeUpdate();
+	    }
 	}
 
 	public static int sottraiPunti(Connection connessione, int idUtente, int puntiDaSottrarre) throws SQLException {
