@@ -33,7 +33,7 @@ Per incentivare la partecipazione degli utenti, il sistema include un programma 
 2. **Clonare la repository**:
    - Clonare questo repository nella propria macchina locale:
      ```bash
-     git clone https://github.com/tuo-username/Wastelligent.git
+     git clone https://github.com/alessiosechi/Wastelligent.git
      ```
      
 3. **Importare il progetto**:
