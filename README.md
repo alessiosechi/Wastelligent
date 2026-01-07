@@ -46,14 +46,15 @@ Per incentivare la partecipazione degli utenti, il sistema include un programma 
 4. **Configurare le dipendenze**:
    - All'interno della cartella del progetto, è presente una cartella chiamata **libs**. Aggiungere tutti i file `.jar` nella cartella **libs** come dipendenze.
 
+5. **Configurazione OpenCage API**:
+   - Modificare il file `resources/config-opencage.properties` e inserire la propria API key per consentire l’accesso ai servizi di geocoding utilizzati dall’applicazione.
+
 6. **Creare il database [opzionale]**:
      - Eseguire lo script SQL presente nella cartella DB attraverso il software HeidiSQL per creare le tabelle necessarie.
-     - Modificare il file `resources/db.properties` per configurare la connessione al proprio database MySQL. 
+     - Modificare il file `resources/db.properties` per configurare la connessione al proprio database MySQL.
    
 ---
 
 ## Esecuzione dell'applicazione
 
-**Se non è stato creato il database**, avviare l'applicazione e scegliere di **utilizzare la versione demo**. Altrimenti, se il database è stato creato, scegliere la versione che si desidera utilizzare.   
-   
-
+**Se non è stato creato il database**, avviare l'applicazione e scegliere di **utilizzare la versione demo**. Altrimenti, se il database è stato creato, scegliere la versione che si desidera utilizzare.
