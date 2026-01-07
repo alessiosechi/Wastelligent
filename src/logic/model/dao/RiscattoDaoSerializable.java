@@ -30,7 +30,7 @@ public class RiscattoDaoSerializable implements RiscattoDao {
             }
         }
         
-        return riscatti;
+        return riscattiUtente;
     }
 
     @SuppressWarnings("unchecked")
