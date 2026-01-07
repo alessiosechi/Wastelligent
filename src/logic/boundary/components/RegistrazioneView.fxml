@@ -12,7 +12,7 @@
    <children>
       <ImageView fitHeight="768.0" fitWidth="540.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../pics/logo.jpg" />
+            <Image url="@/pics/logo.jpg" />
          </image>
       </ImageView>
       <Label layoutX="692.25" layoutY="159.5" text="Crea un account" wrapText="true">

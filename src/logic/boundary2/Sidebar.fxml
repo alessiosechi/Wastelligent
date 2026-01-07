@@ -21,14 +21,14 @@
       </Button>
       <ImageView fitHeight="200.0" fitWidth="210.0" layoutY="14.0">
          <image>
-            <Image url="@../../../pics/logo.png" />
+            <Image url="@/pics/logo.png" />
          </image>
       </ImageView>
       <Button fx:id="exitButton" layoutX="71.0" layoutY="613.0" mnemonicParsing="false" style="-fx-background-color: #216838;">
          <graphic>
             <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../pics/exit.png" />
+                  <Image url="@/pics/exit.png" />
                </image>
             </ImageView>
          </graphic>

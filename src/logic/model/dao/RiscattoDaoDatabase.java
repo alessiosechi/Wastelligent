@@ -19,14 +19,11 @@ public class RiscattoDaoDatabase implements RiscattoDao {
     @Override
     public void registra(Riscatto riscatto) {
         Connection connessione = null;
-        Statement stmt = null;
 
         try {
             connessione = DBConnection.getConnection();
-            stmt = connessione.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
-
-            int righeInserite = RiscattoQueries.inserisciRiscatto(stmt, riscatto);
+            int righeInserite = RiscattoQueries.inserisciRiscatto(connessione, riscatto);
             if (righeInserite > 0) {
                 connessione.commit();
             } else {
@@ -34,25 +31,17 @@ public class RiscattoDaoDatabase implements RiscattoDao {
             }
         } catch (SQLException e) {
             logger.severe("Errore durante l'inserimento del riscatto: " + e.getMessage());
-        } finally {
-            try {
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                logger.severe("Errore durante la chiusura del Statement: " + e.getMessage());
-            }
         }
     }
 
     @Override
     public List<Riscatto> getRiscattiByUtente(int idUtente) {
         List<Riscatto> riscatti = new ArrayList<>();
-        Statement stmt = null;
+        Connection connessione = null;
 
         try {
-            Connection connessione = DBConnection.getConnection();
-            stmt = connessione.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet resultSet = RiscattoQueries.getRiscattiByUtente(stmt, idUtente);
-
+            connessione = DBConnection.getConnection();
+            ResultSet resultSet = RiscattoQueries.getRiscattiByUtente(connessione, idUtente);
             while (resultSet.next()) {
                 String nome = resultSet.getString("nome");
                 String descrizione = resultSet.getString("descrizione");
@@ -69,12 +58,6 @@ public class RiscattoDaoDatabase implements RiscattoDao {
             }
         } catch (SQLException e) {
             logger.severe("Errore durante il recupero dei riscatti dell'utente: " + e.getMessage());
-        } finally {
-            try {
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                logger.severe("Errore durante la chiusura del Statement: " + e.getMessage());
-            }
         }
 
         return riscatti;
