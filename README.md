@@ -45,6 +45,7 @@ Per incentivare la partecipazione degli utenti, il sistema include un programma 
 
 4. **Configurare le dipendenze**:
    - All'interno della cartella del progetto, è presente una cartella chiamata **libs**. Aggiungere tutti i file `.jar` nella cartella **libs** come dipendenze.
+   - Il progetto utilizza **JUnit 5 (Jupiter)** per i test: configurare correttamente le librerie di JUnit 5 tra le dipendenze.
 
 5. **Configurazione OpenCage API**:
    - Modificare il file `resources/config-opencage.properties` e inserire la propria API key per consentire l’accesso ai servizi di geocoding utilizzati dall’applicazione.
