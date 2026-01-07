@@ -53,7 +53,7 @@ Per incentivare la partecipazione degli utenti, il sistema include un programma 
    
 ---
 
-### Esecuzione dell'applicazione
+## Esecuzione dell'applicazione
 
 **Se non è stato creato il database**, avviare l'applicazione e scegliere di **utilizzare la versione demo**. Altrimenti, se il database è stato creato, scegliere la versione che si desidera utilizzare.   
    
