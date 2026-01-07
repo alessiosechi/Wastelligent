@@ -1,4 +1,6 @@
- # Wastelligent
+# Wastelligent
+
+[![SonarCloud](https://sonarcloud.io/api/project_badges/measure?project=alessiosechi_Wastelligent&metric=alert_status)](https://sonarcloud.io/project/overview?id=alessiosechi_Wastelligent)
 
 Wastelligent è un sistema progettato per consentire ai cittadini di segnalare rifiuti abbandonati e discariche illegali, monitorando e coordinando la loro rimozione. Il sistema premia attivamente la partecipazione, incentivando il coinvolgimento nella cura dell'ambiente e nella prevenzione dell'inquinamento.
 
