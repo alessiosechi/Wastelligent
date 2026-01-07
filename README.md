@@ -44,10 +44,9 @@ Per incentivare la partecipazione degli utenti, il sistema include un programma 
 3. **Importare il progetto**.
 
 4. **Configurare le dipendenze**:
-   - All'interno della cartella del progetto, è presente una cartella chiamata **libs**. Questa cartella contiene tutti i file `.jar` necessari per il progetto.
-   - Aggiungere manualmente tutti i file `.jar` nella cartella **libs** come dipendenze.
+   - All'interno della cartella del progetto, è presente una cartella chiamata **libs**. Aggiungere tutti i file `.jar` nella cartella **libs** come dipendenze.
 
-6. **Creazione del database [opzionale]**:
+6. **Creare il database [opzionale]**:
      - Eseguire lo script SQL presente nella cartella DB attraverso il software HeidiSQL per creare le tabelle necessarie.
      - Modificare il file `resources/db.properties` per configurare la connessione al proprio database MySQL. 
    
