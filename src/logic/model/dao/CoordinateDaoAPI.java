@@ -15,7 +15,7 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class CoordinateDaoAPI implements CoordinateDao {
-	private static final String CHIAVE_API_GEOCODING = "eeaf6def78f849edb3ea062981a4af9a"; // chiave API
+	private static final String CHIAVE_API_GEOCODING = "c1e13be9a63f4c13b120089500a57f1b"; // chiave API
 	private static final Logger logger = Logger.getLogger(CoordinateDaoAPI.class.getName());
 
 	@Override
